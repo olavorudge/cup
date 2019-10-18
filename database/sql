@@ -1,0 +1,294 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema cadastro_unico
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema cadastro_unico
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `cadastro_unico` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
+USE `cadastro_unico` ;
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`nivel_ensino`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`nivel_ensino` (
+  `idNivel` INT NOT NULL,
+  `nomeNivel` VARCHAR(45) NULL,
+  PRIMARY KEY (`idNivel`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`ano_escolar`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`ano_escolar` (
+  `idAnoEscolar` INT(11) NOT NULL AUTO_INCREMENT,
+  `idNivel` INT NOT NULL,
+  `nomeAnoEscolar` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idAnoEscolar`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`area_conhecimento`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`area_conhecimento` (
+  `idAreaConhecimento` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeAreaConhecimento` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idAreaConhecimento`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`arquivo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`arquivo` (
+  `idArquivo` INT(11) NOT NULL,
+  `nomeArquivo` VARCHAR(150) NOT NULL DEFAULT '0',
+  `diretorio` VARCHAR(45) NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`idArquivo`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`campo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`campo` (
+  `idCampo` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeCampo` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idCampo`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`origem`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`origem` (
+  `idOrigem` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeOrigem` VARCHAR(150) NOT NULL,
+  PRIMARY KEY (`idOrigem`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`produto` (
+  `idProduto` INT(11) NOT NULL AUTO_INCREMENT,
+  `idAreaConhecimento` INT(11) NOT NULL,
+  `idAnoEscolar` INT(11) NOT NULL,
+  `idOrigem` INT(11) NOT NULL,
+  `titulo` VARCHAR(350) NOT NULL,
+  `tituloObra` VARCHAR(350) NULL DEFAULT NULL,
+  `anoUso` INT(11) NULL DEFAULT '0',
+  `anoLancamento` INT(11) NULL DEFAULT '0',
+  `anoCicloVida` INT(11) NULL DEFAULT '0',
+  `volume` INT(11) NULL DEFAULT '0',
+  `numEdicao` VARCHAR(150) NULL DEFAULT NULL,
+  `pegLA` VARCHAR(150) NULL DEFAULT NULL,
+  `pegLP` VARCHAR(150) NULL DEFAULT NULL,
+  `ISBN_LA` VARCHAR(150) NULL DEFAULT NULL,
+  `ISBN_LP` VARCHAR(150) NULL DEFAULT NULL,
+  `nomeContrato` VARCHAR(150) NULL DEFAULT NULL,
+  `nomeCapa` VARCHAR(150) NULL DEFAULT NULL,
+  `pseudonomio` VARCHAR(150) NULL DEFAULT NULL,
+  `numContrato` INT(11) NULL DEFAULT '0',
+  `dataAssinatura` DATE NULL DEFAULT NULL,
+  `validadeContrato` DATE NULL DEFAULT NULL,
+  `arquivado` TINYINT(1) NOT NULL,
+  `bolAnulado` TINYINT(1) NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`idProduto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`tipo_especificacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`tipo_especificacao` (
+  `idTipoEspecificacao` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeTipoEspecificacao` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idTipoEspecificacao`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`especificacoes_tecnicas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`especificacoes_tecnicas` (
+  `idEspecificacao` INT(11) NOT NULL AUTO_INCREMENT,
+  `idProduto` INT(11) NOT NULL,
+  `idTipoEspecificacao` INT(11) NOT NULL,
+  `componente` VARCHAR(50) NULL DEFAULT '0',
+  `formatoAberto` VARCHAR(100) NULL DEFAULT '0',
+  `formatoFechado` VARCHAR(100) NULL DEFAULT '0',
+  `numPagina` INT(11) NULL DEFAULT '0',
+  `papel` VARCHAR(100) NULL DEFAULT '0',
+  `cores` VARCHAR(150) NULL DEFAULT '0',
+  `acabamento` VARCHAR(150) NULL DEFAULT '0',
+  `observacoes` VARCHAR(300) NULL DEFAULT '0',
+  `espessura` VARCHAR(50) NULL DEFAULT '0',
+  `peso` DOUBLE NULL DEFAULT '0',
+  `orientacao` VARCHAR(50) NULL DEFAULT NULL,
+  `alvura` VARCHAR(50) NULL DEFAULT NULL,
+  `opacidade` VARCHAR(50) NULL DEFAULT NULL,
+  `lombada` VARCHAR(5) NULL DEFAULT NULL,
+  `medLombada` VARCHAR(50) NULL DEFAULT NULL,
+  `bolAnulado` INT(11) NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`idEspecificacao`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`estrutura_produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`estrutura_produto` (
+  `idEstrutura` INT(11) NOT NULL,
+  `idProduto` INT(11) NOT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`imagem_especificacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`imagem_especificacao` (
+  `idImagemEspecificacao` INT(11) NOT NULL,
+  `idArquivo` INT(11) NOT NULL,
+  `idEspecificacao` INT(11) NOT NULL,
+  PRIMARY KEY (`idImagemEspecificacao`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`tipo_log`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`tipo_log` (
+  `idTipoLog` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeLog` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idTipoLog`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`logs`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`logs` (
+  `idLog` INT(11) NOT NULL AUTO_INCREMENT,
+  `idTipoLog` INT(11) NOT NULL,
+  `idUsuario` INT(11) NOT NULL DEFAULT '0',
+  `descricaoLog` VARCHAR(350) NOT NULL DEFAULT '',
+  `observacao` VARCHAR(350) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`idLog`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`modelo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`modelo` (
+  `idModelo` INT(11) NOT NULL AUTO_INCREMENT,
+  `nomeModelo` VARCHAR(150) NOT NULL,
+  `autor` VARCHAR(150) NOT NULL,
+  PRIMARY KEY (`idModelo`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`modelo_campo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`modelo_campo` (
+  `idModelo` INT(11) NOT NULL,
+  `idCampo` INT(11) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`observacoes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`observacoes` (
+  `idObservacao` INT(11) NOT NULL AUTO_INCREMENT,
+  `idProduto` INT(11) NOT NULL,
+  `idUsuario` INT(11) NOT NULL DEFAULT '0',
+  `observacao` VARCHAR(350) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL,
+  `updated_at` TIMESTAMP NOT NULL,
+  PRIMARY KEY (`idObservacao`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`arquivo_especificacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`arquivo_especificacao` (
+  `idArquivoEspecificacao` INT(11) NOT NULL,
+  `idArquivo` INT(11) NOT NULL,
+  `idEspecificacao` INT(11) NOT NULL,
+  PRIMARY KEY (`idArquivoEspecificacao`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `cadastro_unico`.`imagem_produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cadastro_unico`.`imagem_produto` (
+  `idImagemProduto` INT(11) NOT NULL,
+  `idProduto` INT(11) NOT NULL,
+  `idArquivo` INT(11) NOT NULL,
+  PRIMARY KEY (`idImagemProduto`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

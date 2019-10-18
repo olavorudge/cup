@@ -1,7 +1,7 @@
 <template>
   <div class="col">
     <div class="custom-file form-control-sm">
-      <input type="file" :accept="accept" class="custom-file-input" id="customFile" />
+      <input type="file" :accept="accept" class="custom-file-input" :name="name" id="customFile" />
       <label class="custom-file-label" for="customFile">
         <slot></slot>
       </label>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ["accept"]
+  props: ["accept", "name"]
 };
 </script>
 

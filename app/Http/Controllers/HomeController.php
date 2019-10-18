@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Produto;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -107,48 +108,6 @@ class HomeController extends Controller
         return view('cadastrar', [ 'produto' => $produto ]);
     }
 
-    public function getListarProdutos(Request $request)
-    {
-        $produtos = array();
-
-        $produto = new ProdutoViewModel();
-        $produto->id = 1;
-        $produto->identificador = "identificador 1";
-        $produto->nome = "Nome do produto";
-        $produto->peg = "peggggg";
-        $produto->isbn = "isbnnnnnn";
-        $produto->dataModificacao = "12/05/2019 11:33";
-        $produto->tipo = "Produto";
-        array_push($produtos, $produto);
-
-        $produto = new ProdutoViewModel();
-        $produto->id = 2;
-        $produto->identificador = "identificador 2A";
-        $produto->nome = "Nome do produto 2";
-        $produto->peg = "peggggg12";
-        $produto->isbn = "isbnnnnnn";
-        $produto->dataModificacao = "04/03/2018 11:45";
-        $produto->tipo = "Produto";
-        array_push($produtos, $produto);
-
-        $produto = new ProdutoViewModel();
-        $produto->id = 3;
-        $produto->identificador = "identificador 3";
-        $produto->nome = "Nome da estrutura";
-        $produto->peg = "peggggg12";
-        $produto->isbn = "isbnnnnnn";
-        $produto->dataModificacao = "04/03/2018 11:45";
-        $produto->tipo = "Estrutura";
-        array_push($produtos, $produto);
-
-        $title = 'Listar produtos';
-        if ( $request->route()->getName() == 'estruturas' )
-        {
-            $title = 'Listar estruturas';
-        }
-
-        return view('listar-produtos', [ 'produtos' => $produtos, 'title' => $title ]);
-    }    
 
     public function getListarPendencias(Request $request)
     {
@@ -182,7 +141,7 @@ class HomeController extends Controller
         {
             $title = "Pendências nas especificações técnicas";
         }
-        
+
 
         return view('listar-pendencias', [ 'produtos' => $produtos, 'title' => $title ]);
     }

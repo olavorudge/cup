@@ -90,6 +90,16 @@ Route::get('/', function(){
     return view('index');
 });
 
+/* PRODUTOS */
+
+/* GET*/
+Route::get('listar-produtos', ['as' => 'listar-produtos', 'uses' => 'ProdutosController@ListarProdutos']);
+
+/* POST */
+Route::post('cadastrar-produto', ['as' => 'cadastrar-produto', 'uses' => 'ProdutosController@CadastrarProdutos']);
+
+
+
 //POST
 
 // Route::post('/cadastrar-produto', 'HomeController@postCadastrarProduto')->name('post-cadastrar-produto');

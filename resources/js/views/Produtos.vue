@@ -40,7 +40,22 @@
       </div>
 
       <template v-slot:cell(select)="data">
-        <checkbox id :value="data.item.id" v-model="selectedItems"></checkbox>
+        <checkbox id :value="data.item.idProduto" v-model="selectedItems"></checkbox>
+      </template>
+       <template v-slot:cell(identificador)="data">
+        {{data.item.idProduto}}
+      </template>
+      <template v-slot:cell(peg)="data">
+        {{data.item.pegLA}}
+      </template>
+      <template v-slot:cell(nome)="data">
+        {{data.item.titulo}}
+      </template>
+      <template v-slot:cell(isbn)="data">
+        {{data.item.ISBN_LA}}
+      </template>
+      <template v-slot:cell(dataModificacao)="data">
+        {{data.item.updated_at}}
       </template>
 
       <template v-slot:cell(actions)="data">
@@ -90,6 +105,7 @@ import BootstrapVue, { BPagination, BTable } from "bootstrap-vue";
 import Checkbox from "@/js/components/Checkbox";
 import VInput from "@/js/components/Input";
 import VSelect from "@/js/components/Select";
+import axios from "axios";
 import ModalVisualizarHistorico from "@/js/modals/VisualizarHistorico";
 import ModalVisualizarProduto from "@/js/modals/VisualizarProduto";
 import $ from "jquery";
@@ -153,33 +169,7 @@ export default {
         { key: "actions", label: "Ações", class: "text-center" }
       ],
       items: [
-        {
-          identificador: "Identificador 001",
-          peg: "PEG 001",
-          nome: "Nome do produto 001",
-          isbn: "ISBN 001",
-          dataModificacao: "15/09/2019 14:33",
-          id: 1,
-          archived: false
-        },
-        {
-          identificador: "Identificador 005",
-          peg: "PEG 005",
-          nome: "Nome do produto 005",
-          isbn: "ISBN 005",
-          dataModificacao: "01/04/2017 14:33",
-          id: 1,
-          archived: true
-        },
-        {
-          identificador: "Identificador 003",
-          peg: "PEG 003",
-          nome: "Nome do produto 003",
-          isbn: "ISBN 003",
-          dataModificacao: "12/06/2019 14:33",
-          id: 1,
-          archived: false
-        },
+        {},
       ]
     };
   },
@@ -199,7 +189,15 @@ export default {
     },
     rowClass(item, type) {
       if (item.archived) return 'table-danger'
+    },
+    getProdutos(){
+      axios
+      .get('/listar-produtos')
+      .then(response => (this.items = response.data))
     }
+  },
+  mounted(){
+   this.getProdutos();
   }
 };
 </script>

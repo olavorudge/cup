@@ -2,7 +2,7 @@
   <div>
     <div class="mb-3 d-flex justify-content-between">
       <slot name="buttons"></slot>
-      
+
       <router-link
         to="/produto"
         class="btn btn-primary btn-adicionar-produto d-flex align-items-center"
@@ -156,7 +156,7 @@ export default {
       ],
       items: [
         {
-          identificador: "Identificador 001",
+          identificador: "Identificador TabelaProduto001",
           peg: "PEG 001",
           nome: "Nome do produto 001",
           isbn: "ISBN 001",

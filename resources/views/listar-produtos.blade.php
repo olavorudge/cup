@@ -11,7 +11,7 @@ $render = function( $produto )
     return $html;
 };
 
-$selecionar = function ( $produto ) 
+$selecionar = function ( $produto )
 {
     return '<div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="customCheck-' . $produto->id . '">
@@ -27,7 +27,7 @@ if ( Route::current()->getName() == 'produtos-todos' )
     array_push( $colunas, [ 'key' => 'tipo', 'label' => 'Tipo' ] );
 }
 
-array_push( $colunas, 
+array_push( $colunas,
 //[ 'key' => 'selecionar', 'label' => 'Selecionar', 'render' => $selecionar ],
 [ 'key' => 'identificador', 'label' => 'Identificador' ],
 [ 'key' => 'peg', 'label' => 'PEG' ],

@@ -3,7 +3,7 @@
     <label v-if="hasDefaultSlot">
       <slot></slot>
     </label>
-    <input type="text" :placeholder="placeholder" class="form-control form-control-sm" :value="value" :v-model="vmodel" />
+    <input type="text" :placeholder="placeholder" class="form-control form-control-sm" v-bind:value="value" v-on:input="$emit('input', $event.target.value)"/>
   </div>
 </template>
 

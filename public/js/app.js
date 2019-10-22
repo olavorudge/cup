@@ -2203,6 +2203,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2215,8 +2229,31 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      form: {},
-      errors: {}
+      errors: {},
+      form: {
+        titulo: '',
+        titulo_obra: '',
+        ano_uso: '',
+        ano_lancamento: '',
+        ano_ciclo: '',
+        area_conhec: '',
+        nivel_ensino: '',
+        serie: '',
+        volume: '',
+        num_edicao: '',
+        origem: '',
+        idioma: '',
+        peg_la: '',
+        peg_lp: '',
+        isbn_la: '',
+        isbn_lp: '',
+        nome_contrato: '',
+        nome_capa: '',
+        pseudonomio: '',
+        num_contrato: '',
+        data_assinatura: '',
+        validade_contrato: ''
+      }
     };
   },
   methods: {
@@ -2224,12 +2261,38 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors = {};
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-produto', this.form).then(function (response) {
-        alert('Message sent!');
-        console.log(response);
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-produto', {
+        titulo: this.form.titulo,
+        titulo_obra: this.form.titulo_obra,
+        ano_uso: this.form.ano_uso,
+        ano_lancamento: this.form.ano_lancamento,
+        ano_ciclo: this.form.ano_ciclo,
+        area_conhec: this.form.area_conhec,
+        nivel_ensino: this.form.nivel_ensino,
+        serie: this.form.serie,
+        volume: this.form.volume,
+        num_edicao: this.form.num_edicao,
+        origem: this.form.origem,
+        idioma: this.form.idioma,
+        peg_la: this.form.peg_la,
+        peg_lp: this.form.peg_lp,
+        isbn_la: this.form.isbn_la,
+        isbn_lp: this.form.isbn_lp,
+        nome_contrato: this.form.nome_contrato,
+        nome_capa: this.form.nome_capa,
+        pseudonomio: this.form.pseudonomio,
+        num_contrato: this.form.num_contrato,
+        data_assinatura: this.form.data_assinatura,
+        validade_contrato: this.form.validade_contrato
+      }).then(function (response) {
+        var responseLog = document.getElementById('response');
+        responseLog.innerHTML = response.data.msg;
       })["catch"](function (error) {
         if (error.response.status === 422) {
           _this.errors = error.response.data.errors || {};
+          var responseLog = document.getElementById('response');
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          responseLog.innerHTML = errorHandling[0];
         }
       });
     }
@@ -2321,6 +2384,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -54276,12 +54340,13 @@ var render = function() {
     _vm._v(" "),
     _c("input", {
       staticClass: "form-control form-control-sm",
-      attrs: {
-        type: "text",
-        placeholder: _vm.placeholder,
-        "v-model": _vm.vmodel
-      },
-      domProps: { value: _vm.value }
+      attrs: { type: "text", placeholder: _vm.placeholder },
+      domProps: { value: _vm.value },
+      on: {
+        input: function($event) {
+          return _vm.$emit("input", $event.target.value)
+        }
+      }
     })
   ])
 }
@@ -54570,12 +54635,14 @@ var render = function() {
     [
       _vm._m(0),
       _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
       _c(
         "form",
         {
           staticClass: "mr-3",
           staticStyle: { flex: "1" },
-          attrs: { method: "POST" },
+          attrs: { id: "form", method: "POST" },
           on: {
             submit: function($event) {
               $event.preventDefault()
@@ -54584,17 +54651,58 @@ var render = function() {
           }
         },
         [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-md-12" }, [
+              _vm.errors.length
+                ? _c("p", [
+                    _c("b", [
+                      _vm._v("Por favor, corrija o(s) seguinte(s) erro(s):")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "ul",
+                      { staticClass: "bg-alert" },
+                      _vm._l(_vm.errors, function(error) {
+                        return _c("li", [_vm._v(_vm._s(error))])
+                      }),
+                      0
+                    )
+                  ])
+                : _vm._e()
+            ])
+          ]),
+          _vm._v(" "),
           _c(
             "div",
             { staticClass: "form-row" },
             [
-              _c("v-input", { attrs: { vmodel: "form.titulo" } }, [
-                _vm._v("Título")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.titulo,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "titulo", $$v)
+                    },
+                    expression: "form.titulo"
+                  }
+                },
+                [_vm._v("Título")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.titulo-obra" } }, [
-                _vm._v("Título da obra")
-              ])
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.titulo_obra,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "titulo_obra", $$v)
+                    },
+                    expression: "form.titulo_obra"
+                  }
+                },
+                [_vm._v("Título da obra")]
+              )
             ],
             1
           ),
@@ -54606,7 +54714,14 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [2019, 2018, 2017], vmodel: "form.ano-uso" }
+                  attrs: { options: [2019, 2018, 2017] },
+                  model: {
+                    value: _vm.form.ano_uso,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "ano_uso", $$v)
+                    },
+                    expression: "form.ano_uso"
+                  }
                 },
                 [_vm._v("Geração de uso (ano)")]
               ),
@@ -54614,9 +54729,13 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: {
-                    options: [2019, 2018, 2017],
-                    vmodel: "form.ano-lancamento"
+                  attrs: { options: [2019, 2018, 2017] },
+                  model: {
+                    value: _vm.form.ano_lancamento,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "ano_lancamento", $$v)
+                    },
+                    expression: "form.ano_lancamento"
                   }
                 },
                 [_vm._v("Ano de lançamento")]
@@ -54625,9 +54744,13 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: {
-                    options: [2019, 2018, 2017],
-                    vmodel: "form.ano-ciclo"
+                  attrs: { options: [2019, 2018, 2017] },
+                  model: {
+                    value: _vm.form.ano_ciclo,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "ano_ciclo", $$v)
+                    },
+                    expression: "form.ano_ciclo"
                   }
                 },
                 [_vm._v("Ciclo de vida (até)")]
@@ -54642,19 +54765,46 @@ var render = function() {
             [
               _c(
                 "v-select",
-                { attrs: { options: [1, 2], vmodel: "form.area-conhec" } },
+                {
+                  attrs: { options: [1, 2] },
+                  model: {
+                    value: _vm.form.area_conhec,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "area_conhec", $$v)
+                    },
+                    expression: "form.area_conhec"
+                  }
+                },
                 [_vm._v("Área de conhecimento")]
               ),
               _vm._v(" "),
               _c(
                 "v-select",
-                { attrs: { options: [1, 2], vmodel: "form.nivel-ensino" } },
+                {
+                  attrs: { options: [1, 2] },
+                  model: {
+                    value: _vm.form.nivel_ensino,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "nivel_ensino", $$v)
+                    },
+                    expression: "form.nivel_ensino"
+                  }
+                },
                 [_vm._v("Nível de ensino")]
               ),
               _vm._v(" "),
               _c(
                 "v-select",
-                { attrs: { options: [1, 2], vmodel: "form.serie" } },
+                {
+                  attrs: { options: [1, 2] },
+                  model: {
+                    value: _vm.form.serie,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "serie", $$v)
+                    },
+                    expression: "form.serie"
+                  }
+                },
                 [_vm._v("Ano escolar/ Série")]
               )
             ],
@@ -54667,25 +54817,60 @@ var render = function() {
             [
               _c(
                 "v-select",
-                { attrs: { options: [1, 2, 3, 4], vmodel: "form.volume" } },
+                {
+                  attrs: { options: [1, 2, 3, 4] },
+                  model: {
+                    value: _vm.form.volume,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "volume", $$v)
+                    },
+                    expression: "form.volume"
+                  }
+                },
                 [_vm._v("Volume")]
               ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.num-edicao" } }, [
-                _vm._v("Número da edição")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.num_edicao,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "num_edicao", $$v)
+                    },
+                    expression: "form.num_edicao"
+                  }
+                },
+                [_vm._v("Número da edição")]
+              ),
               _vm._v(" "),
               _c(
                 "v-select",
                 {
-                  attrs: { options: ["Brasil", "Japão"], vmodel: "form.origem" }
+                  attrs: { options: ["Brasil", "Japão"] },
+                  model: {
+                    value: _vm.form.origem,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "origem", $$v)
+                    },
+                    expression: "form.origem"
+                  }
                 },
                 [_vm._v("Origem")]
               ),
               _vm._v(" "),
               _c(
                 "v-select",
-                { attrs: { options: ["PT-Br"], vmodel: "form.idiomas" } },
+                {
+                  attrs: { options: ["PT-Br"] },
+                  model: {
+                    value: _vm.form.idioma,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "idioma", $$v)
+                    },
+                    expression: "form.idioma"
+                  }
+                },
                 [_vm._v("Idioma")]
               )
             ],
@@ -54696,34 +54881,84 @@ var render = function() {
             "div",
             { staticClass: "form-row" },
             [
-              _c("v-input", { attrs: { vmodel: "form.peg-la" } }, [
-                _vm._v("PEG (LA)")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.peg_la,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "peg_la", $$v)
+                    },
+                    expression: "form.peg_la"
+                  }
+                },
+                [_vm._v("PEG (LA)")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.peg-lp" } }, [
-                _vm._v("PEG (LP)")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.peg_lp,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "peg_lp", $$v)
+                    },
+                    expression: "form.peg_lp"
+                  }
+                },
+                [_vm._v("PEG (LP)")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.isbn-la" } }, [
-                _vm._v("ISBN (LA)")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.isbn_la,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "isbn_la", $$v)
+                    },
+                    expression: "form.isbn_la"
+                  }
+                },
+                [_vm._v("ISBN (LA)")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.isbn-lp" } }, [
-                _vm._v("ISBN (LP)")
-              ])
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.isbn_lp,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "isbn_lp", $$v)
+                    },
+                    expression: "form.isbn_lp"
+                  }
+                },
+                [_vm._v("ISBN (LP)")]
+              )
             ],
             1
           ),
           _vm._v(" "),
-          _vm._m(1),
+          _vm._m(2),
           _vm._v(" "),
           _c(
             "div",
             { staticClass: "form-row" },
             [
-              _c("v-input", { attrs: { vmodel: "form.nome-contrato" } }, [
-                _vm._v("Nome para contrato")
-              ])
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.nome_contrato,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "nome_contrato", $$v)
+                    },
+                    expression: "form.nome_contrato"
+                  }
+                },
+                [_vm._v("Nome para contrato")]
+              )
             ],
             1
           ),
@@ -54732,13 +54967,33 @@ var render = function() {
             "div",
             { staticClass: "form-row" },
             [
-              _c("v-input", { attrs: { vmodel: "form.nome-capa" } }, [
-                _vm._v("Nome para capa")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.nome_capa,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "nome_capa", $$v)
+                    },
+                    expression: "form.nome_capa"
+                  }
+                },
+                [_vm._v("Nome para capa")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.pseudonomio" } }, [
-                _vm._v("Pseudônimo")
-              ])
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.pseudonomio,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "pseudonomio", $$v)
+                    },
+                    expression: "form.pseudonomio"
+                  }
+                },
+                [_vm._v("Pseudônimo")]
+              )
             ],
             1
           ),
@@ -54747,46 +55002,54 @@ var render = function() {
             "div",
             { staticClass: "form-row" },
             [
-              _c("v-input", { attrs: { vmodel: "form.nome-contrato" } }, [
-                _vm._v("Nome do contrato")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.num_contrato,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "num_contrato", $$v)
+                    },
+                    expression: "form.num_contrato"
+                  }
+                },
+                [_vm._v("Número do contrato")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.data-assinatura" } }, [
-                _vm._v("Data de assinatura")
-              ]),
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.data_assinatura,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "data_assinatura", $$v)
+                    },
+                    expression: "form.data_assinatura"
+                  }
+                },
+                [_vm._v("Data de assinatura")]
+              ),
               _vm._v(" "),
-              _c("v-input", { attrs: { vmodel: "form.validade-contrato" } }, [
-                _vm._v("Validade do contrato")
-              ])
+              _c(
+                "v-input",
+                {
+                  model: {
+                    value: _vm.form.validade_contrato,
+                    callback: function($$v) {
+                      _vm.$set(_vm.form, "validade_contrato", $$v)
+                    },
+                    expression: "form.validade_contrato"
+                  }
+                },
+                [_vm._v("Validade do contrato")]
+              )
             ],
             1
           ),
           _vm._v(" "),
-          _c("div", [
-            _c("label", [_vm._v("Imagens")]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "form-row" },
-              [
-                _c(
-                  "filepicker",
-                  {
-                    attrs: {
-                      accept: "'image/png, image/jpeg'",
-                      vmodel: "form.produto-img"
-                    }
-                  },
-                  [_vm._v("Adicionar imagem")]
-                )
-              ],
-              1
-            ),
-            _vm._v(" "),
-            _vm._m(2)
-          ]),
+          _vm._m(3),
           _vm._v(" "),
-          _vm._m(3)
+          _vm._m(4)
         ]
       )
     ]
@@ -54803,23 +55066,42 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", {
+          staticClass: "p-6 mb-2 bg-light text-dark",
+          attrs: { id: "response" }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("h6", [_c("b", [_vm._v("Autoria")])])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-4" }, [
-        _c("img", { attrs: { width: "100%", src: "" } })
-      ]),
+    return _c("div", [
+      _c("label", [_vm._v("Imagens")]),
       _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
-        _c("img", { attrs: { width: "100%", src: "" } })
-      ]),
+      _c("div", { staticClass: "form-row" }),
       _vm._v(" "),
-      _c("div", { staticClass: "col-4" }, [
-        _c("img", { attrs: { width: "100%", src: "" } })
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-4" }, [
+          _c("img", { attrs: { width: "100%", src: "" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c("img", { attrs: { width: "100%", src: "" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-4" }, [
+          _c("img", { attrs: { width: "100%", src: "" } })
+        ])
       ])
     ])
   },
@@ -54945,14 +55227,22 @@ var render = function() {
       "select",
       {
         staticClass: "form-control form-control-sm",
-        attrs: { "v-model": _vm.vmodel }
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          }
+        }
       },
-      _vm._l(_vm.options, function(option) {
-        return _c("option", { domProps: { value: option } }, [
-          _vm._v(_vm._s(option))
-        ])
-      }),
-      0
+      [
+        _c("option", { attrs: { value: "" } }, [_vm._v(" Selecione ")]),
+        _vm._v(" "),
+        _vm._l(_vm.options, function(option) {
+          return _c("option", { domProps: { value: option } }, [
+            _vm._v(_vm._s(option))
+          ])
+        })
+      ],
+      2
     )
   ])
 }

@@ -3,7 +3,8 @@
     <label v-if="hasDefaultSlot">
       <slot></slot>
     </label>
-    <select class="form-control form-control-sm" :v-model="vmodel">
+    <select class="form-control form-control-sm"  v-on:input="$emit('input', $event.target.value)">
+      <option value=""> Selecione </option>
       <option v-for="option in options" :value="option">{{ option }}</option>
     </select>
   </div>

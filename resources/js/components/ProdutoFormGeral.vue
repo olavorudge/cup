@@ -21,7 +21,7 @@
       </div>
       </div>
       <div class="form-row">
-        <v-input  v-model="form.titulo">{{form.titulo}}</v-input>
+        <v-input  v-model="form.titulo">Título</v-input>
         <v-input v-model="form.titulo_obra">Título da obra</v-input>
       </div>
       <div class="form-row">

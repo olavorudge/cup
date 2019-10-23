@@ -72,17 +72,15 @@
         @click="openModal('#modal-visualizar-produto')"
         >remove_red_eye</span>
       </a>
-
-      <form @submit.prevent="deleteProduto">
         <router-link v-if="!data.item.arquivado" :to="{ name: 'editarProduto', params: { id: data.item.id } }" title="Editar">
           <span class="material-icons">edit</span>
         </router-link>
-        <button type="submit" class="button-invisible" v-if="!data.item.arquivado" title="Deletar" data-toggle="tooltip" @click="deleteProduto(data.item.idProduto)">
+        <button type="" class="button-invisible" v-if="!data.item.arquivado" title="Deletar" data-toggle="tooltip" @click="deleteProduto(data.item.idProduto)">
           <span class="material-icons">delete</span>
         </button>
-        <a href v-if="!data.item.arquivado" title="Duplicar" data-toggle="tooltip">
+        <button v-if="!data.item.arquivado" class="button-invisible" title="Duplicar" data-toggle="tooltip" @click="duplicateProduto(data.item.idProduto)">
           <span class="material-icons">file_copy</span>
-        </a>
+        </button>
         <a href title="Exportar" data-toggle="tooltip">
           <span class="material-icons">picture_as_pdf</span>
         </a>
@@ -93,7 +91,6 @@
           @click="openModal('#modal-visualizar-historico')"
           >history</span>
         </a>
-      </form>
     </template>
   </b-table>
 
@@ -206,6 +203,16 @@ export default {
     deleteProduto(id){
       axios
       .get('/deletar-produto/' + id)
+      .then(response => {
+        var responseMsg = response.data.msg;
+        var responseLog = document.getElementById('response');
+        responseLog.innerHTML = responseMsg;
+      })
+      this.getProdutos();
+    },
+    duplicateProduto(id){
+      axios
+      .get('/duplicar-produto/' + id)
       .then(response => {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');

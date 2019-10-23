@@ -4243,9 +4243,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -4339,6 +4336,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     },
     deleteProduto: function deleteProduto(id) {
       axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/deletar-produto/' + id).then(function (response) {
+        var responseMsg = response.data.msg;
+        var responseLog = document.getElementById('response');
+        responseLog.innerHTML = responseMsg;
+      });
+      this.getProdutos();
+    },
+    duplicateProduto: function duplicateProduto(id) {
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/duplicar-produto/' + id).then(function (response) {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
@@ -54761,7 +54766,7 @@ var render = function() {
                     expression: "form.titulo"
                   }
                 },
-                [_vm._v(_vm._s(_vm.form.titulo))]
+                [_vm._v("Título")]
               ),
               _vm._v(" "),
               _c(
@@ -57674,115 +57679,104 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "form",
-                    {
-                      on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.deleteProduto($event)
-                        }
-                      }
-                    },
-                    [
-                      !data.item.arquivado
-                        ? _c(
-                            "router-link",
-                            {
-                              attrs: {
-                                to: {
-                                  name: "editarProduto",
-                                  params: { id: data.item.id }
-                                },
-                                title: "Editar"
-                              }
-                            },
-                            [
-                              _c("span", { staticClass: "material-icons" }, [
-                                _vm._v("edit")
-                              ])
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !data.item.arquivado
-                        ? _c(
-                            "button",
-                            {
-                              staticClass: "button-invisible",
-                              attrs: {
-                                type: "submit",
-                                title: "Deletar",
-                                "data-toggle": "tooltip"
-                              },
-                              on: {
-                                click: function($event) {
-                                  return _vm.deleteProduto(data.item.idProduto)
-                                }
-                              }
-                            },
-                            [
-                              _c("span", { staticClass: "material-icons" }, [
-                                _vm._v("delete")
-                              ])
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      !data.item.arquivado
-                        ? _c(
-                            "a",
-                            {
-                              attrs: {
-                                href: "",
-                                title: "Duplicar",
-                                "data-toggle": "tooltip"
-                              }
-                            },
-                            [
-                              _c("span", { staticClass: "material-icons" }, [
-                                _vm._v("file_copy")
-                              ])
-                            ]
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c(
-                        "a",
+                  !data.item.arquivado
+                    ? _c(
+                        "router-link",
                         {
                           attrs: {
-                            href: "",
-                            title: "Exportar",
-                            "data-toggle": "tooltip"
+                            to: {
+                              name: "editarProduto",
+                              params: { id: data.item.id }
+                            },
+                            title: "Editar"
                           }
                         },
                         [
                           _c("span", { staticClass: "material-icons" }, [
-                            _vm._v("picture_as_pdf")
+                            _vm._v("edit")
                           ])
                         ]
-                      ),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "", "data-toggle": "modal" } }, [
-                        _c(
-                          "span",
-                          {
-                            staticClass: "material-icons",
-                            attrs: { title: "Histórico" },
-                            on: {
-                              click: function($event) {
-                                return _vm.openModal(
-                                  "#modal-visualizar-historico"
-                                )
-                              }
-                            }
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !data.item.arquivado
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "button-invisible",
+                          attrs: {
+                            type: "",
+                            title: "Deletar",
+                            "data-toggle": "tooltip"
                           },
-                          [_vm._v("history")]
-                        )
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteProduto(data.item.idProduto)
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { staticClass: "material-icons" }, [
+                            _vm._v("delete")
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  !data.item.arquivado
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "button-invisible",
+                          attrs: {
+                            title: "Duplicar",
+                            "data-toggle": "tooltip"
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.duplicateProduto(data.item.idProduto)
+                            }
+                          }
+                        },
+                        [
+                          _c("span", { staticClass: "material-icons" }, [
+                            _vm._v("file_copy")
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "",
+                        title: "Exportar",
+                        "data-toggle": "tooltip"
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("picture_as_pdf")
                       ])
-                    ],
-                    1
-                  )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("a", { attrs: { href: "", "data-toggle": "modal" } }, [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "material-icons",
+                        attrs: { title: "Histórico" },
+                        on: {
+                          click: function($event) {
+                            return _vm.openModal("#modal-visualizar-historico")
+                          }
+                        }
+                      },
+                      [_vm._v("history")]
+                    )
+                  ])
                 ]
               }
             }

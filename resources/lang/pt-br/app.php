@@ -16,5 +16,6 @@ return [
     'produto_cadastrado' => 'Produto cadastrado com sucesso',
     'modelo_deletado' => 'Modelo deletado',
     'produto_deletado' => 'Produto deletado com sucesso',
+    'produto_duplicado' => 'Produto duplicado com sucesso',
 
 ];

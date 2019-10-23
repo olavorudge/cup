@@ -90,7 +90,7 @@ class ProdutosController extends Controller
 */
   public function DeletarProduto($id){
     if ($id){
-      $produto = Produto::where('idProduto', $id)->first();
+      $produto = Produto::find($id);
       if ($produto){
         $produto->bolAnulado = 1;
         $produto->save();
@@ -99,7 +99,18 @@ class ProdutosController extends Controller
       }
     }
   }
-
+  /*
+    FUNÇÃO PARA DUPLICAR PRODUTOS
+  */
+    public function DuplicarProduto($id){
+      if ($id){
+        $produto = Produto::find($id);
+        if ($produto){
+          $produto->replicate()->save();
+          return response()->json(['success'=>1, 'msg'=>trans('app.produto_duplicado')]);
+        }
+      }
+    }
 /*
   FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
 */

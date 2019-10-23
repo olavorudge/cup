@@ -20,6 +20,7 @@ Route::get('/', function(){
 /* GET*/
 Route::get('listar-produtos', ['as' => 'listar-produtos', 'uses' => 'ProdutosController@ListarProdutos']);
 Route::get('deletar-produto/{id}', ['as' => 'deletar-produto', 'uses' => 'ProdutosController@DeletarProduto']);
+Route::get('duplicar-produto/{id}', ['as' => 'duplicar-produto', 'uses' => 'ProdutosController@DuplicarProduto']);
 
 Route::get('listar-modelos', ['as' => 'listar-modelos', 'uses' => 'ModelosController@ListarModelos']);
 Route::get('listar-modelo/{id}', ['as' => 'listar-modelo', 'uses' => 'ModelosController@SelecionarModelo']);

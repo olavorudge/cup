@@ -13173,6 +13173,12 @@ footer.footer ul {
   border-color: #a180da;
 }
 
+.button-invisible {
+  background: none;
+  border: none;
+  color: #36999f;
+}
+
 .sidebar {
   min-width: 256px;
   max-width: 256px;

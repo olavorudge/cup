@@ -6,33 +6,47 @@
         Adicionar novo modelo
       </router-link>
     </div>
-
-    <b-table
-      :fields="fields"
-      :items="items"
-      :busy="busy"
-      :hover="true"
-    >
-      <div slot="table-busy" class="text-center text-blue my-2">
-        <b-spinner class="align-middle"></b-spinner>
-        <strong>Carregando...</strong>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="response" class="p-6 mb-2 bg-info text-dark">
+        </div>
       </div>
-
-      <template v-slot:cell(actions)="row">
-        <router-link :to="{ name: 'editarModelo', params: { id: row.item.id } }" title="Editar">
+    </div>
+    <b-table
+    :fields="fields"
+    :items="visibleItems"
+    :busy="busy"
+    :hover="true"
+    >
+    <div slot="table-busy" class="text-center text-blue my-2">
+      <b-spinner class="align-middle"></b-spinner>
+      <strong>Carregando...</strong>
+    </div>
+    <template v-slot:cell(nome)="data">
+      {{data.item.nomeModelo}}
+    </template>
+    <template v-slot:cell(identificador)="data">
+      {{data.item.autor}}
+    </template>
+    <template v-slot:cell(actions)="data">
+      <form @submit.prevent="deleteModelo">
+        <router-link :to="{ name: 'editarModelo', params: { id: data.item.idModelo } }" title="Editar">
           <span class="material-icons">edit</span>
         </router-link>
-        <a href title="Deletar" data-toggle="tooltip">
+        <button type="" class="button-invisible" title="Deletar" data-toggle="tooltip" @click="deleteModelo(data.item.idModelo)">
           <span class="material-icons">delete</span>
-        </a>
-      </template>
-    </b-table>
-  </div>
+        </button>
+      </form>
+    </template>
+  </b-table>
+</div>
 </template>
 
 <script>
 import Vue from "vue";
 import BootstrapVue, { BPagination, BTable } from "bootstrap-vue";
+import axios from "axios";
+import $ from "jquery";
 
 Vue.use(BootstrapVue);
 
@@ -40,7 +54,7 @@ export default {
   components: { BTable },
   data() {
     return {
-      busy: false,          
+      busy: false,
       fields: [
         {
           key: "nome",
@@ -55,27 +69,41 @@ export default {
         { key: "actions", label: "Ações", class: "text-center" }
       ],
       items: [
-        {
-          nome: "Nome do modelo 001",
-          autor: "Alexandre",
-          editable: true,
-          id: 1
-        },
-        {
-          nome: "Nome do modelo 002",
-          autor: "Administrador",
-          editable: false,
-          id: 2
-        },
-        {
-          nome: "Nome do modelo 003",
-          autor: "Alexandre",
-          editable: true,
-          id: 3
-        }
+        {}
       ]
     };
+  },
+  computed: {
+    rows() {
+      return this.items.length;
+    },
+    visibleItems() {
+      return this.items;
+    }
+  },
+  methods: {
+    rowClass(item, type) {
+      return 'table-danger';
+    },
+    getModelos(){
+      axios
+      .get('/listar-modelos')
+      .then(response => (this.items = response.data))
+    },
+    deleteModelo(id) {
+      axios
+      .get('/deletar-modelo/' + id)
+      .then(response => {
+        var responseLog = document.getElementById('response');
+        var responseMsg = response.data.msg;
+        responseLog.innerHTML = responseMsg;
+      })
+        this.getModelos();
   }
+},
+mounted(){
+  this.getModelos();
+}
 };
 </script>
 

@@ -21,7 +21,7 @@
       </div>
       </div>
       <div class="form-row">
-        <v-input  v-model="form.titulo">Título</v-input>
+        <v-input  v-model="form.titulo">{{form.titulo}}</v-input>
         <v-input v-model="form.titulo_obra">Título da obra</v-input>
       </div>
       <div class="form-row">
@@ -87,13 +87,10 @@
 </template>
 
 <script>
-
 import Filepicker from "@/js/components/Filepicker";
 import VInput from "@/js/components/Input";
 import VSelect from "@/js/components/Select";
 import axios from "axios";
-
-
 
 export default {
   components: { Filepicker, VInput, VSelect },
@@ -153,19 +150,15 @@ export default {
         data_assinatura: this.form.data_assinatura,
         validade_contrato: this.form.validade_contrato,
       }).then(response => {
-
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = response.data.msg;
       }).catch(error => {
         if (error.response.status === 422) {
             this.errors = error.response.data.errors || {};
-
             var responseLog = document.getElementById('response');
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
 
-          responseLog.innerHTML = errorHandling[0];
-
-
+            responseLog.innerHTML = errorHandling[0];
         }
       });
     },

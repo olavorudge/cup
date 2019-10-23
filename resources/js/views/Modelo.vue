@@ -1,7 +1,8 @@
 <template>
   <form>
+
     <div class="form-row">
-      <v-input>Nome do modelo</v-input>
+      <v-input :value="items.nomeModelo">Nome do Modelo</v-input>
     </div>
     <div class="form-row">
       <v-select :options="['Para todos', 'Somente eu']">Compartilhamento</v-select>
@@ -54,10 +55,35 @@
 import Checkbox from "@/js/components/Checkbox";
 import VInput from "@/js/components/Input";
 import VSelect from "@/js/components/Select";
+import axios from "axios";
+import Router from "vue-router";
+
 
 export default {
-  components: { Checkbox, VInput, VSelect }
-};
+  components: { Checkbox, VInput, VSelect },
+    data() {
+      return {
+        busy: false,
+        items: [
+          {}
+        ]
+      };
+    },
+    computed: {
+
+      },
+      methods: {
+        editModelo(){
+          axios
+          .get('/listar-modelo/'+ this.$route.params.id)
+          .then(response => (this.items = response.data))
+        }
+      },
+      mounted(){
+       this.editModelo();
+      }
+  };
+
 </script>
 
 <style>

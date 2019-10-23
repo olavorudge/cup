@@ -70,7 +70,6 @@
       style="background-color: #ddd; padding: 10px;"
     >Criado em: 01/10/2019. Atualizado em: 02/10/2019. Atualizado por: Alexandre Grocholski.</div>
   </div>
-
   <!-- @include( 'modals.adicionar-descricao' ) -->
 </template>
 

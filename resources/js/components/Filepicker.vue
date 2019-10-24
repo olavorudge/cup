@@ -1,7 +1,7 @@
 <template>
   <div class="col">
     <div class="custom-file form-control-sm">
-      <input type="file" :accept="accept" class="custom-file-input" :name="name" id="customFile" />
+      <input type="file" :accept="accept" class="custom-file-input" :name="name" id="customFile" v-bind:value="value" v-on:input="$emit('input', $event.target.value)" />
       <label class="custom-file-label" for="customFile">
         <slot></slot>
       </label>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ["accept", "name"]
+  props: ["accept", "name", "value", "change"]
 };
 </script>
 

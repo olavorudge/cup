@@ -80,7 +80,9 @@ export default {
         }
       },
       mounted(){
-       this.editModelo();
+        if(this.$route.params.id){
+          this.editModelo();
+        }
       }
   };
 

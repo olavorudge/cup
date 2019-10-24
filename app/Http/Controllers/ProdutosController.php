@@ -11,6 +11,8 @@ use App\Models\ViewModels\UsuarioViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cookie;
+use Carbon\Carbon;
+use Intervention\Image\Facades\Image as Image;
 
 class ProdutosController extends Controller
 {
@@ -47,8 +49,9 @@ class ProdutosController extends Controller
       'origem' => 'required',
       'idioma' => 'required',
       'data_assinatura' => 'date',
-      'validade_contrato' => 'date',
+      'validade_contrato' => 'date'
     ];
+
     if ($this->validate($request, $rules)) {
 
       $data = [
@@ -61,7 +64,7 @@ class ProdutosController extends Controller
         'anoLancamento'         => $request->ano_lancamento,
         'anoCicloVida'          => $request->ano_ciclo,
         'volume'                => $request->volume,
-        'numEdicao'            => $request->num_edicao,
+        'numEdicao'             => $request->num_edicao,
         'pegLA'                 => $request->peg_la,
         'pegLP'                 => $request->peg_lp,
         'ISBN_LA'               => $request->isbn_la,
@@ -77,11 +80,8 @@ class ProdutosController extends Controller
       ];
 
       $create = Produto::create($data);
-
-
       if($create) {
         return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
-
       }
     }
   }
@@ -111,6 +111,13 @@ class ProdutosController extends Controller
         }
       }
     }
+
+/*
+  Cadastro Especificacoes
+*/
+public function CadastrarEspecificacoes($id){
+
+}
 /*
   FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
 */

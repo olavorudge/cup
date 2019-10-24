@@ -21,6 +21,29 @@ class ModelosController extends Controller
     return $modelos;
   }
 
+  public function CadastrarModelo(){
+
+    $rules = [
+      'nomeModelo'   => 'required',
+      'compartilhamento'    => 'required'
+    ];
+
+    if ($this->validate($request, $rules)) {
+
+      $data = [
+        'idUsuario'          => 2,
+        'nomeModelo'         => 1,
+        'autor'              => 'Usuario teste',
+        'compartilhamento'   => 1,
+      ];
+
+      $create = Produto::create($data);
+      if($create) {
+        return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
+      }
+    }
+  }
+
   public function SelecionarModelo($id){
     $modelos = array();
     $modelos = Modelo::where('idModelo', $id)->first();

@@ -9,7 +9,7 @@
         </div>
       </div>
     </div>
-    <form class="mr-3" id="form" style="flex: 1" method="POST" @submit.prevent="submit">
+    <form class="mr-3" id="form" style="flex: 1" method="POST" @submit.prevent="submit" enctype="multipart/form-data">
       <div class="row">
         <div class="col-md-12">
           <p v-if="errors.length">
@@ -17,8 +17,8 @@
             <ul class="bg-alert">
               <li v-for="error in errors">{{ error }}</li>
             </ul>
-        </p>
-      </div>
+          </p>
+        </div>
       </div>
       <div class="form-row">
         <v-input  v-model="form.titulo">Título</v-input>
@@ -64,6 +64,8 @@
       <div>
         <label>Imagens</label>
         <div class="form-row">
+          <img :src="image" class="img-thumbnail" width="100px" height="auto">
+          <filepicker accept="'image/png, image/jpeg'" v-model="form.produto_imgs" v-on:input.native="onFileChange">Adicionar Imagem</filepicker>
         </div>
         <div class="row">
           <div class="col-4">
@@ -121,11 +123,13 @@ export default {
         data_assinatura: '',
         validade_contrato: '',
       },
+      image: '',
     }
   },
   methods: {
     submit() {
       this.errors = {};
+
       axios.post('/cadastrar-produto', {
         titulo: this.form.titulo,
         titulo_obra: this.form.titulo_obra,
@@ -149,19 +153,34 @@ export default {
         num_contrato: this.form.num_contrato,
         data_assinatura: this.form.data_assinatura,
         validade_contrato: this.form.validade_contrato,
+        image: this.image,
       }).then(response => {
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = response.data.msg;
       }).catch(error => {
         if (error.response.status === 422) {
-            this.errors = error.response.data.errors || {};
-            var responseLog = document.getElementById('response');
-            var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+          this.errors = error.response.data.errors || {};
+          var responseLog = document.getElementById('response');
+          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
 
-            responseLog.innerHTML = errorHandling[0];
+          responseLog.innerHTML = errorHandling[0];
         }
       });
     },
+    onFileChange(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length)
+      return;
+      this.createImage(files[0]);
+    },
+    createImage(file) {
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = (e) => {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }
 </script>

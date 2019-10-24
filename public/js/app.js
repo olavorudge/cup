@@ -1896,7 +1896,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["accept", "name"]
+  props: ["accept", "name", "value", "change"]
 });
 
 /***/ }),
@@ -1920,7 +1920,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["placeholder", "value", "vmodel"],
+  props: ["placeholder", "value"],
   computed: {
     hasDefaultSlot: function hasDefaultSlot() {
       return !!this.$slots["default"];
@@ -2217,6 +2217,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -2253,7 +2255,8 @@ __webpack_require__.r(__webpack_exports__);
         num_contrato: '',
         data_assinatura: '',
         validade_contrato: ''
-      }
+      },
+      image: ''
     };
   },
   methods: {
@@ -2283,7 +2286,8 @@ __webpack_require__.r(__webpack_exports__);
         pseudonomio: this.form.pseudonomio,
         num_contrato: this.form.num_contrato,
         data_assinatura: this.form.data_assinatura,
-        validade_contrato: this.form.validade_contrato
+        validade_contrato: this.form.validade_contrato,
+        image: this.image
       }).then(function (response) {
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = response.data.msg;
@@ -2295,6 +2299,21 @@ __webpack_require__.r(__webpack_exports__);
           responseLog.innerHTML = errorHandling[0];
         }
       });
+    },
+    onFileChange: function onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      this.createImage(files[0]);
+    },
+    createImage: function createImage(file) {
+      var reader = new FileReader();
+      var vm = this;
+
+      reader.onload = function (e) {
+        vm.image = e.target.result;
+      };
+
+      reader.readAsDataURL(file);
     }
   }
 });
@@ -3696,7 +3715,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.editModelo();
+    if (this.$route.params.id) {
+      this.editModelo();
+    }
   }
 });
 
@@ -4335,20 +4356,28 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       });
     },
     deleteProduto: function deleteProduto(id) {
+      var _this3 = this;
+
       axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/deletar-produto/' + id).then(function (response) {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
       });
-      this.getProdutos();
+      setTimeout(function () {
+        return _this3.getProdutos();
+      }, 100);
     },
     duplicateProduto: function duplicateProduto(id) {
+      var _this4 = this;
+
       axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/duplicar-produto/' + id).then(function (response) {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
       });
-      this.getProdutos();
+      setTimeout(function () {
+        return _this4.getProdutos();
+      }, 100);
     }
   },
   mounted: function mounted() {
@@ -54380,6 +54409,12 @@ var render = function() {
           accept: _vm.accept,
           name: _vm.name,
           id: "customFile"
+        },
+        domProps: { value: _vm.value },
+        on: {
+          input: function($event) {
+            return _vm.$emit("input", $event.target.value)
+          }
         }
       }),
       _vm._v(" "),
@@ -54721,7 +54756,7 @@ var render = function() {
         {
           staticClass: "mr-3",
           staticStyle: { flex: "1" },
-          attrs: { id: "form", method: "POST" },
+          attrs: { id: "form", method: "POST", enctype: "multipart/form-data" },
           on: {
             submit: function($event) {
               $event.preventDefault()
@@ -55126,7 +55161,43 @@ var render = function() {
             1
           ),
           _vm._v(" "),
-          _vm._m(3),
+          _c("div", [
+            _c("label", [_vm._v("Imagens")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "form-row" },
+              [
+                _c("img", {
+                  staticClass: "img-thumbnail",
+                  attrs: { src: _vm.image, width: "100px", height: "auto" }
+                }),
+                _vm._v(" "),
+                _c(
+                  "filepicker",
+                  {
+                    attrs: { accept: "'image/png, image/jpeg'" },
+                    nativeOn: {
+                      input: function($event) {
+                        return _vm.onFileChange($event)
+                      }
+                    },
+                    model: {
+                      value: _vm.form.produto_imgs,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "produto_imgs", $$v)
+                      },
+                      expression: "form.produto_imgs"
+                    }
+                  },
+                  [_vm._v("Adicionar Imagem")]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _vm._m(3)
+          ]),
           _vm._v(" "),
           _vm._m(4)
         ]
@@ -55164,23 +55235,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("label", [_vm._v("Imagens")]),
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-4" }, [
+        _c("img", { attrs: { width: "100%", src: "" } })
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "form-row" }),
+      _c("div", { staticClass: "col-4" }, [
+        _c("img", { attrs: { width: "100%", src: "" } })
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-4" }, [
-          _c("img", { attrs: { width: "100%", src: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-4" }, [
-          _c("img", { attrs: { width: "100%", src: "" } })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-4" }, [
-          _c("img", { attrs: { width: "100%", src: "" } })
-        ])
+      _c("div", { staticClass: "col-4" }, [
+        _c("img", { attrs: { width: "100%", src: "" } })
       ])
     ])
   },

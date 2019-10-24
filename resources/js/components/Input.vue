@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  props: ["placeholder", "value", "vmodel"],
+  props: ["placeholder", "value"],
   computed: {
     hasDefaultSlot() {
       return !!this.$slots.default;

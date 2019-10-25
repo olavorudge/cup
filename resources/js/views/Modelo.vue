@@ -1,51 +1,56 @@
 <template>
-  <form>
-
-    <div class="form-row">
-      <v-input :value="items.nomeModelo">Nome do Modelo</v-input>
+  <form @submit.prevent="submitModelo">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="response" class="p-6 mb-2 bg-info text-dark">
+        </div>
+      </div>
     </div>
     <div class="form-row">
-      <v-select :options="['Para todos', 'Somente eu']">Compartilhamento</v-select>
+      <v-input :value="items.nomeModelo" v-model="form.nome_modelo">Nome do Modelo</v-input>
+    </div>
+    <div class="form-row">
+      <v-select :options="['Para todos', 'Somente eu']" v-model="form.compartilhamento">Compartilhamento</v-select>
     </div>
 
     <p>Selecionar campos</p>
     <div class="form-row">
-      <checkbox id="titulo">Título</checkbox>
-      <checkbox id="tituloObra">Título da obra</checkbox>
-      <checkbox id="geracaoUso">Geração de uso (Ano)</checkbox>
-      <checkbox id="anoLancamento">Ano de lançamento</checkbox>
+      <checkbox v-model="form.checkbox" id="titulo" :value="1">Título</checkbox>
+      <checkbox v-model="form.checkbox" id="tituloObra" :value="2">Título da obra</checkbox>
+      <checkbox v-model="form.checkbox" id="geracaoUso" :value="3">Geração de uso (Ano)</checkbox>
+      <checkbox v-model="form.checkbox" id="anoLancamento" :value="4">Ano de lançamento</checkbox>
     </div>
     <div class="form-row">
-      <checkbox id="cicloVida">Ciclo de vida (até)</checkbox>
-      <checkbox id="areaConhecimento">Área de conhecimento</checkbox>
-      <checkbox id="nivelEnsino">Nível de ensino</checkbox>
-      <checkbox id="anoEscolar">Ano escolar/Série</checkbox>
+      <checkbox v-model="form.checkbox" id="cicloVida" :value="5">Ciclo de vida (até)</checkbox>
+      <checkbox v-model="form.checkbox" id="areaConhecimento" :value="6">Área de conhecimento</checkbox>
+      <checkbox v-model="form.checkbox" id="nivelEnsino" :value="7">Nível de ensino</checkbox>
+      <checkbox v-model="form.checkbox" id="anoEscolar" :value="8">Ano escolar/Série</checkbox>
     </div>
     <div class="form-row">
-      <checkbox id="volume">Volume</checkbox>
-      <checkbox id="numeroEdicao">Número da edição</checkbox>
-      <checkbox id="origem">Origem</checkbox>
-      <checkbox id="idioma">Idioma</checkbox>
+      <checkbox v-model="form.checkbox" id="volume" :value="9">Volume</checkbox>
+      <checkbox v-model="form.checkbox" id="numeroEdicao" :value="10">Número da edição</checkbox>
+      <checkbox v-model="form.checkbox" id="origem" :value="11">Origem</checkbox>
+      <checkbox v-model="form.checkbox" id="idioma" :value="12">Idioma</checkbox>
     </div>
     <div class="form-row">
-      <checkbox id="pegLa">PEG (LA)</checkbox>
-      <checkbox id="pegLp">PEG (LP)</checkbox>
-      <checkbox id="isbnLa">ISBN (LA)</checkbox>
-      <checkbox id="isbnLp">ISBN (LP)</checkbox>
+      <checkbox v-model="form.checkbox" id="pegLa" :value="13">PEG (LA)</checkbox>
+      <checkbox v-model="form.checkbox" id="pegLp" :value="14">PEG (LP)</checkbox>
+      <checkbox v-model="form.checkbox" id="isbnLa" :value="15">ISBN (LA)</checkbox>
+      <checkbox v-model="form.checkbox" id="isbnLp" :value="16">ISBN (LP)</checkbox>
     </div>
     <div class="form-row">
-      <checkbox id="nomeContrato">Nome para contrato</checkbox>
-      <checkbox id="nomeCapa">Nome para capa</checkbox>
-      <checkbox id="pseudonimo">Pseudônimo</checkbox>
-      <checkbox id="numeroContrato">Número do contrato</checkbox>
+      <checkbox v-model="form.checkbox" id="nomeContrato" :value="17">Nome para contrato</checkbox>
+      <checkbox v-model="form.checkbox" id="nomeCapa" :value="18">Nome para capa</checkbox>
+      <checkbox v-model="form.checkbox" id="pseudonimo" :value="19">Pseudônimo</checkbox>
+      <checkbox v-model="form.checkbox" id="numeroContrato" :value="20">Número do contrato</checkbox>
     </div>
     <div class="form-row">
-      <checkbox class="col-3" id="dataAssinatura">Data de assinatura</checkbox>
-      <checkbox class="col-3" id="validadeContrato">Validade do contrato</checkbox>
+      <checkbox v-model="form.checkbox" class="col-3" id="dataAssinatura" :value="21">Data de assinatura</checkbox>
+      <checkbox v-model="form.checkbox" class="col-3" id="validadeContrato" :value="22">Validade do contrato</checkbox>
     </div>
-
+    {{form.checkbox}}
     <div class="mt-3 text-right">
-      <button class="btn btn-primary btn-salvar-produto">Salvar</button>
+      <button type="submit" class="btn btn-primary">Salvar</button>
       <router-link to="/modelos" class="btn btn-secondary">Cancelar</router-link>
     </div>
   </form>
@@ -66,7 +71,12 @@ export default {
         busy: false,
         items: [
           {}
-        ]
+        ],
+        form: {
+          nome_modelo: '',
+          compartilhamento: '',
+          checkbox: [],
+        }
       };
     },
     computed: {
@@ -77,6 +87,26 @@ export default {
           axios
           .get('/listar-modelo/'+ this.$route.params.id)
           .then(response => (this.items = response.data))
+        },
+        submitModelo(){
+          this.errors = {};
+
+          axios.post('/cadastrar-modelo', {
+            nome_modelo: this.form.nome_modelo,
+            compartilhamento: this.form.compartilhamento,
+            checkbox: this.form.checkbox
+          }).then(response => {
+            var responseLog = document.getElementById('response');
+            responseLog.innerHTML = response.data.msg;
+          }).catch(error => {
+            if (error.response.status === 422) {
+              this.errors = error.response.data.errors || {};
+              var responseLog = document.getElementById('response');
+              var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+
+              responseLog.innerHTML = errorHandling[0];
+            }
+          });
         }
       },
       mounted(){

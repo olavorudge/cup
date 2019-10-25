@@ -5,7 +5,7 @@
     </label>
     <select class="form-control form-control-sm"  v-on:input="$emit('input', $event.target.value)">
       <option value=""> Selecione </option>
-      <option v-for="option in options" v-bind:value="option.value">{{ option }}</option>
+      <option v-for="option in options" v-bind:value="option">{{ option }}</option>
     </select>
   </div>
 </template>

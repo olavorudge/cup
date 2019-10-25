@@ -3687,6 +3687,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -3701,7 +3706,12 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       busy: false,
-      items: [{}]
+      items: [{}],
+      form: {
+        nome_modelo: '',
+        compartilhamento: '',
+        checkbox: []
+      }
     };
   },
   computed: {},
@@ -3711,6 +3721,26 @@ __webpack_require__.r(__webpack_exports__);
 
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-modelo/' + this.$route.params.id).then(function (response) {
         return _this.items = response.data;
+      });
+    },
+    submitModelo: function submitModelo() {
+      var _this2 = this;
+
+      this.errors = {};
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-modelo', {
+        nome_modelo: this.form.nome_modelo,
+        compartilhamento: this.form.compartilhamento,
+        checkbox: this.form.checkbox
+      }).then(function (response) {
+        var responseLog = document.getElementById('response');
+        responseLog.innerHTML = response.data.msg;
+      })["catch"](function (error) {
+        if (error.response.status === 422) {
+          _this2.errors = error.response.data.errors || {};
+          var responseLog = document.getElementById('response');
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          responseLog.innerHTML = errorHandling[0];
+        }
       });
     }
   },
@@ -55381,7 +55411,7 @@ var render = function() {
         _c("option", { attrs: { value: "" } }, [_vm._v(" Selecione ")]),
         _vm._v(" "),
         _vm._l(_vm.options, function(option) {
-          return _c("option", { domProps: { value: option.value } }, [
+          return _c("option", { domProps: { value: option } }, [
             _vm._v(_vm._s(option))
           ])
         })
@@ -56834,166 +56864,475 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("v-input", { attrs: { value: _vm.items.nomeModelo } }, [
-          _vm._v("Nome do Modelo")
-        ])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("v-select", { attrs: { options: ["Para todos", "Somente eu"] } }, [
-          _vm._v("Compartilhamento")
-        ])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c("p", [_vm._v("Selecionar campos")]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("checkbox", { attrs: { id: "titulo" } }, [_vm._v("Título")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "tituloObra" } }, [
-          _vm._v("Título da obra")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "geracaoUso" } }, [
-          _vm._v("Geração de uso (Ano)")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "anoLancamento" } }, [
-          _vm._v("Ano de lançamento")
-        ])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("checkbox", { attrs: { id: "cicloVida" } }, [
-          _vm._v("Ciclo de vida (até)")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "areaConhecimento" } }, [
-          _vm._v("Área de conhecimento")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "nivelEnsino" } }, [
-          _vm._v("Nível de ensino")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "anoEscolar" } }, [
-          _vm._v("Ano escolar/Série")
-        ])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("checkbox", { attrs: { id: "volume" } }, [_vm._v("Volume")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "numeroEdicao" } }, [
-          _vm._v("Número da edição")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "origem" } }, [_vm._v("Origem")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "idioma" } }, [_vm._v("Idioma")])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("checkbox", { attrs: { id: "pegLa" } }, [_vm._v("PEG (LA)")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "pegLp" } }, [_vm._v("PEG (LP)")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "isbnLa" } }, [_vm._v("ISBN (LA)")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "isbnLp" } }, [_vm._v("ISBN (LP)")])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c("checkbox", { attrs: { id: "nomeContrato" } }, [
-          _vm._v("Nome para contrato")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "nomeCapa" } }, [
-          _vm._v("Nome para capa")
-        ]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "pseudonimo" } }, [_vm._v("Pseudônimo")]),
-        _vm._v(" "),
-        _c("checkbox", { attrs: { id: "numeroContrato" } }, [
-          _vm._v("Número do contrato")
-        ])
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-row" },
-      [
-        _c(
-          "checkbox",
-          { staticClass: "col-3", attrs: { id: "dataAssinatura" } },
-          [_vm._v("Data de assinatura")]
-        ),
-        _vm._v(" "),
-        _c(
-          "checkbox",
-          { staticClass: "col-3", attrs: { id: "validadeContrato" } },
-          [_vm._v("Validade do contrato")]
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "mt-3 text-right" },
-      [
-        _c("button", { staticClass: "btn btn-primary btn-salvar-produto" }, [
-          _vm._v("Salvar")
-        ]),
-        _vm._v(" "),
-        _c(
-          "router-link",
-          { staticClass: "btn btn-secondary", attrs: { to: "/modelos" } },
-          [_vm._v("Cancelar")]
-        )
-      ],
-      1
-    )
-  ])
+  return _c(
+    "form",
+    {
+      on: {
+        submit: function($event) {
+          $event.preventDefault()
+          return _vm.submitModelo($event)
+        }
+      }
+    },
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "v-input",
+            {
+              attrs: { value: _vm.items.nomeModelo },
+              model: {
+                value: _vm.form.nome_modelo,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "nome_modelo", $$v)
+                },
+                expression: "form.nome_modelo"
+              }
+            },
+            [_vm._v("Nome do Modelo")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "v-select",
+            {
+              attrs: { options: ["Para todos", "Somente eu"] },
+              model: {
+                value: _vm.form.compartilhamento,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "compartilhamento", $$v)
+                },
+                expression: "form.compartilhamento"
+              }
+            },
+            [_vm._v("Compartilhamento")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("p", [_vm._v("Selecionar campos")]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "titulo", value: 1 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Título")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "tituloObra", value: 2 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Título da obra")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "geracaoUso", value: 3 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Geração de uso (Ano)")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "anoLancamento", value: 4 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Ano de lançamento")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "cicloVida", value: 5 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Ciclo de vida (até)")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "areaConhecimento", value: 6 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Área de conhecimento")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "nivelEnsino", value: 7 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Nível de ensino")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "anoEscolar", value: 8 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Ano escolar/Série")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "volume", value: 9 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Volume")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "numeroEdicao", value: 10 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Número da edição")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "origem", value: 11 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Origem")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "idioma", value: 12 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Idioma")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "pegLa", value: 13 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("PEG (LA)")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "pegLp", value: 14 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("PEG (LP)")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "isbnLa", value: 15 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("ISBN (LA)")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "isbnLp", value: 16 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("ISBN (LP)")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "nomeContrato", value: 17 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Nome para contrato")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "nomeCapa", value: 18 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Nome para capa")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "pseudonimo", value: 19 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Pseudônimo")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              attrs: { id: "numeroContrato", value: 20 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Número do contrato")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-row" },
+        [
+          _c(
+            "checkbox",
+            {
+              staticClass: "col-3",
+              attrs: { id: "dataAssinatura", value: 21 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Data de assinatura")]
+          ),
+          _vm._v(" "),
+          _c(
+            "checkbox",
+            {
+              staticClass: "col-3",
+              attrs: { id: "validadeContrato", value: 22 },
+              model: {
+                value: _vm.form.checkbox,
+                callback: function($$v) {
+                  _vm.$set(_vm.form, "checkbox", $$v)
+                },
+                expression: "form.checkbox"
+              }
+            },
+            [_vm._v("Validade do contrato")]
+          )
+        ],
+        1
+      ),
+      _vm._v("\n  " + _vm._s(_vm.form.checkbox) + "\n  "),
+      _c(
+        "div",
+        { staticClass: "mt-3 text-right" },
+        [
+          _c(
+            "button",
+            { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+            [_vm._v("Salvar")]
+          ),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            { staticClass: "btn btn-secondary", attrs: { to: "/modelos" } },
+            [_vm._v("Cancelar")]
+          )
+        ],
+        1
+      )
+    ]
+  )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", {
+          staticClass: "p-6 mb-2 bg-info text-dark",
+          attrs: { id: "response" }
+        })
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 

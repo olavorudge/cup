@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Modelo;
+use App\ModeloCampo;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -15,16 +16,16 @@ class ModelosController extends Controller
 {
   public function ListarModelos(){
     $modelos = array();
-    $modelos = Modelo::all()->where('bolAnulado', 0);
+    $modelos = Modelo::where('bolAnulado', 0)->get();
 
     $modelos = json_encode($modelos);
     return $modelos;
   }
 
-  public function CadastrarModelo(){
+  public function CadastrarModelo(Request $request){
 
     $rules = [
-      'nomeModelo'   => 'required',
+      'nome_modelo'   => 'required',
       'compartilhamento'    => 'required'
     ];
 
@@ -32,14 +33,33 @@ class ModelosController extends Controller
 
       $data = [
         'idUsuario'          => 2,
-        'nomeModelo'         => 1,
+        'nomeModelo'         => 'dsadaa',
         'autor'              => 'Usuario teste',
         'compartilhamento'   => 1,
       ];
 
-      $create = Produto::create($data);
+      $create = Modelo::create($data);
       if($create) {
-        return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
+
+        try {
+          foreach ($request->checkbox as $check) {
+
+            $dataModeloCampo = [
+              'idModelo' => $create->idModelo,
+              'idCampo' => $check,
+            ];
+
+            $insert = ModeloCampo::create($dataModeloCampo);
+
+          }
+
+          return response()->json(['success'=>1, 'msg'=>trans('app.modelo_cadastrado')]);
+        } catch (\Exception $e) {
+
+          return response()->json(['error'=>1, 'msg'=>trans('app.falha_cadastro')]);
+        }
+
+
       }
     }
   }

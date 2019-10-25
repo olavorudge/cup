@@ -28,3 +28,4 @@ Route::get('deletar-modelo/{id}', ['as' => 'deletar-modelo', 'uses' => 'ModelosC
 
 /* POST */
 Route::post('cadastrar-produto', ['as' => 'cadastrar-produto', 'uses' => 'ProdutosController@CadastrarProdutos']);
+Route::post('cadastrar-modelo', ['as' => 'cadastrar-modelo', 'uses' => 'ModelosController@CadastrarModelo']);

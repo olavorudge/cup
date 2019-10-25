@@ -1,6 +1,6 @@
 <template>
   <div class="form-check form-check-inline col">
-    <input v-model="checkboxModel" :value="value" class="form-check-input" type="checkbox" :id="id" />
+    <input v-model="checkboxModel" :value="value" :checked="checked(value)" class="form-check-input" type="checkbox" :id="id" />
     <label class="form-check-label" :for="id">
       <slot></slot>
     </label>
@@ -30,6 +30,11 @@ export default {
     },
     checkboxModel(newValue) {
       this.$emit("input", newValue);
+    }
+  },
+  methods: {
+    checked(value){
+      return this.checkboxModel.includes(value);
     }
   }
 };

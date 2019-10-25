@@ -1870,6 +1870,11 @@ __webpack_require__.r(__webpack_exports__);
     checkboxModel: function checkboxModel(newValue) {
       this.$emit("input", newValue);
     }
+  },
+  methods: {
+    checked: function checked(value) {
+      return this.checkboxModel.includes(value);
+    }
   }
 });
 
@@ -2256,7 +2261,10 @@ __webpack_require__.r(__webpack_exports__);
         data_assinatura: '',
         validade_contrato: ''
       },
-      image: ''
+      image: '',
+      areaconhecimento: {},
+      nivelensino: {},
+      anoescolar: {}
     };
   },
   methods: {
@@ -2314,7 +2322,33 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       reader.readAsDataURL(file);
+    },
+    getAreaConhecimento: function getAreaConhecimento() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-areaconhecimento').then(function (response) {
+        return _this2.areaconhecimento = response.data;
+      });
+    },
+    getNivelEnsino: function getNivelEnsino() {
+      var _this3 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-nivelensino').then(function (response) {
+        return _this3.nivelensino = response.data;
+      });
+    },
+    getAnoEscolar: function getAnoEscolar() {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-anoescolar').then(function (response) {
+        return _this4.anoescolar = response.data;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.getAreaConhecimento();
+    this.getNivelEnsino();
+    this.getAnoEscolar();
   }
 });
 
@@ -2787,27 +2821,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         visible: true,
         hideable: false
       }],
-      items: [{
-        tipo: "capa aluno",
-        numeroPaginas: 40,
-        tipoLivro: 1
-      }, {
-        tipo: "miolo aluno",
-        numeroPaginas: 40,
-        tipoLivro: 1
-      }, {
-        tipo: "capa professor",
-        numeroPaginas: 40,
-        tipoLivro: 2
-      }, {
-        tipo: "miolo professor",
-        numeroPaginas: 40,
-        tipoLivro: 2
-      }, {
-        tipo: "suplemento",
-        numeroPaginas: 40,
-        tipoLivro: 3
-      }]
+      items: [{}]
     };
   },
   computed: {
@@ -2947,7 +2961,8 @@ __webpack_require__.r(__webpack_exports__);
   props: [""],
   data: function data() {
     return {
-      id: "modal-adicionar-componente"
+      id: "modal-adicionar-componente",
+      form: {}
     };
   },
   watch: {}
@@ -3706,7 +3721,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       busy: false,
-      items: [{}],
+      items: {
+        nomeModelo: ''
+      },
       form: {
         nome_modelo: '',
         compartilhamento: '',
@@ -3720,7 +3737,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-modelo/' + this.$route.params.id).then(function (response) {
-        return _this.items = response.data;
+        return _this.form = response.data;
       });
     },
     submitModelo: function submitModelo() {
@@ -3959,6 +3976,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -4013,31 +4032,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         label: "Ações",
         "class": "text-center"
       }],
-      items: [{
-        numeroPendencias: "10",
-        peg: "PEG 001",
-        nome: "Nome do produto 001",
-        isbn: "ISBN 001",
-        dataModificacao: "15/09/2019 14:33",
-        id: 1,
-        archived: false
-      }, {
-        numeroPendencias: "16",
-        peg: "PEG 005",
-        nome: "Nome do produto 005",
-        isbn: "ISBN 005",
-        dataModificacao: "01/04/2017 14:33",
-        id: 1,
-        archived: true
-      }, {
-        numeroPendencias: "4",
-        peg: "PEG 003",
-        nome: "Nome do produto 003",
-        isbn: "ISBN 003",
-        dataModificacao: "12/06/2019 14:33",
-        id: 1,
-        archived: false
-      }]
+      items: [{}]
     };
   },
   computed: {
@@ -4048,7 +4043,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       var _this = this;
 
       return this.items.filter(function (item) {
-        return !item.archived || item.archived == _this.showArchivedItems;
+        return !item.arquivado || item.arquivado == _this.showArchivedItems;
+      });
+    },
+    getPendencias: function getPendencias() {
+      var _this2 = this;
+
+      axios.get('/listar-pendencias').then(function (response) {
+        return _this2.items = response.data;
       });
     }
   },
@@ -54373,6 +54375,7 @@ var render = function() {
       attrs: { type: "checkbox", id: _vm.id },
       domProps: {
         value: _vm.value,
+        checked: _vm.checked(_vm.value),
         checked: Array.isArray(_vm.checkboxModel)
           ? _vm._i(_vm.checkboxModel, _vm.value) > -1
           : _vm.checkboxModel
@@ -54858,7 +54861,13 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [2019, 2018, 2017] },
+                  attrs: {
+                    options: [
+                      { value: 2019, name: 2019 },
+                      { value: 2018, name: 2018 },
+                      { value: 2017, name: 2017 }
+                    ]
+                  },
                   model: {
                     value: _vm.form.ano_uso,
                     callback: function($$v) {
@@ -54873,7 +54882,13 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [2019, 2018, 2017] },
+                  attrs: {
+                    options: [
+                      { value: 2019, name: 2019 },
+                      { value: 2018, name: 2018 },
+                      { value: 2017, name: 2017 }
+                    ]
+                  },
                   model: {
                     value: _vm.form.ano_lancamento,
                     callback: function($$v) {
@@ -54888,7 +54903,13 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [2019, 2018, 2017] },
+                  attrs: {
+                    options: [
+                      { value: 2019, name: 2019 },
+                      { value: 2018, name: 2018 },
+                      { value: 2017, name: 2017 }
+                    ]
+                  },
                   model: {
                     value: _vm.form.ano_ciclo,
                     callback: function($$v) {
@@ -54910,7 +54931,7 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [1, 2] },
+                  attrs: { options: _vm.areaconhecimento },
                   model: {
                     value: _vm.form.area_conhec,
                     callback: function($$v) {
@@ -54925,7 +54946,7 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [1, 2] },
+                  attrs: { options: _vm.nivelensino },
                   model: {
                     value: _vm.form.nivel_ensino,
                     callback: function($$v) {
@@ -54940,7 +54961,7 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [1, 2] },
+                  attrs: { options: _vm.anoescolar },
                   model: {
                     value: _vm.form.serie,
                     callback: function($$v) {
@@ -54962,7 +54983,14 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: [1, 2, 3, 4] },
+                  attrs: {
+                    options: [
+                      { value: 1, name: 1 },
+                      { value: 2, name: 2 },
+                      { value: 3, name: 3 },
+                      { value: 4, name: 4 }
+                    ]
+                  },
                   model: {
                     value: _vm.form.volume,
                     callback: function($$v) {
@@ -54991,7 +55019,12 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: ["Brasil", "Japão"] },
+                  attrs: {
+                    options: [
+                      { value: "Brasil", name: "Brasil" },
+                      { value: "Japão", name: "Japão" }
+                    ]
+                  },
                   model: {
                     value: _vm.form.origem,
                     callback: function($$v) {
@@ -55006,7 +55039,12 @@ var render = function() {
               _c(
                 "v-select",
                 {
-                  attrs: { options: ["PT-Br"] },
+                  attrs: {
+                    options: [
+                      { value: "pt-br", name: "Português-BR" },
+                      { value: "en-usa", name: "Inglês-EUA" }
+                    ]
+                  },
                   model: {
                     value: _vm.form.idioma,
                     callback: function($$v) {
@@ -55411,9 +55449,16 @@ var render = function() {
         _c("option", { attrs: { value: "" } }, [_vm._v(" Selecione ")]),
         _vm._v(" "),
         _vm._l(_vm.options, function(option) {
-          return _c("option", { domProps: { value: option } }, [
-            _vm._v(_vm._s(option))
-          ])
+          return _c(
+            "option",
+            {
+              domProps: {
+                value: option.value,
+                selected: _vm.value == option.value
+              }
+            },
+            [_vm._v(_vm._s(option.name))]
+          )
         })
       ],
       2
@@ -55787,9 +55832,26 @@ var render = function() {
                 "div",
                 { staticClass: "form-row" },
                 [
-                  _c("v-select", { attrs: { options: ["Capa", "Miolo"] } }, [
-                    _vm._v("Componente")
-                  ])
+                  _c(
+                    "v-select",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.componente,
+                          expression: "form.componente"
+                        }
+                      ],
+                      attrs: {
+                        options: [
+                          { value: "capa", name: "Capa" },
+                          { value: "miolo", name: "Miolo" }
+                        ]
+                      }
+                    },
+                    [_vm._v("Componente")]
+                  )
                 ],
                 1
               ),
@@ -55798,11 +55860,50 @@ var render = function() {
                 "div",
                 { staticClass: "form-row" },
                 [
-                  _c("v-input", [_vm._v("Formato aberto (mm)")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.formato_aberto,
+                          expression: "form.formato_aberto"
+                        }
+                      ]
+                    },
+                    [_vm._v("Formato aberto (mm)")]
+                  ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Formato fechado (mm)")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.formato_fechado,
+                          expression: "form.formato_fechado"
+                        }
+                      ]
+                    },
+                    [_vm._v("Formato fechado (mm)")]
+                  ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Número de páginas")])
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.num_paginas,
+                          expression: "form.num_paginas"
+                        }
+                      ]
+                    },
+                    [_vm._v("Número de páginas")]
+                  )
                 ],
                 1
               ),
@@ -55811,11 +55912,50 @@ var render = function() {
                 "div",
                 { staticClass: "form-row" },
                 [
-                  _c("v-input", [_vm._v("Papel/Gramatura")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.papel,
+                          expression: "form.papel"
+                        }
+                      ]
+                    },
+                    [_vm._v("Papel/Gramatura")]
+                  ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Cores")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.cores,
+                          expression: "form.cores"
+                        }
+                      ]
+                    },
+                    [_vm._v("Cores")]
+                  ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Acabamento")])
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.acabamento,
+                          expression: "form.acabamento"
+                        }
+                      ]
+                    },
+                    [_vm._v("Acabamento")]
+                  )
                 ],
                 1
               ),
@@ -55823,7 +55963,22 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "form-row" },
-                [_c("v-input", [_vm._v("Observação")])],
+                [
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.observacoes,
+                          expression: "form.observacoes"
+                        }
+                      ]
+                    },
+                    [_vm._v("Observação")]
+                  )
+                ],
                 1
               ),
               _vm._v(" "),
@@ -55831,17 +55986,71 @@ var render = function() {
                 "div",
                 { staticClass: "form-row" },
                 [
-                  _c("v-input", [_vm._v("Espessura")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.espessura,
+                          expression: "form.espessura"
+                        }
+                      ]
+                    },
+                    [_vm._v("Espessura")]
+                  ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Peso (g)")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.peso,
+                          expression: "form.peso"
+                        }
+                      ]
+                    },
+                    [_vm._v("Peso (g)")]
+                  ),
                   _vm._v(" "),
                   _c(
                     "v-select",
-                    { attrs: { options: ["Retrato", "Paisagem"] } },
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.orientacao,
+                          expression: "form.orientacao"
+                        }
+                      ],
+                      attrs: {
+                        options: [
+                          { value: "retrato", name: "Retrato" },
+                          { value: "paisagem", name: "Paisagem" }
+                        ]
+                      }
+                    },
                     [_vm._v("Orientação")]
                   ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Alvura (%)")])
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.alvura,
+                          expression: "form.alvura"
+                        }
+                      ]
+                    },
+                    [_vm._v("Alvura (%)")]
+                  )
                 ],
                 1
               ),
@@ -55850,13 +56059,56 @@ var render = function() {
                 "div",
                 { staticClass: "form-row" },
                 [
-                  _c("v-input", [_vm._v("Opacidade")]),
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.opacidade,
+                          expression: "form.opacidade"
+                        }
+                      ]
+                    },
+                    [_vm._v("Opacidade")]
+                  ),
                   _vm._v(" "),
-                  _c("v-select", { attrs: { options: ["A", "B"] } }, [
-                    _vm._v("Lombada")
-                  ]),
+                  _c(
+                    "v-select",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.lombada,
+                          expression: "form.lombada"
+                        }
+                      ],
+                      attrs: {
+                        options: [
+                          { value: "A", name: "A" },
+                          { value: "B", name: "B" }
+                        ]
+                      }
+                    },
+                    [_vm._v("Lombada")]
+                  ),
                   _vm._v(" "),
-                  _c("v-input", [_vm._v("Medidas da lombada")])
+                  _c(
+                    "v-input",
+                    {
+                      directives: [
+                        {
+                          name: "form",
+                          rawName: "v-form",
+                          value: _vm.form.medida_lombada,
+                          expression: "form.medida_lombada"
+                        }
+                      ]
+                    },
+                    [_vm._v("Medidas da lombada")]
+                  )
                 ],
                 1
               )
@@ -56884,13 +57136,12 @@ var render = function() {
           _c(
             "v-input",
             {
-              attrs: { value: _vm.items.nomeModelo },
               model: {
-                value: _vm.form.nome_modelo,
+                value: _vm.form.nomeModelo,
                 callback: function($$v) {
-                  _vm.$set(_vm.form, "nome_modelo", $$v)
+                  _vm.$set(_vm.form, "nomeModelo", $$v)
                 },
-                expression: "form.nome_modelo"
+                expression: "form.nomeModelo"
               }
             },
             [_vm._v("Nome do Modelo")]
@@ -56906,7 +57157,12 @@ var render = function() {
           _c(
             "v-select",
             {
-              attrs: { options: ["Para todos", "Somente eu"] },
+              attrs: {
+                options: [
+                  { value: 1, name: "Para todos" },
+                  { value: 2, name: "Somente eu" }
+                ]
+              },
               model: {
                 value: _vm.form.compartilhamento,
                 callback: function($$v) {
@@ -57578,6 +57834,12 @@ var render = function() {
             "tbody-tr-class": _vm.rowClass
           },
           scopedSlots: _vm._u([
+            {
+              key: "cell(peg)",
+              fn: function(data) {
+                return [_vm._v("\n      " + _vm._s(data.item.nome) + "\n    ")]
+              }
+            },
             {
               key: "cell(numeroPendencias)",
               fn: function(row) {

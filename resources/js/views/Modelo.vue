@@ -7,10 +7,10 @@
       </div>
     </div>
     <div class="form-row">
-      <v-input :value="items.nomeModelo" v-model="form.nome_modelo">Nome do Modelo</v-input>
+      <v-input  v-model="form.nomeModelo">Nome do Modelo</v-input>
     </div>
     <div class="form-row">
-      <v-select :options="['Para todos', 'Somente eu']" v-model="form.compartilhamento">Compartilhamento</v-select>
+      <v-select :options="[{value: 1, name:'Para todos'}, {value: 2, name:'Somente eu'}]" v-model="form.compartilhamento">Compartilhamento</v-select>
     </div>
 
     <p>Selecionar campos</p>
@@ -69,9 +69,10 @@ export default {
     data() {
       return {
         busy: false,
-        items: [
-          {}
-        ],
+        items:
+          {
+            nomeModelo: '',
+          },
         form: {
           nome_modelo: '',
           compartilhamento: '',
@@ -86,7 +87,7 @@ export default {
         editModelo(){
           axios
           .get('/listar-modelo/'+ this.$route.params.id)
-          .then(response => (this.items = response.data))
+          .then(response => (this.form = response.data))
         },
         submitModelo(){
           this.errors = {};

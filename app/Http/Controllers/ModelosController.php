@@ -22,6 +22,7 @@ class ModelosController extends Controller
     return $modelos;
   }
 
+
   public function CadastrarModelo(Request $request){
 
     $rules = [
@@ -33,9 +34,9 @@ class ModelosController extends Controller
 
       $data = [
         'idUsuario'          => 2,
-        'nomeModelo'         => 'dsadaa',
+        'nomeModelo'         => $request->nome_modelo,
         'autor'              => 'Usuario teste',
-        'compartilhamento'   => 1,
+        'compartilhamento'   => $request->compartilhamento,
       ];
 
       $create = Modelo::create($data);

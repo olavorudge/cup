@@ -27,12 +27,14 @@
         <b-spinner class="align-middle"></b-spinner>
         <strong>Carregando...</strong>
       </div>
-
+      <template v-slot:cell(peg)="data">
+        {{data.item.nome}}
+      </template>
       <template v-slot:cell(numeroPendencias)="row">
         <b>{{ row.item.numeroPendencias }}</b>
       </template>
 
-      <template v-slot:cell(actions)="row">      
+      <template v-slot:cell(actions)="row">
         <a
           href="#"
           @click="row.toggleDetails"
@@ -125,33 +127,7 @@ export default {
         { key: "actions", label: "Ações", class: "text-center" }
       ],
       items: [
-        {
-          numeroPendencias: "10",
-          peg: "PEG 001",
-          nome: "Nome do produto 001",
-          isbn: "ISBN 001",
-          dataModificacao: "15/09/2019 14:33",
-          id: 1,
-          archived: false
-        },
-        {
-          numeroPendencias: "16",
-          peg: "PEG 005",
-          nome: "Nome do produto 005",
-          isbn: "ISBN 005",
-          dataModificacao: "01/04/2017 14:33",
-          id: 1,
-          archived: true
-        },
-        {
-          numeroPendencias: "4",
-          peg: "PEG 003",
-          nome: "Nome do produto 003",
-          isbn: "ISBN 003",
-          dataModificacao: "12/06/2019 14:33",
-          id: 1,
-          archived: false
-        }
+        {}
       ]
     };
   },
@@ -161,9 +137,14 @@ export default {
     },
     visibleItems() {
       return this.items.filter(
-        item => !item.archived || item.archived == this.showArchivedItems
+        item => !item.arquivado || item.arquivado == this.showArchivedItems
       );
-    }
+    },
+    getPendencias(){
+      axios
+      .get('/listar-pendencias')
+      .then(response => (this.items = response.data))
+    },
   },
   methods: {
     openModal(modalId) {

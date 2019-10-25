@@ -212,31 +212,7 @@ export default {
         }
       ],
       items: [
-        {
-          tipo: "capa aluno",
-          numeroPaginas: 40,
-          tipoLivro: 1
-        },
-        {
-          tipo: "miolo aluno",
-          numeroPaginas: 40,
-          tipoLivro: 1
-        },
-        {
-          tipo: "capa professor",
-          numeroPaginas: 40,
-          tipoLivro: 2
-        },
-        {
-          tipo: "miolo professor",
-          numeroPaginas: 40,
-          tipoLivro: 2
-        },
-        {
-          tipo: "suplemento",
-          numeroPaginas: 40,
-          tipoLivro: 3
-        }
+        {}
       ]
     };
   },

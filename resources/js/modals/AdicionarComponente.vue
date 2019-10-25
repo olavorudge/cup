@@ -17,31 +17,31 @@
         </div>
         <div class="modal-body">
           <div class="form-row">
-            <v-select :options="[ 'Capa', 'Miolo' ]">Componente</v-select>
+            <v-select :options="[ {value: 'capa', name: 'Capa'}, {value: 'miolo', name:'Miolo'} ]"  v-form="form.componente">Componente</v-select>
           </div>
           <div class="form-row">
-            <v-input>Formato aberto (mm)</v-input>
-            <v-input>Formato fechado (mm)</v-input>
-            <v-input>Número de páginas</v-input>
+            <v-input v-form="form.formato_aberto">Formato aberto (mm)</v-input>
+            <v-input v-form="form.formato_fechado">Formato fechado (mm)</v-input>
+            <v-input v-form="form.num_paginas">Número de páginas</v-input>
           </div>
           <div class="form-row">
-            <v-input>Papel/Gramatura</v-input>
-            <v-input>Cores</v-input>
-            <v-input>Acabamento</v-input>
+            <v-input v-form="form.papel">Papel/Gramatura</v-input>
+            <v-input v-form="form.cores">Cores</v-input>
+            <v-input v-form="form.acabamento">Acabamento</v-input>
           </div>
           <div class="form-row">
-            <v-input>Observação</v-input>
+            <v-input v-form="form.observacoes">Observação</v-input>
           </div>
           <div class="form-row">
-            <v-input>Espessura</v-input>
-            <v-input>Peso (g)</v-input>
-            <v-select :options="['Retrato','Paisagem']">Orientação</v-select>
-            <v-input>Alvura (%)</v-input>
+            <v-input v-form="form.espessura">Espessura</v-input>
+            <v-input v-form="form.peso">Peso (g)</v-input>
+            <v-select :options="[{value: 'retrato', name: 'Retrato'}, {value: 'paisagem', name: 'Paisagem'}]" v-form="form.orientacao">Orientação</v-select>
+            <v-input  v-form="form.alvura">Alvura (%)</v-input>
           </div>
           <div class="form-row">
-            <v-input>Opacidade</v-input>
-            <v-select :options="['A','B']">Lombada</v-select>
-            <v-input>Medidas da lombada</v-input>
+            <v-input v-form="form.opacidade">Opacidade</v-input>
+            <v-select :options="[{value: 'A', name: 'A'}, {value: 'B', name:'B'} ]"  v-form="form.lombada">Lombada</v-select>
+            <v-input v-form="form.medida_lombada">Medidas da lombada</v-input>
           </div>
         </div>
         <div class="modal-footer">
@@ -63,7 +63,8 @@ export default {
   props: [""],
   data() {
     return {
-      id: "modal-adicionar-componente"
+      id: "modal-adicionar-componente",
+      form: {}
     };
   },
   watch: {

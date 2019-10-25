@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Produto;
+use App\EspecificacaoTecnica;
 use App\AreaConhecimento;
+use App\AnoEscolar;
+use App\NivelEnsino;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -20,10 +23,31 @@ class ProdutosController extends Controller
   /*
   Função para exibir todos os produtos cadastrados
   */
-  public function ListarProdutos(Request $request)
+  public function ListarProdutos()
   {
     $produtos = array();
     $produtos = Produto::where('bolAnulado', 0)->get();
+
+    $produtos = json_encode($produtos);
+    return $produtos;
+  }
+
+  public function ListarPendências(){
+    $produtos = array();
+    $produtos = Produto::where([
+        ['volume', '=', ''],
+        ['num_edicao', '=', ''],
+        ['pegLA', '=', ''],
+        ['pegLP', '=', ''],
+        ['ISBN_LA', '=', ''],
+        ['ISBN_LP', '=', ''],
+        ['nomeContrato', '=', ''],
+        ['nomeCapa', '=', ''],
+        ['pseudonomio', '=', ''],
+        ['numContrato', '=', ''],
+        ['dataAssinatura', '=', ''],
+        ['validadeContrato', '=', '']
+    ])->get();
 
     $produtos = json_encode($produtos);
     return $produtos;
@@ -85,6 +109,45 @@ class ProdutosController extends Controller
       }
     }
   }
+  /*
+  Função para cadastrar especificacoes
+  */
+  public function CadastrarEspecificacao(Request $request)
+  {
+
+    $rules = [
+      'componente'   => 'required',
+    ];
+
+    if ($this->validate($request, $rules)) {
+
+      $data = [
+        'idProduto'             => 2,
+        'idTipoEspecificacao'   => 2,
+        'componente'            => $request->componente,
+        'formatoAberto'         => $request->formato_aberto,
+        'formatoFechado'        => $request->formato_fechado,
+        'numPagina'             => $request->num_paginas,
+        'papel'                 => $request->papel,
+        'cores'                 => $request->cores,
+        'acabamento'            => $request->acabamento,
+        'observacoes'           => $request->observacoes,
+        'espessura'             => $request->espessura,
+        'peso'                  => $request->peso,
+        'orientacao'            => $request->orientacao,
+        'alvura'                => $request->alvura,
+        'opacidade'             => $request->opacidade,
+        'lombada'              => $request->lombada,
+        'medLombada'           => $request->medida_lombada,
+        'bolAnulado'            => 0
+      ];
+
+      $create = EspecificacaoTecnica::create($data);
+      if($create) {
+        return response()->json(['success'=>1, 'msg'=>trans('app.componente_cadastrado')]);
+      }
+    }
+  }
 /*
   FUNÇÃO PARA DELETAR PRODUTOS
 */
@@ -125,9 +188,52 @@ public function getAreaConhecimento()
 {
   $areaConhec = array();
   $areaConhec = AreaConhecimento::all();
+  $data = [];
+  foreach ($areaConhec as $area) {
+      $data[] = [
+        'value' => $area->idAreaConhecimento,
+        'name' => $area->nomeAreaConhecimento
+      ];
+  }
 
-  $areaConhec = json_encode($areaConhec);
+  $areaConhec = json_encode($data);
   return $areaConhec;
+}
+/*
+  FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
+*/
+public function getNivelEnsino()
+{
+  $areaConhec = array();
+  $nivelEnsino = NivelEnsino::all();
+  $data = [];
+  foreach ($nivelEnsino as $nivel) {
+      $data[] = [
+        'value' => $nivel->idNivel,
+        'name' => $nivel->nomeNivel
+      ];
+  }
+
+  $nivelEnsino = json_encode($data);
+  return $nivelEnsino;
+}
+/*
+  FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
+*/
+public function getAnoEscolar()
+{
+  $anoEsc = array();
+  $anoEsc = AnoEscolar::all();
+  $data = [];
+  foreach ($anoEsc as $ano) {
+      $data[] = [
+        'value' => $ano->idAnoEscolar,
+        'name' => $ano->nomeAnoEscolar
+      ];
+  }
+
+  $anoEsc = json_encode($data);
+  return $anoEsc;
 }
 
 

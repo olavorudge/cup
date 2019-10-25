@@ -25,20 +25,20 @@
         <v-input v-model="form.titulo_obra">Título da obra</v-input>
       </div>
       <div class="form-row">
-        <v-select :options="[ 2019, 2018, 2017 ]" v-model="form.ano_uso">Geração de uso (ano)</v-select>
-        <v-select :options="[ 2019, 2018, 2017 ]" v-model="form.ano_lancamento">Ano de lançamento</v-select>
-        <v-select :options="[ 2019, 2018, 2017 ]" v-model="form.ano_ciclo">Ciclo de vida (até)</v-select>
+        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_uso">Geração de uso (ano)</v-select>
+        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_lancamento">Ano de lançamento</v-select>
+        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_ciclo">Ciclo de vida (até)</v-select>
       </div>
       <div class="form-row">
-        <v-select :options="[ 1, 2 ]" v-model="form.area_conhec">Área de conhecimento</v-select>
-        <v-select :options="[ 1, 2 ]" v-model="form.nivel_ensino">Nível de ensino</v-select>
-        <v-select :options="[ 1, 2]" v-model="form.serie">Ano escolar/ Série</v-select>
+        <v-select :options="areaconhecimento" v-model="form.area_conhec">Área de conhecimento</v-select>
+        <v-select :options="nivelensino" v-model="form.nivel_ensino">Nível de ensino</v-select>
+        <v-select :options="anoescolar" v-model="form.serie">Ano escolar/ Série</v-select>
       </div>
       <div class="form-row">
-        <v-select :options="[ 1, 2, 3, 4 ]" v-model="form.volume">Volume</v-select>
+        <v-select :options="[{value:1, name:1}, {value:2, name:2}, {value:3, name:3}, {value:4, name:4}]" v-model="form.volume">Volume</v-select>
         <v-input v-model="form.num_edicao">Número da edição</v-input>
-        <v-select :options="[ 'Brasil', 'Japão' ]" v-model="form.origem">Origem</v-select>
-        <v-select :options="[ 'PT-Br' ]" v-model="form.idioma">Idioma</v-select>
+        <v-select :options="[{value:'Brasil', name:'Brasil'}, {value:'Japão', name:'Japão'}]" v-model="form.origem">Origem</v-select>
+        <v-select :options="[ {value:'pt-br', name:'Português-BR'}, {value:'en-usa', name:'Inglês-EUA'} ]" v-model="form.idioma">Idioma</v-select>
       </div>
       <div class="form-row">
         <v-input v-model="form.peg_la">PEG (LA)</v-input>
@@ -124,6 +124,9 @@ export default {
         validade_contrato: '',
       },
       image: '',
+      areaconhecimento:  {},
+      nivelensino:  {},
+      anoescolar:  {},
     }
   },
   methods: {
@@ -180,7 +183,27 @@ export default {
         vm.image = e.target.result;
       };
       reader.readAsDataURL(file);
+    },
+    getAreaConhecimento(){
+      axios
+      .get('/listar-areaconhecimento')
+      .then(response => (this.areaconhecimento = response.data))
+    },
+    getNivelEnsino(){
+      axios
+      .get('/listar-nivelensino')
+      .then(response => (this.nivelensino = response.data))
+    },
+    getAnoEscolar(){
+      axios
+      .get('/listar-anoescolar')
+      .then(response => (this.anoescolar = response.data))
     }
+  },
+  mounted() {
+    this.getAreaConhecimento();
+    this.getNivelEnsino();
+    this.getAnoEscolar();
   }
 }
 </script>

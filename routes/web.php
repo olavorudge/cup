@@ -21,6 +21,9 @@ Route::get('/', function(){
 Route::get('listar-produtos', ['as' => 'listar-produtos', 'uses' => 'ProdutosController@ListarProdutos']);
 Route::get('deletar-produto/{id}', ['as' => 'deletar-produto', 'uses' => 'ProdutosController@DeletarProduto']);
 Route::get('duplicar-produto/{id}', ['as' => 'duplicar-produto', 'uses' => 'ProdutosController@DuplicarProduto']);
+Route::get('listar-areaconhecimento', ['as' => 'listar-areaconhecimento', 'uses' => 'ProdutosController@getAreaConhecimento']);
+Route::get('listar-nivelensino', ['as' => 'listar-nivelensino', 'uses' => 'ProdutosController@getNivelEnsino']);
+Route::get('listar-anoescolar', ['as' => 'listar-anoescolar', 'uses' => 'ProdutosController@getAnoEscolar']);
 
 Route::get('listar-modelos', ['as' => 'listar-modelos', 'uses' => 'ModelosController@ListarModelos']);
 Route::get('listar-modelo/{id}', ['as' => 'listar-modelo', 'uses' => 'ModelosController@SelecionarModelo']);
@@ -29,3 +32,4 @@ Route::get('deletar-modelo/{id}', ['as' => 'deletar-modelo', 'uses' => 'ModelosC
 /* POST */
 Route::post('cadastrar-produto', ['as' => 'cadastrar-produto', 'uses' => 'ProdutosController@CadastrarProdutos']);
 Route::post('cadastrar-modelo', ['as' => 'cadastrar-modelo', 'uses' => 'ModelosController@CadastrarModelo']);
+Route::post('cadastrar-especificacao', ['as' => 'cadastrar-especificacao', 'uses' => 'ProdutosController@CadastrarEspecificacao']);

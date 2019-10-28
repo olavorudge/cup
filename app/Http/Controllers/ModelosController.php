@@ -53,7 +53,6 @@ class ModelosController extends Controller
             $insert = ModeloCampo::create($dataModeloCampo);
 
           }
-
           return response()->json(['success'=>1, 'msg'=>trans('app.modelo_cadastrado')]);
         } catch (\Exception $e) {
 

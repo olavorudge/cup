@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="form-row">
-      <v-input  v-model="form.nomeModelo">Nome do Modelo</v-input>
+      <v-input v-model="form.nome_modelo">Nome do Modelo</v-input>
     </div>
     <div class="form-row">
       <v-select :options="[{value: 1, name:'Para todos'}, {value: 2, name:'Somente eu'}]" v-model="form.compartilhamento">Compartilhamento</v-select>
@@ -71,7 +71,6 @@ export default {
         busy: false,
         items:
           {
-            nomeModelo: '',
           },
         form: {
           nome_modelo: '',

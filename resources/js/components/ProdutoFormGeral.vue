@@ -83,7 +83,6 @@
         <button type="submit" class="btn btn-primary">Salvar</button>
         <button type="" class="btn btn-secondary">Cancelar</button>
       </div>
-
     </form>
   </div>
 </template>

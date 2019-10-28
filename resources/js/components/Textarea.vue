@@ -3,7 +3,7 @@
     <label>
       <slot></slot>
     </label>
-    <textarea class="form-control" v-model="value">}</textarea>
+    <textarea class="form-control" v-bind:value="value" v-on:input="$emit('input', $event.target.value)"></textarea>
   </div>
 </template>
 

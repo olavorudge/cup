@@ -4,9 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AreaConhecimento extends Model
+class EspecificacaoTecnica extends Model
 {
     protected $table = 'especificacoes_tecnicas';
-    protected $fillable = [];
+    protected $primaryKey = 'idEspecificacao';
+    protected $fillable = ['idProduto', 'idTipoEspecificacao', 'componente', 'formatoAberto', 'formatoFechado', 'numPagina', 'papel', 'cores', 'acabamento', 'observacoes', 'espessura', 'peso', 'orientacao', 'alvura', 'opacidade', 'lombada', 'medLombada', 'bolAnulado'];
 
 }

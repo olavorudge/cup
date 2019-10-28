@@ -7,6 +7,8 @@ use App\EspecificacaoTecnica;
 use App\AreaConhecimento;
 use App\AnoEscolar;
 use App\NivelEnsino;
+use App\Observacao;
+use App\EstruturaProduto;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -31,7 +33,9 @@ class ProdutosController extends Controller
     $produtos = json_encode($produtos);
     return $produtos;
   }
-
+/*
+  Listar produtos com pendências
+*/
   public function ListarPendências(){
     $produtos = array();
     $produtos = Produto::where([
@@ -53,6 +57,36 @@ class ProdutosController extends Controller
     return $produtos;
   }
 
+/*
+ Listar as especificações do produto X
+*/
+
+public function ListarEspecificacoes($id)
+{
+  $produtos = array();
+  $produtos = EspecificacaoTecnica::where('idProduto', $id)->where('bolAnulado', 0)->get();
+
+  $produtos = json_encode($produtos);
+  return $produtos;
+}
+/*
+ Listar as estrtuturas do produto X
+*/
+
+public function ListarEstruturas($id)
+{
+  $produtos = array();
+  $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
+
+  foreach ($produtos as $produto) {
+    $ids[] = $produto->idProduto;
+  }
+  $produtos = Produto::find($ids);
+
+
+  $produtos = json_encode($produtos);
+  return $produtos;
+}
   /*
   Função para cadastrar produtos
   */
@@ -117,13 +151,15 @@ class ProdutosController extends Controller
 
     $rules = [
       'componente'   => 'required',
+      'num_paginas'   => 'numeric',
+      'peso'   => 'numeric'
     ];
 
     if ($this->validate($request, $rules)) {
 
       $data = [
-        'idProduto'             => 2,
-        'idTipoEspecificacao'   => 2,
+        'idProduto'             => 1,
+        'idTipoEspecificacao'   => 1,
         'componente'            => $request->componente,
         'formatoAberto'         => $request->formato_aberto,
         'formatoFechado'        => $request->formato_fechado,
@@ -147,6 +183,48 @@ class ProdutosController extends Controller
         return response()->json(['success'=>1, 'msg'=>trans('app.componente_cadastrado')]);
       }
     }
+  }
+  /*
+  Função para cadastrar observacoes de produtos
+  */
+  public function CadastrarObservacao(Request $request)
+  {
+
+    $rules = [
+      'observacao'   => 'required',
+    ];
+
+    if ($this->validate($request, $rules)) {
+
+      $data = [
+        'idProduto'       => 1,
+        'idUsuario'       => 1,
+        'observacao'      => $request->observacao
+      ];
+
+      $create = Observacao::create($data);
+      if($create) {
+        return response()->json(['success'=>1, 'msg'=>trans('app.observacao_cadastrada')]);
+      }
+    }
+  }
+  /*
+  Função para cadastrar estruturas de produtos
+  */
+  public function CadastrarEstrutura(Request $request)
+  {
+    if($request->selectedItems == null){
+      return response()->json(['error'=>1, 'msg'=>trans('app.produto_vazio')]);
+    }
+    foreach ($request->selectedItems as $item) {
+      $data = [
+        'idEstrutura'     => $request->idProduto,
+        'idProduto'       => $item
+      ];
+
+      $create = EstruturaProduto::create($data);
+    }
+      return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
   }
 /*
   FUNÇÃO PARA DELETAR PRODUTOS
@@ -175,12 +253,7 @@ class ProdutosController extends Controller
       }
     }
 
-/*
-  Cadastro Especificacoes
-*/
-public function CadastrarEspecificacoes($id){
 
-}
 /*
   FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
 */

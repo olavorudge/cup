@@ -19,5 +19,8 @@ return [
     'produto_deletado' => 'Produto deletado com sucesso',
     'produto_duplicado' => 'Produto duplicado com sucesso',
     'componente_cadastrado' => 'Componente cadastrado com sucesso',
+    'observacao_cadastrada' => 'Observação cadastrada com sucesso',
+    'erro_cadastrar' => 'Erro ao cadastrar, tente novamente mais tarde',
+    'produto_vazio' => 'Nenhum produto selecionado',
 
 ];

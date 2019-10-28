@@ -2044,10 +2044,20 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
-/* harmony import */ var _js_modals_BuscarProdutos__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/modals/BuscarProdutos */ "./resources/js/modals/BuscarProdutos.vue");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
+/* harmony import */ var _js_modals_BuscarProdutos__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/js/modals/BuscarProdutos */ "./resources/js/modals/BuscarProdutos.vue");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2077,18 +2087,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    BTable: bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["BTable"],
-    ModalBuscarProdutos: _js_modals_BuscarProdutos__WEBPACK_IMPORTED_MODULE_2__["default"]
+    BTable: bootstrap_vue__WEBPACK_IMPORTED_MODULE_2__["BTable"],
+    ModalBuscarProdutos: _js_modals_BuscarProdutos__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
       busy: false,
       currentPage: 1,
       perPage: 20,
-      items: [],
+      items: [{
+        idProduto: ''
+      }],
       fields: [{
         key: "identificador",
         label: "Identificador",
@@ -2113,8 +2126,18 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
   },
   methods: {
     openModal: function openModal(modalId) {
-      jquery__WEBPACK_IMPORTED_MODULE_3___default()(modalId).modal();
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(modalId).modal();
+    },
+    getEstrutura: function getEstrutura(id) {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/listar-estruturas/' + id).then(function (response) {
+        return _this.items = response.data;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.getEstrutura(1);
   }
 });
 
@@ -2134,7 +2157,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_components_Select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/components/Select */ "./resources/js/components/Select.vue");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-//
 //
 //
 //
@@ -2626,8 +2648,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_modals_SelecionarComponentes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/js/modals/SelecionarComponentes */ "./resources/js/modals/SelecionarComponentes.vue");
 /* harmony import */ var _js_modals_AdicionarComponente__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/modals/AdicionarComponente */ "./resources/js/modals/AdicionarComponente.vue");
 /* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_5__);
 //
 //
 //
@@ -2690,6 +2714,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2821,7 +2890,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         visible: true,
         hideable: false
       }],
-      items: [{}]
+      items: [{
+        idProduto: ''
+      }]
     };
   },
   computed: {
@@ -2840,19 +2911,29 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
 
       if (this.filterBy === 0) return this.items;
       return this.items.filter(function (item) {
-        return item.tipoLivro === _this.filterBy;
+        return item.idTipoEspecificacao === _this.filterBy;
       });
     }
   },
   methods: {
     openModal: function openModal(modalId) {
-      jquery__WEBPACK_IMPORTED_MODULE_4___default()(modalId).modal();
+      jquery__WEBPACK_IMPORTED_MODULE_5___default()(modalId).modal();
     },
     updateFields: function updateFields(selectedFields) {
       this.fields.forEach(function (field) {
         field.visible = selectedFields.includes(field.key);
       });
+    },
+    getEspecificacoes: function getEspecificacoes(id) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-especificacoes/' + id).then(function (response) {
+        return _this2.items = response.data;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.getEspecificacoes(1);
   }
 });
 
@@ -2894,6 +2975,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_components_Checkbox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/js/components/Checkbox */ "./resources/js/components/Checkbox.vue");
 /* harmony import */ var _js_components_Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/js/components/Input */ "./resources/js/components/Input.vue");
 /* harmony import */ var _js_components_Select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/components/Select */ "./resources/js/components/Select.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
 //
 //
 //
@@ -2949,6 +3032,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2962,10 +3054,70 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       id: "modal-adicionar-componente",
-      form: {}
+      form: {
+        idProduto: 1,
+        idTipoEspecificacao: 1,
+        componente: '',
+        formato_aberto: '',
+        num_paginas: 0,
+        papel: '',
+        cores: '',
+        acabamento: '',
+        observacoes: '',
+        espessura: '',
+        peso: 0,
+        orientacao: '',
+        alvura: '',
+        opacidade: '',
+        lombada: '',
+        medida_lombada: ''
+      }
     };
   },
-  watch: {}
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      this.errors = {};
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-especificacao', {
+        idProduto: this.form.idProduto,
+        idTipoEspecificacao: this.form.idTipoEspecificacao,
+        componente: this.form.componente,
+        formato_aberto: this.form.formato_aberto,
+        num_paginas: this.form.num_paginas,
+        papel: this.form.papel,
+        cores: this.form.cores,
+        acabamento: this.form.acabamento,
+        observacoes: this.form.observacoes,
+        espessura: this.form.espessura,
+        peso: this.form.peso,
+        orientacao: this.form.orientacao,
+        alvura: this.form.alvura,
+        opacidade: this.form.opacidade,
+        lombada: this.form.lombada,
+        medida_lombada: this.form.medida_lombada
+      }).then(function (response) {
+        var responseLog = document.getElementById('responseComponente');
+        responseLog.innerHTML = response.data.msg;
+
+        _this.getEspecificacoes(_this.form.idProduto);
+      })["catch"](function (error) {
+        if (error.response.status === 422) {
+          _this.errors = error.response.data.errors || {};
+          var responseLog = document.getElementById('responseComponente');
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          responseLog.innerHTML = errorHandling[0];
+        }
+      });
+    },
+    getEspecificacoes: function getEspecificacoes(id) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-especificacoes/' + id).then(function (response) {
+        return _this2.items = response.data;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -2980,6 +3132,16 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_components_Textarea__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/js/components/Textarea */ "./resources/js/components/Textarea.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3014,14 +3176,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     VTextarea: _js_components_Textarea__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   data: function data() {
     return {
-      id: "modal-adicionar-observacao"
+      id: "modal-adicionar-observacao",
+      form: {
+        idProduto: 1,
+        idUsuario: 1,
+        observacao: ''
+      }
     };
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      this.errors = {};
+      console.log('ole');
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/cadastrar-observacao', {
+        idProduto: this.form.idProduto,
+        idUsuario: this.form.idUsuario,
+        observacao: this.form.observacao
+      }).then(function (response) {
+        var responseLog = document.getElementById('responseObservacao');
+        responseLog.innerHTML = response.data.msg;
+
+        _this.getEspecificacoes(_this.form.idProduto);
+      })["catch"](function (error) {
+        if (error.response.status === 422) {
+          _this.errors = error.response.data.errors || {};
+          var responseLog = document.getElementById('responseObservacao');
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          responseLog.innerHTML = errorHandling[0];
+        }
+      });
+    }
   }
 });
 
@@ -3042,6 +3235,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_components_Checkbox__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/components/Checkbox */ "./resources/js/components/Checkbox.vue");
 /* harmony import */ var _js_components_Input__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/js/components/Input */ "./resources/js/components/Input.vue");
 /* harmony import */ var _js_components_Select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/js/components/Select */ "./resources/js/components/Select.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 //
 //
 //
@@ -3094,6 +3289,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3114,21 +3335,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       currentPage: 1,
       perPage: 20,
       selectedItems: [],
-      items: [{
-        identificador: "Identificador 001",
-        peg: "PEG 001",
-        nome: "Nome do produto 001",
-        isbn: "ISBN 001",
-        dataModificacao: "15/09/2019 14:33",
+      items: [{}],
+      produto: {
         id: 1
-      }, {
-        identificador: "Identificador 002",
-        peg: "PEG 002",
-        nome: "Nome do produto 002",
-        isbn: "ISBN 002",
-        dataModificacao: "01/06/2019 14:33",
-        id: 2
-      }],
+      },
       fields: [{
         key: "select",
         label: ""
@@ -3164,6 +3374,36 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     rows: function rows() {
       return this.items.length;
     }
+  },
+  methods: {
+    getProdutos: function getProdutos() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/listar-produtos').then(function (response) {
+        return _this.items = response.data;
+      });
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.post('/cadastrar-estrutura', {
+        idProduto: this.produto.id,
+        selectedItems: this.selectedItems
+      }).then(function (response) {
+        var responseLog = document.getElementById('responseProdutos');
+        responseLog.innerHTML = response.data.msg;
+      })["catch"](function (error) {
+        if (error.response.status === 422) {
+          _this2.errors = error.response.data.errors || {};
+          var responseLog = document.getElementById('responseProdutos');
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          responseLog.innerHTML = errorHandling[0];
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getProdutos();
   }
 });
 
@@ -3721,9 +3961,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       busy: false,
-      items: {
-        nomeModelo: ''
-      },
+      items: {},
       form: {
         nome_modelo: '',
         compartilhamento: '',
@@ -54708,6 +54946,28 @@ var render = function() {
           },
           scopedSlots: _vm._u([
             {
+              key: "cell(identificador)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.idProduto) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(peg)",
+              fn: function(data) {
+                return [_vm._v("\n      " + _vm._s(data.item.pegLA) + "\n    ")]
+              }
+            },
+            {
+              key: "cell(nome)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.titulo) + "\n    ")
+                ]
+              }
+            },
+            {
               key: "cell(actions)",
               fn: function(data) {
                 return [
@@ -55695,6 +55955,132 @@ var render = function() {
           },
           scopedSlots: _vm._u(
             [
+              {
+                key: "cell(tipo)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.componente) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(formatoAberto)",
+                fn: function(data) {
+                  return [
+                    _vm._v(
+                      "\n      " + _vm._s(data.item.formatoAberto) + "\n    "
+                    )
+                  ]
+                }
+              },
+              {
+                key: "cell(formatoFechado)",
+                fn: function(data) {
+                  return [
+                    _vm._v(
+                      "\n      " + _vm._s(data.item.formatoFechado) + "\n    "
+                    )
+                  ]
+                }
+              },
+              {
+                key: "cell(numeroPaginas)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.numPagina) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(papelGramatura)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.papel) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(cores)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.cores) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(acabamento)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.acabamento) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(observacao)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.observacao) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(espessura)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.espessura) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(peso)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.peso) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(orientacao)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.orientacao) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(alvura)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.alvura) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(opacidade)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.opacidade) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(lombada)",
+                fn: function(data) {
+                  return [
+                    _vm._v("\n      " + _vm._s(data.item.lombada) + "\n    ")
+                  ]
+                }
+              },
+              {
+                key: "cell(medidasLombada)",
+                fn: function(data) {
+                  return [
+                    _vm._v(
+                      "\n      " + _vm._s(data.item.medidasLombada) + "\n    "
+                    )
+                  ]
+                }
+              },
               false
                 ? undefined
                 : null
@@ -55756,30 +56142,15 @@ var render = function() {
   return _c("div", { staticClass: "form-group col col-xs-12" }, [
     _c("label", [_vm._t("default")], 2),
     _vm._v(" "),
-    _c(
-      "textarea",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.value,
-            expression: "value"
-          }
-        ],
-        staticClass: "form-control",
-        domProps: { value: _vm.value },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
-            }
-            _vm.value = $event.target.value
-          }
+    _c("textarea", {
+      staticClass: "form-control",
+      domProps: { value: _vm.value },
+      on: {
+        input: function($event) {
+          return _vm.$emit("input", $event.target.value)
         }
-      },
-      [_vm._v("}")]
-    )
+      }
+    })
   ])
 }
 var staticRenderFns = []
@@ -55827,294 +56198,295 @@ var render = function() {
           _c("div", { staticClass: "modal-content" }, [
             _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _c(
-                "div",
-                { staticClass: "form-row" },
-                [
-                  _c(
-                    "v-select",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.componente,
-                          expression: "form.componente"
-                        }
-                      ],
-                      attrs: {
-                        options: [
-                          { value: "capa", name: "Capa" },
-                          { value: "miolo", name: "Miolo" }
-                        ]
-                      }
-                    },
-                    [_vm._v("Componente")]
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-row" },
-                [
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.formato_aberto,
-                          expression: "form.formato_aberto"
-                        }
-                      ]
-                    },
-                    [_vm._v("Formato aberto (mm)")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.formato_fechado,
-                          expression: "form.formato_fechado"
-                        }
-                      ]
-                    },
-                    [_vm._v("Formato fechado (mm)")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.num_paginas,
-                          expression: "form.num_paginas"
-                        }
-                      ]
-                    },
-                    [_vm._v("Número de páginas")]
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-row" },
-                [
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.papel,
-                          expression: "form.papel"
-                        }
-                      ]
-                    },
-                    [_vm._v("Papel/Gramatura")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.cores,
-                          expression: "form.cores"
-                        }
-                      ]
-                    },
-                    [_vm._v("Cores")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.acabamento,
-                          expression: "form.acabamento"
-                        }
-                      ]
-                    },
-                    [_vm._v("Acabamento")]
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-row" },
-                [
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.observacoes,
-                          expression: "form.observacoes"
-                        }
-                      ]
-                    },
-                    [_vm._v("Observação")]
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-row" },
-                [
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.espessura,
-                          expression: "form.espessura"
-                        }
-                      ]
-                    },
-                    [_vm._v("Espessura")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.peso,
-                          expression: "form.peso"
-                        }
-                      ]
-                    },
-                    [_vm._v("Peso (g)")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-select",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.orientacao,
-                          expression: "form.orientacao"
-                        }
-                      ],
-                      attrs: {
-                        options: [
-                          { value: "retrato", name: "Retrato" },
-                          { value: "paisagem", name: "Paisagem" }
-                        ]
-                      }
-                    },
-                    [_vm._v("Orientação")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.alvura,
-                          expression: "form.alvura"
-                        }
-                      ]
-                    },
-                    [_vm._v("Alvura (%)")]
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "form-row" },
-                [
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.opacidade,
-                          expression: "form.opacidade"
-                        }
-                      ]
-                    },
-                    [_vm._v("Opacidade")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-select",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.lombada,
-                          expression: "form.lombada"
-                        }
-                      ],
-                      attrs: {
-                        options: [
-                          { value: "A", name: "A" },
-                          { value: "B", name: "B" }
-                        ]
-                      }
-                    },
-                    [_vm._v("Lombada")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-input",
-                    {
-                      directives: [
-                        {
-                          name: "form",
-                          rawName: "v-form",
-                          value: _vm.form.medida_lombada,
-                          expression: "form.medida_lombada"
-                        }
-                      ]
-                    },
-                    [_vm._v("Medidas da lombada")]
-                  )
-                ],
-                1
-              )
-            ]),
+            _vm._m(1),
             _vm._v(" "),
-            _vm._m(1)
+            _c(
+              "form",
+              {
+                attrs: { name: "form", id: "form" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.submit($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "modal-body" }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-select",
+                        {
+                          attrs: {
+                            options: [
+                              { value: "capa", name: "Capa" },
+                              { value: "miolo", name: "Miolo" }
+                            ]
+                          },
+                          model: {
+                            value: _vm.form.componente,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "componente", $$v)
+                            },
+                            expression: "form.componente"
+                          }
+                        },
+                        [_vm._v("Componente")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.formato_aberto,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "formato_aberto", $$v)
+                            },
+                            expression: "form.formato_aberto"
+                          }
+                        },
+                        [_vm._v("Formato aberto (mm)")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.formato_fechado,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "formato_fechado", $$v)
+                            },
+                            expression: "form.formato_fechado"
+                          }
+                        },
+                        [_vm._v("Formato fechado (mm)")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.num_paginas,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "num_paginas", $$v)
+                            },
+                            expression: "form.num_paginas"
+                          }
+                        },
+                        [_vm._v("Número de páginas")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.papel,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "papel", $$v)
+                            },
+                            expression: "form.papel"
+                          }
+                        },
+                        [_vm._v("Papel/Gramatura")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.cores,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "cores", $$v)
+                            },
+                            expression: "form.cores"
+                          }
+                        },
+                        [_vm._v("Cores")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.acabamento,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "acabamento", $$v)
+                            },
+                            expression: "form.acabamento"
+                          }
+                        },
+                        [_vm._v("Acabamento")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.observacoes,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "observacoes", $$v)
+                            },
+                            expression: "form.observacoes"
+                          }
+                        },
+                        [_vm._v("Observação")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.espessura,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "espessura", $$v)
+                            },
+                            expression: "form.espessura"
+                          }
+                        },
+                        [_vm._v("Espessura")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.peso,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "peso", $$v)
+                            },
+                            expression: "form.peso"
+                          }
+                        },
+                        [_vm._v("Peso (g)")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-select",
+                        {
+                          attrs: {
+                            options: [
+                              { value: "retrato", name: "Retrato" },
+                              { value: "paisagem", name: "Paisagem" }
+                            ]
+                          },
+                          model: {
+                            value: _vm.form.orientacao,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "orientacao", $$v)
+                            },
+                            expression: "form.orientacao"
+                          }
+                        },
+                        [_vm._v("Orientação")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.alvura,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "alvura", $$v)
+                            },
+                            expression: "form.alvura"
+                          }
+                        },
+                        [_vm._v("Alvura (%)")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.opacidade,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "opacidade", $$v)
+                            },
+                            expression: "form.opacidade"
+                          }
+                        },
+                        [_vm._v("Opacidade")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-select",
+                        {
+                          attrs: {
+                            options: [
+                              { value: "A", name: "A" },
+                              { value: "B", name: "B" }
+                            ]
+                          },
+                          model: {
+                            value: _vm.form.lombada,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "lombada", $$v)
+                            },
+                            expression: "form.lombada"
+                          }
+                        },
+                        [_vm._v("Lombada")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-input",
+                        {
+                          model: {
+                            value: _vm.form.medida_lombada,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "medida_lombada", $$v)
+                            },
+                            expression: "form.medida_lombada"
+                          }
+                        },
+                        [_vm._v("Medidas da lombada")]
+                      )
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._m(2)
+              ]
+            )
           ])
         ]
       )
@@ -56149,13 +56521,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", {
+          staticClass: "p-6 mb-2 bg-light text-dark",
+          attrs: { id: "responseComponente" }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "modal-footer" }, [
       _c(
         "button",
-        {
-          staticClass: "btn btn-primary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
         [_vm._v("Adicionar")]
       ),
       _vm._v(" "),
@@ -56211,13 +56593,44 @@ var render = function() {
           _c("div", { staticClass: "modal-content" }, [
             _vm._m(0),
             _vm._v(" "),
-            _c("div", { staticClass: "modal-body" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-row" }, [_c("v-textarea")], 1)
-            ]),
+            _vm._m(1),
             _vm._v(" "),
-            _vm._m(2)
+            _c(
+              "form",
+              {
+                attrs: { name: "form", id: "form" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.submit($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "modal-body" }, [
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c("v-textarea", {
+                        model: {
+                          value: _vm.form.observacao,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "observacao", $$v)
+                          },
+                          expression: "form.observacao"
+                        }
+                      })
+                    ],
+                    1
+                  )
+                ]),
+                _vm._v(" "),
+                _vm._m(3)
+              ]
+            )
           ])
         ]
       )
@@ -56252,9 +56665,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", {
+          staticClass: "p-6 mb-2 bg-light text-dark",
+          attrs: { id: "responseObservacao" }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", [
       _c("p", [
-        _vm._v("Adicione uma breve descrição das alterações realizadas.")
+        _vm._v("Adicione uma brevaae descrição das alterações realizadas.")
       ])
     ])
   },
@@ -56265,7 +56691,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "modal-footer" }, [
       _c(
         "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
         [_vm._v("Adicionar")]
       )
     ])
@@ -56338,6 +56764,8 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
+                _vm._m(1),
+                _vm._v(" "),
                 _c("b-table", {
                   attrs: {
                     fields: _vm.fields,
@@ -56352,7 +56780,7 @@ var render = function() {
                       fn: function(data) {
                         return [
                           _c("checkbox", {
-                            attrs: { id: "", value: data.item.id },
+                            attrs: { id: "", value: data.item.idProduto },
                             model: {
                               value: _vm.selectedItems,
                               callback: function($$v) {
@@ -56361,6 +56789,66 @@ var render = function() {
                               expression: "selectedItems"
                             }
                           })
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(identificador)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.idProduto) +
+                              "\n        "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(peg)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.pegLA) +
+                              "\n        "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(nome)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.titulo) +
+                              "\n        "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(isbn)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.ISBN_LA) +
+                              "\n        "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(dataModificacao)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.updated_at) +
+                              "\n        "
+                          )
                         ]
                       }
                     }
@@ -56398,7 +56886,28 @@ var render = function() {
                 )
               ],
               1
-            )
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-footer" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: { type: "submit" },
+                  on: { click: _vm.submit }
+                },
+                [_vm._v("Adicionar")]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { type: "button", "data-dismiss": "modal" }
+                },
+                [_vm._v("Fechar")]
+              )
+            ])
           ])
         ]
       )
@@ -56425,6 +56934,19 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12" }, [
+        _c("div", {
+          staticClass: "p-6 mb-2 bg-light text-dark",
+          attrs: { id: "responseProdutos" }
+        })
+      ])
     ])
   }
 ]
@@ -57137,11 +57659,11 @@ var render = function() {
             "v-input",
             {
               model: {
-                value: _vm.form.nomeModelo,
+                value: _vm.form.nome_modelo,
                 callback: function($$v) {
-                  _vm.$set(_vm.form, "nomeModelo", $$v)
+                  _vm.$set(_vm.form, "nome_modelo", $$v)
                 },
-                expression: "form.nomeModelo"
+                expression: "form.nome_modelo"
               }
             },
             [_vm._v("Nome do Modelo")]

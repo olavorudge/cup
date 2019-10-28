@@ -11,7 +11,15 @@
         <b-spinner class="align-middle"></b-spinner>
         <strong>Carregando...</strong>
       </div>
-
+      <template v-slot:cell(identificador)="data">
+        {{data.item.idProduto}}
+      </template>
+      <template v-slot:cell(peg)="data">
+        {{data.item.pegLA}}
+      </template>
+      <template v-slot:cell(nome)="data">
+        {{data.item.titulo}}
+      </template>
       <template v-slot:cell(actions)="data">
         <a href title="Remover" data-toggle="tooltip">
           <span class="material-icons">clear</span>
@@ -25,6 +33,7 @@
 
 <script>
 import Vue from "vue";
+import axios from "axios";
 import BootstrapVue, { BPagination, BTable } from "bootstrap-vue";
 import ModalBuscarProdutos from "@/js/modals/BuscarProdutos";
 import $ from "jquery";
@@ -38,7 +47,9 @@ export default {
       busy: false,
       currentPage: 1,
       perPage: 20,
-      items: [],
+      items: [{
+        idProduto: ''
+      }],
       fields: [
         {
           key: "identificador",
@@ -65,7 +76,15 @@ export default {
   methods: {
     openModal(modalId) {
       $(modalId).modal();
+    },
+    getEstrutura(id){
+      axios
+      .get('/listar-estruturas/' + id)
+      .then(response => (this.items = response.data))
     }
+  },
+  mounted(){
+    this.getEstrutura(1);
   }
 };
 </script>

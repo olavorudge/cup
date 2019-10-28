@@ -31,7 +31,51 @@
         <b-spinner class="align-middle"></b-spinner>
         <strong>Carregando...</strong>
       </div>
-
+      <template v-slot:cell(tipo)="data">
+        {{data.item.componente}}
+      </template>
+      <template v-slot:cell(formatoAberto)="data">
+        {{data.item.formatoAberto}}
+      </template>
+      <template v-slot:cell(formatoFechado)="data">
+        {{data.item.formatoFechado}}
+      </template>
+      <template v-slot:cell(numeroPaginas)="data">
+        {{data.item.numPagina}}
+      </template>
+      <template v-slot:cell(papelGramatura)="data">
+        {{data.item.papel}}
+      </template>
+      <template v-slot:cell(cores)="data">
+        {{data.item.cores}}
+      </template>
+      <template v-slot:cell(acabamento)="data">
+        {{data.item.acabamento}}
+      </template>
+      <template v-slot:cell(observacao)="data">
+        {{data.item.observacao}}
+      </template>
+      <template v-slot:cell(espessura)="data">
+        {{data.item.espessura}}
+      </template>
+      <template v-slot:cell(peso)="data">
+        {{data.item.peso}}
+      </template>
+      <template v-slot:cell(orientacao)="data">
+        {{data.item.orientacao}}
+      </template>
+      <template v-slot:cell(alvura)="data">
+        {{data.item.alvura}}
+      </template>
+      <template v-slot:cell(opacidade)="data">
+        {{data.item.opacidade}}
+      </template>
+      <template v-slot:cell(lombada)="data">
+        {{data.item.lombada}}
+      </template>
+      <template v-slot:cell(medidasLombada)="data">
+        {{data.item.medidasLombada}}
+      </template>
       <template v-slot:cell(actions)="data" v-if="false">
         <a href data-toggle="modal">
           <span
@@ -41,7 +85,7 @@
           >remove_red_eye</span>
         </a>
 
-        <router-link :to="{ name: 'editarProduto', params: { id: data.item.id } }">
+        <router-link :to="{ name: 'editarProduto', params: { id: data.item.idEspecificacao } }">
           <span class="material-icons">edit</span>
         </router-link>
         <a href title="Deletar" data-toggle="tooltip">
@@ -65,6 +109,7 @@ import Vue from "vue";
 import ModalSelecionarComponentes from "@/js/modals/SelecionarComponentes";
 import ModalAdicionarComponente from "@/js/modals/AdicionarComponente";
 import BootstrapVue, { BPagination, BTable } from "bootstrap-vue";
+import axios from "axios";
 import $ from "jquery";
 
 Vue.use(BootstrapVue);
@@ -212,7 +257,10 @@ export default {
         }
       ],
       items: [
-        {}
+        {
+          idProduto: '',
+        },
+
       ]
     };
   },
@@ -225,7 +273,7 @@ export default {
     },
     filteredItems() {
       if (this.filterBy === 0) return this.items;
-      return this.items.filter(item => item.tipoLivro === this.filterBy);
+      return this.items.filter(item => item.idTipoEspecificacao === this.filterBy);
     }
   },
   methods: {
@@ -236,7 +284,15 @@ export default {
       this.fields.forEach(field => {
         field.visible = selectedFields.includes(field.key);
       });
-    }
+    },
+    getEspecificacoes(id){
+      axios
+      .get('/listar-especificacoes/' + id)
+      .then(response => (this.items = response.data))
+    },
+  },
+  mounted(){
+    this.getEspecificacoes(1);
   }
 };
 </script>

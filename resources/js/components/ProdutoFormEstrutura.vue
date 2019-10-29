@@ -21,12 +21,11 @@
         {{data.item.titulo}}
       </template>
       <template v-slot:cell(actions)="data">
-        <a href title="Remover" data-toggle="tooltip">
+        <button type="button" title="Remover" data-toggle="tooltip" class="button-invisible" @click="deletarEstrutura(data.item.idProduto)">
           <span class="material-icons">clear</span>
-        </a>
+        </button>
       </template>
     </b-table>
-
     <modal-buscar-produtos></modal-buscar-produtos>
   </div>
 </template>
@@ -81,6 +80,19 @@ export default {
       axios
       .get('/listar-estruturas/' + id)
       .then(response => (this.items = response.data))
+    },
+    deletarEstrutura(idProduto){
+      axios
+      .post('/deletar-estrutura', {
+        idEstrutura: 1,
+        idProduto: idProduto
+      })
+      .then(response => {
+        var responseMsg = response.data.msg;
+        var responseLog = document.getElementById('response');
+        responseLog.innerHTML = responseMsg;
+      })
+      setTimeout(() => this.getEstrutura(1), 100);
     }
   },
   mounted(){

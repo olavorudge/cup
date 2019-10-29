@@ -55,7 +55,6 @@
           {{data.item.updated_at}}
         </template>
       </b-table>
-
       <div>Exibindo {{ perPage }} de {{ rows }}</div>
       <div>
         <b-pagination
@@ -142,9 +141,9 @@ export default {
     }
   },
   methods: {
-    getProdutos(){
+    getProdutosEstrutura(id){
       axios
-      .get('/listar-produtos')
+      .get('/listar-produtos-estruturas/' + id)
       .then(response => (this.items = response.data))
     },
     submit() {
@@ -168,7 +167,7 @@ export default {
     }
   },
   mounted(){
-    this.getProdutos();
+    this.getProdutosEstrutura(1);
   }
 };
 </script>

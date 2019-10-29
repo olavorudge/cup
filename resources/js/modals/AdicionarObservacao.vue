@@ -24,7 +24,7 @@
         <form name="form" id="form" @submit.prevent="submit">
         <div class="modal-body">
           <div>
-            <p>Adicione uma brevaae descrição das alterações realizadas.</p>
+            <p>Adicione uma breve descrição das alterações realizadas.</p>
           </div>
           <div class="form-row">
             <v-textarea v-model="form.observacao"></v-textarea>

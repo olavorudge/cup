@@ -27,6 +27,8 @@ Route::get('listar-anoescolar', ['as' => 'listar-anoescolar', 'uses' => 'Produto
 
 Route::get('listar-especificacoes/{id}', ['as' => 'listar-especificacoes', 'uses' => 'ProdutosController@ListarEspecificacoes']);
 Route::get('listar-estruturas/{id}', ['as' => 'listar-estruturas', 'uses' => 'ProdutosController@ListarEstruturas']);
+Route::get('listar-produtos-estruturas/{id}', ['as' => 'listar-produtos-estruturas', 'uses' => 'ProdutosController@ListarProdutosEstruturas']);
+Route::get('listar-observacoes/{id}', ['as' => 'listar-observacoes', 'uses' => 'ProdutosController@ListarObservacoes']);
 
 Route::get('listar-modelos', ['as' => 'listar-modelos', 'uses' => 'ModelosController@ListarModelos']);
 Route::get('listar-modelo/{id}', ['as' => 'listar-modelo', 'uses' => 'ModelosController@SelecionarModelo']);
@@ -38,3 +40,6 @@ Route::post('cadastrar-modelo', ['as' => 'cadastrar-modelo', 'uses' => 'ModelosC
 Route::post('cadastrar-especificacao', ['as' => 'cadastrar-especificacao', 'uses' => 'ProdutosController@CadastrarEspecificacao']);
 Route::post('cadastrar-observacao', ['as' => 'cadastrar-observacao', 'uses' => 'ProdutosController@CadastrarObservacao']);
 Route::post('cadastrar-estrutura', ['as' => 'cadastrar-estrutura', 'uses' => 'ProdutosController@CadastrarEstrutura']);
+
+
+Route::post('deletar-estrutura', ['as' => 'deletar-estrutura', 'uses' => 'ProdutosController@DeletarEstrutura']);

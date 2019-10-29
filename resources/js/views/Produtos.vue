@@ -174,7 +174,9 @@ export default {
         { key: "actions", label: "Ações", class: "text-center" }
       ],
       items: [
-        {},
+        {
+          idProduto: ''
+        },
       ]
     };
   },

@@ -2082,7 +2082,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -2134,6 +2133,21 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/listar-estruturas/' + id).then(function (response) {
         return _this.items = response.data;
       });
+    },
+    deletarEstrutura: function deletarEstrutura(idProduto) {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/deletar-estrutura', {
+        idEstrutura: 1,
+        idProduto: idProduto
+      }).then(function (response) {
+        var responseMsg = response.data.msg;
+        var responseLog = document.getElementById('response');
+        responseLog.innerHTML = responseMsg;
+      });
+      setTimeout(function () {
+        return _this2.getEstrutura(1);
+      }, 100);
     }
   },
   mounted: function mounted() {
@@ -2389,8 +2403,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
 /* harmony import */ var _js_modals_AdicionarObservacao__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/modals/AdicionarObservacao */ "./resources/js/modals/AdicionarObservacao.vue");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_4__);
 //
 //
 //
@@ -2410,6 +2426,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -2425,7 +2449,11 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       busy: false,
       currentPage: 1,
       perPage: 20,
-      items: [],
+      items: [{
+        idProduto: '',
+        observaca: '',
+        created_at: ''
+      }],
       fields: [{
         key: "data",
         label: "Data de criação",
@@ -2443,8 +2471,18 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
   },
   methods: {
     openModal: function openModal(modalId) {
-      jquery__WEBPACK_IMPORTED_MODULE_3___default()(modalId).modal();
+      jquery__WEBPACK_IMPORTED_MODULE_4___default()(modalId).modal();
+    },
+    getObservacoes: function getObservacoes(id) {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-observacoes/' + id).then(function (response) {
+        return _this.items = response.data;
+      });
     }
+  },
+  mounted: function mounted() {
+    this.getObservacoes(1);
   }
 });
 
@@ -3313,7 +3351,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -3376,10 +3413,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     }
   },
   methods: {
-    getProdutos: function getProdutos() {
+    getProdutosEstrutura: function getProdutosEstrutura(id) {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/listar-produtos').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/listar-produtos-estruturas/' + id).then(function (response) {
         return _this.items = response.data;
       });
     },
@@ -3403,7 +3440,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     }
   },
   mounted: function mounted() {
-    this.getProdutos();
+    this.getProdutosEstrutura(1);
   }
 });
 
@@ -4596,7 +4633,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         label: "Ações",
         "class": "text-center"
       }],
-      items: [{}]
+      items: [{
+        idProduto: ''
+      }]
     };
   },
   computed: {
@@ -54972,12 +55011,18 @@ var render = function() {
               fn: function(data) {
                 return [
                   _c(
-                    "a",
+                    "button",
                     {
+                      staticClass: "button-invisible",
                       attrs: {
-                        href: "",
+                        type: "button",
                         title: "Remover",
                         "data-toggle": "tooltip"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.deletarEstrutura(data.item.idProduto)
+                        }
                       }
                     },
                     [
@@ -55645,7 +55690,31 @@ var render = function() {
             busy: _vm.busy,
             hover: true,
             "tbody-tr-class": "row-class"
-          }
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "cell(data)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.created_at) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(usuario)",
+              fn: function(data) {
+                return [_vm._v("\n      Isabella\n    ")]
+              }
+            },
+            {
+              key: "cell(observacao)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.observacao) + "\n    ")
+                ]
+              }
+            }
+          ])
         },
         [
           _c(
@@ -56680,7 +56749,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", [
       _c("p", [
-        _vm._v("Adicione uma brevaae descrição das alterações realizadas.")
+        _vm._v("Adicione uma breve descrição das alterações realizadas.")
       ])
     ])
   },

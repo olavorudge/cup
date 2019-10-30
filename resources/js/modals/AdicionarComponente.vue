@@ -98,7 +98,7 @@ export default {
       this.errors = {};
 
       axios.post('/cadastrar-especificacao', {
-        idProduto: this.form.idProduto,
+        idProduto: this.$route.params.id,
         idTipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
         formato_aberto: this.form.formato_aberto,

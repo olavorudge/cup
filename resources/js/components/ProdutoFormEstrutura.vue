@@ -15,7 +15,7 @@
         {{data.item.idProduto}}
       </template>
       <template v-slot:cell(peg)="data">
-        {{data.item.pegLA}}
+        {{data.item.peg_la}}
       </template>
       <template v-slot:cell(nome)="data">
         {{data.item.titulo}}
@@ -84,7 +84,7 @@ export default {
     deletarEstrutura(idProduto){
       axios
       .post('/deletar-estrutura', {
-        idEstrutura: 1,
+        idEstrutura: this.$route.params.id,
         idProduto: idProduto
       })
       .then(response => {
@@ -92,11 +92,11 @@ export default {
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
       })
-      setTimeout(() => this.getEstrutura(1), 100);
+      setTimeout(() => this.getEstrutura(this.$route.params.id), 100);
     }
   },
   mounted(){
-    this.getEstrutura(1);
+    this.getEstrutura(this.$route.params.id);
   }
 };
 </script>

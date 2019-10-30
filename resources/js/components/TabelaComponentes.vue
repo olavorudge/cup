@@ -292,7 +292,7 @@ export default {
     },
   },
   mounted(){
-    this.getEspecificacoes(1);
+    this.getEspecificacoes(this.$route.params.id);
   }
 };
 </script>

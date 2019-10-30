@@ -43,13 +43,13 @@
           {{data.item.idProduto}}
         </template>
         <template v-slot:cell(peg)="data">
-          {{data.item.pegLA}}
+          {{data.item.peg_la}}
         </template>
         <template v-slot:cell(nome)="data">
           {{data.item.titulo}}
         </template>
         <template v-slot:cell(isbn)="data">
-          {{data.item.ISBN_LA}}
+          {{data.item.isbn_la}}
         </template>
         <template v-slot:cell(dataModificacao)="data">
           {{data.item.updated_at}}
@@ -95,7 +95,6 @@ export default {
       selectedItems: [],
       items: [{}],
       produto: {
-        id: 1
       },
       fields: [
         {
@@ -149,7 +148,7 @@ export default {
     submit() {
       axios
       .post('/cadastrar-estrutura', {
-        idProduto: this.produto.id,
+        idProduto: this.$route.params.id,
         selectedItems: this.selectedItems
       })
       .then(response => {
@@ -167,7 +166,7 @@ export default {
     }
   },
   mounted(){
-    this.getProdutosEstrutura(1);
+    this.getProdutosEstrutura(this.$route.params.id);
   }
 };
 </script>

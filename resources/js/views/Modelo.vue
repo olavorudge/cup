@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="form-row">
-      <v-input v-model="form.nome_modelo">Nome do Modelo</v-input>
+      <v-input v-model="form.nomeModelo">Nome do Modelo</v-input>
     </div>
     <div class="form-row">
       <v-select :options="[{value: 1, name:'Para todos'}, {value: 2, name:'Somente eu'}]" v-model="form.compartilhamento">Compartilhamento</v-select>
@@ -73,7 +73,7 @@ export default {
           {
           },
         form: {
-          nome_modelo: '',
+          nomeModelo: '',
           compartilhamento: '',
           checkbox: [],
         }
@@ -89,24 +89,43 @@ export default {
           .then(response => (this.form = response.data))
         },
         submitModelo(){
-          this.errors = {};
-
-          axios.post('/cadastrar-modelo', {
-            nome_modelo: this.form.nome_modelo,
-            compartilhamento: this.form.compartilhamento,
-            checkbox: this.form.checkbox
-          }).then(response => {
-            var responseLog = document.getElementById('response');
-            responseLog.innerHTML = response.data.msg;
-          }).catch(error => {
-            if (error.response.status === 422) {
-              this.errors = error.response.data.errors || {};
+          if(this.$route.params.id){
+            axios.post('/editar-modelo', {
+              idModelo: this.$route.params.id,
+              nome_modelo: this.form.nomeModelo,
+              compartilhamento: this.form.compartilhamento,
+              checkbox: this.form.checkbox
+            }).then(response => {
               var responseLog = document.getElementById('response');
-              var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+              responseLog.innerHTML = response.data.msg;
+            }).catch(error => {
+              if (error.response.status === 422) {
+                this.errors = error.response.data.errors || {};
+                var responseLog = document.getElementById('response');
+                var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+                responseLog.innerHTML = errorHandling[0];
+              }
+            });
+          } else {
+            this.errors = {};
 
-              responseLog.innerHTML = errorHandling[0];
-            }
-          });
+            axios.post('/cadastrar-modelo', {
+              nome_modelo: this.form.nomeModelo,
+              compartilhamento: this.form.compartilhamento,
+              checkbox: this.form.checkbox
+            }).then(response => {
+              var responseLog = document.getElementById('response');
+              responseLog.innerHTML = response.data.msg;
+            }).catch(error => {
+              if (error.response.status === 422) {
+                this.errors = error.response.data.errors || {};
+                var responseLog = document.getElementById('response');
+                var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+
+                responseLog.innerHTML = errorHandling[0];
+              }
+            });
+          }
         }
       },
       mounted(){

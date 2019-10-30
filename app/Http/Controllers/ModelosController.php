@@ -66,10 +66,47 @@ class ModelosController extends Controller
 
   public function SelecionarModelo($id){
     $modelos = array();
-    $modelos = Modelo::where('idModelo', $id)->first();
+    $modelos = Modelo::where('idModelo', $id)->where('bolAnulado', 0)->first();
+    $campos = ModeloCampo::where('idModelo', $id)->get();
 
-    $modelos = json_encode($modelos);
-    return $modelos;
+    $arr = [];
+    foreach ($campos as $campo) {
+      $arr[] = $campo->idCampo;
+    }
+    $data = [
+      'nomeModelo' => $modelos->nomeModelo,
+      'compartilhamento' => $modelos->compartilhamento,
+      'checkbox' => $arr
+    ];
+    $modelo = json_encode($data);
+    return $modelo;
+  }
+
+  public function EditarModelo(Request $request){
+    if ($request->idModelo){
+      $modelo = Modelo::find($request->idModelo);
+      if ($modelo){
+        $data = [
+          'nomeModelo' => $request->nome_modelo,
+          'compartilhamento' => $request->compartilhamento
+        ];
+        $modelo->update($data);
+
+        $campos = ModeloCampo::where('idModelo', $request->idModelo)->delete();
+        foreach ($request->checkbox as $check) {
+
+          $dataModeloCampo = [
+            'idModelo' => $request->idModelo,
+            'idCampo' => $check,
+          ];
+
+          $insert = ModeloCampo::create($dataModeloCampo);
+
+        }
+
+        return response()->json(['success'=>1, 'msg'=>trans('app.modelo_atualizado')]);
+      }
+    }
   }
 
   public function DeletarModelo($id){

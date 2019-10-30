@@ -85,6 +85,14 @@ export default {
     ProdutoFormEspecificacoes,
     ProdutoFormEstrutura,
     ProdutoFormObservacoes
+  },
+  mounted() {
+    if(!this.$route.params.id){
+      var navLink = document.getElementsByClassName('nav-link');
+      for(var i=0; i < navLink.length; i++) {
+        navLink[i].classList.add("disabled");
+      }
+    }
   }
 };
 </script>

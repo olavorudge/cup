@@ -34,6 +34,44 @@ class ProdutosController extends Controller
     return $produtos;
   }
   /*
+  Função para exibir todos os produtos cadastrados
+  */
+  public function ListarProduto($id)
+  {
+    $produto = array();
+    $produto = Produto::where('idProduto', $id)->first();
+
+    $anoEscolar = AnoEscolar::where('idAnoEscolar', $produto->idAnoEscolar)->first();
+
+    $data = [
+      'titulo' => $produto->titulo,
+      'titulo_obra' => $produto->tituloObra,
+      'ano_uso' => $produto->anoUso,
+      'ano_lancamento' => $produto->anoLancamento,
+      'ano_ciclo' => $produto->anoCicloVida,
+      'area_conhec' => $produto->idAreaConhecimento,
+      'nivel_ensino' => $anoEscolar->idNivel,
+      'serie' => $produto->idAnoEscolar,
+      'volume' => $produto->volume,
+      'num_edicao' => $produto->numEdicao,
+      'origem' => $produto->idOrigem,
+      'idioma' => $produto->idioma,
+      'peg_la' => $produto->peg_la,
+      'peg_lp' => $produto->peg_lp,
+      'isbn_la' => $produto->isbn_la,
+      'isbn_lp' => $produto->isbn_lp,
+      'nome_contrato' => $produto->nomeContrato,
+      'nome_capa' => $produto->nomeCapa,
+      'pseudonomio' => $produto->pseudonomio,
+      'num_contrato' => $produto->numContrato,
+      'data_assinatura' => $produto->dataAssinatura,
+      'validade_contrato' => $produto->validadeContrato
+    ];
+
+    $produtos = json_encode($data);
+    return $produtos;
+  }
+  /*
   Listar produtos com pendências
   */
   public function ListarPendências(){
@@ -76,7 +114,7 @@ class ProdutosController extends Controller
     {
       $produtos = array();
       $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
-
+      $ids = [];
       foreach ($produtos as $produto) {
         $ids[] = $produto->idProduto;
       }
@@ -94,6 +132,7 @@ class ProdutosController extends Controller
     {
       $produtos = array();
       $produtos = Observacao::where('idProduto', $id)->get();
+      $data = [];
       foreach ($produtos as $prod) {
         $data[] = [
           'created_at' => $prod->created_at->format('d/m/Y'),
@@ -112,7 +151,7 @@ class ProdutosController extends Controller
     {
       $produtos = array();
       $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
-
+      $ids = [];
       foreach ($produtos as $produto) {
         $ids[] = $produto->idProduto;
       }
@@ -140,17 +179,17 @@ class ProdutosController extends Controller
         'volume' => 'required',
         'num_edicao' => 'required',
         'origem' => 'required',
-        'idioma' => 'required',
-        'data_assinatura' => 'date',
-        'validade_contrato' => 'date'
+        'idioma' => 'required'
       ];
 
       if ($this->validate($request, $rules)) {
 
+        $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
+
         $data = [
-          'idAreaConhecimento'    => 1,
-          'idAnoEscolar'          => 2,
-          'idOrigem'              => 1,
+          'idAreaConhecimento'    => $anoEscolar->idNivel,
+          'idAnoEscolar'          => $request->serie,
+          'idOrigem'              => $request->origem,
           'titulo'                => $request->titulo,
           'tituloObra'            => $request->titulo_obra,
           'anoUso'                => $request->ano_uso,
@@ -158,10 +197,11 @@ class ProdutosController extends Controller
           'anoCicloVida'          => $request->ano_ciclo,
           'volume'                => $request->volume,
           'numEdicao'             => $request->num_edicao,
-          'pegLA'                 => $request->peg_la,
-          'pegLP'                 => $request->peg_lp,
-          'ISBN_LA'               => $request->isbn_la,
-          'ISBN_LP'               => $request->isbn_lp,
+          'idioma'                => $request->idioma,
+          'peg_la'                 => $request->peg_la,
+          'peg_lp'                 => $request->peg_lp,
+          'isbn_la'               => $request->isbn_la,
+          'isbn_lp'               => $request->isbn_lp,
           'nomeContrato'          => $request->nome_contrato,
           'nomeCapa'              => $request->nome_capa,
           'pseudonomio'           => $request->pseudonomio,
@@ -193,7 +233,7 @@ class ProdutosController extends Controller
       if ($this->validate($request, $rules)) {
 
         $data = [
-          'idProduto'             => 1,
+          'idProduto'             => $request->idProduto,
           'idTipoEspecificacao'   => 1,
           'componente'            => $request->componente,
           'formatoAberto'         => $request->formato_aberto,
@@ -232,7 +272,7 @@ class ProdutosController extends Controller
       if ($this->validate($request, $rules)) {
 
         $data = [
-          'idProduto'       => 1,
+          'idProduto'       => $request->idProduto,
           'idUsuario'       => 1,
           'observacao'      => $request->observacao
         ];
@@ -260,6 +300,63 @@ class ProdutosController extends Controller
         $create = EstruturaProduto::create($data);
       }
       return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
+    }
+    /*
+    FUNÇÃO PARA EDITAR PRODUTOS
+    */
+    public function EditarProduto(Request $request){
+
+      if ($request->idProduto){
+        $produto = Produto::find($request->idProduto);
+        if ($produto){
+
+          $rules = [
+            'titulo'   => 'required',
+            'titulo_obra'    => 'required',
+            'ano_uso'      => 'required',
+            'ano_lancamento'      => 'required',
+            'ano_ciclo'      => 'required',
+            'area_conhec'      => 'required',
+            'nivel_ensino'      => 'required',
+            'serie' => 'required',
+            'volume' => 'required',
+            'num_edicao' => 'required',
+            'origem' => 'required',
+            'idioma' => 'required'
+          ];
+
+          if ($this->validate($request, $rules)) {
+            $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
+
+            $data = [
+              'idAreaConhecimento'    => $anoEscolar->idNivel,
+              'idAnoEscolar'          => $request->serie,
+              'idOrigem'              => $request->origem,
+              'titulo'                => $request->titulo,
+              'tituloObra'            => $request->titulo_obra,
+              'anoUso'                => $request->ano_uso,
+              'anoLancamento'         => $request->ano_lancamento,
+              'anoCicloVida'          => $request->ano_ciclo,
+              'volume'                => $request->volume,
+              'numEdicao'             => $request->num_edicao,
+              'idioma'                => $request->idioma,
+              'peg_la'                 => $request->peg_la,
+              'peg_lp'                 => $request->peg_lp,
+              'isbn_la'               => $request->isbn_la,
+              'isbn_lp'               => $request->isbn_lp,
+              'nomeContrato'          => $request->nome_contrato,
+              'nomeCapa'              => $request->nome_capa,
+              'pseudonomio'           => $request->pseudonomio,
+              'numContrato'           => $request->num_contrato,
+              'dataAssinatura'        => $request->data_assinatura,
+              'validadeContrato'      => $request->validade_contrato
+            ];
+            $produto->update($data);
+
+            return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado')]);
+          }
+        }
+      }
     }
     /*
     FUNÇÃO PARA DELETAR PRODUTOS

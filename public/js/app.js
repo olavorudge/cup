@@ -1880,6 +1880,35 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Datepicker.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Datepicker.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["placeholder", "value"],
+  computed: {
+    hasDefaultSlot: function hasDefaultSlot() {
+      return !!this.$slots["default"];
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Filepicker.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Filepicker.vue?vue&type=script&lang=js& ***!
@@ -2138,7 +2167,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/deletar-estrutura', {
-        idEstrutura: 1,
+        idEstrutura: this.$route.params.id,
         idProduto: idProduto
       }).then(function (response) {
         var responseMsg = response.data.msg;
@@ -2146,12 +2175,12 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         responseLog.innerHTML = responseMsg;
       });
       setTimeout(function () {
-        return _this2.getEstrutura(1);
+        return _this2.getEstrutura(_this2.$route.params.id);
       }, 100);
     }
   },
   mounted: function mounted() {
-    this.getEstrutura(1);
+    this.getEstrutura(this.$route.params.id);
   }
 });
 
@@ -2169,8 +2198,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_components_Filepicker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/js/components/Filepicker */ "./resources/js/components/Filepicker.vue");
 /* harmony import */ var _js_components_Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/js/components/Input */ "./resources/js/components/Input.vue");
 /* harmony import */ var _js_components_Select__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/js/components/Select */ "./resources/js/components/Select.vue");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _js_components_Datepicker__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/js/components/Datepicker */ "./resources/js/components/Datepicker.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
 //
 //
 //
@@ -2260,6 +2290,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -2268,7 +2299,8 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Filepicker: _js_components_Filepicker__WEBPACK_IMPORTED_MODULE_0__["default"],
     VInput: _js_components_Input__WEBPACK_IMPORTED_MODULE_1__["default"],
-    VSelect: _js_components_Select__WEBPACK_IMPORTED_MODULE_2__["default"]
+    VSelect: _js_components_Select__WEBPACK_IMPORTED_MODULE_2__["default"],
+    VDatepicker: _js_components_Datepicker__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
@@ -2308,41 +2340,83 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors = {};
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-produto', {
-        titulo: this.form.titulo,
-        titulo_obra: this.form.titulo_obra,
-        ano_uso: this.form.ano_uso,
-        ano_lancamento: this.form.ano_lancamento,
-        ano_ciclo: this.form.ano_ciclo,
-        area_conhec: this.form.area_conhec,
-        nivel_ensino: this.form.nivel_ensino,
-        serie: this.form.serie,
-        volume: this.form.volume,
-        num_edicao: this.form.num_edicao,
-        origem: this.form.origem,
-        idioma: this.form.idioma,
-        peg_la: this.form.peg_la,
-        peg_lp: this.form.peg_lp,
-        isbn_la: this.form.isbn_la,
-        isbn_lp: this.form.isbn_lp,
-        nome_contrato: this.form.nome_contrato,
-        nome_capa: this.form.nome_capa,
-        pseudonomio: this.form.pseudonomio,
-        num_contrato: this.form.num_contrato,
-        data_assinatura: this.form.data_assinatura,
-        validade_contrato: this.form.validade_contrato,
-        image: this.image
-      }).then(function (response) {
-        var responseLog = document.getElementById('response');
-        responseLog.innerHTML = response.data.msg;
-      })["catch"](function (error) {
-        if (error.response.status === 422) {
-          _this.errors = error.response.data.errors || {};
+
+      if (this.$route.params.id) {
+        axios__WEBPACK_IMPORTED_MODULE_4___default.a.post('/editar-produto', {
+          idProduto: this.$route.params.id,
+          titulo: this.form.titulo,
+          titulo_obra: this.form.titulo_obra,
+          ano_uso: this.form.ano_uso,
+          ano_lancamento: this.form.ano_lancamento,
+          ano_ciclo: this.form.ano_ciclo,
+          area_conhec: this.form.area_conhec,
+          nivel_ensino: this.form.nivel_ensino,
+          serie: this.form.serie,
+          volume: this.form.volume,
+          num_edicao: this.form.num_edicao,
+          origem: this.form.origem,
+          idioma: this.form.idioma,
+          peg_la: this.form.peg_la,
+          peg_lp: this.form.peg_lp,
+          isbn_la: this.form.isbn_la,
+          isbn_lp: this.form.isbn_lp,
+          nome_contrato: this.form.nome_contrato,
+          nome_capa: this.form.nome_capa,
+          pseudonomio: this.form.pseudonomio,
+          num_contrato: this.form.num_contrato,
+          data_assinatura: this.form.data_assinatura,
+          validade_contrato: this.form.validade_contrato,
+          image: this.image
+        }).then(function (response) {
           var responseLog = document.getElementById('response');
-          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
-          responseLog.innerHTML = errorHandling[0];
-        }
-      });
+          responseLog.innerHTML = response.data.msg;
+        })["catch"](function (error) {
+          if (error.response.status === 422) {
+            _this.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_4___default.a.post('/cadastrar-produto', {
+          titulo: this.form.titulo,
+          titulo_obra: this.form.titulo_obra,
+          ano_uso: this.form.ano_uso,
+          ano_lancamento: this.form.ano_lancamento,
+          ano_ciclo: this.form.ano_ciclo,
+          area_conhec: this.form.area_conhec,
+          nivel_ensino: this.form.nivel_ensino,
+          serie: this.form.serie,
+          volume: this.form.volume,
+          num_edicao: this.form.num_edicao,
+          origem: this.form.origem,
+          idioma: this.form.idioma,
+          peg_la: this.form.peg_la,
+          peg_lp: this.form.peg_lp,
+          isbn_la: this.form.isbn_la,
+          isbn_lp: this.form.isbn_lp,
+          nome_contrato: this.form.nome_contrato,
+          nome_capa: this.form.nome_capa,
+          pseudonomio: this.form.pseudonomio,
+          num_contrato: this.form.num_contrato,
+          data_assinatura: this.form.data_assinatura,
+          validade_contrato: this.form.validade_contrato,
+          image: this.image
+        }).then(function (response) {
+          _this.$router.push('/produto/1');
+
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = response.data.msg;
+        })["catch"](function (error) {
+          if (error.response.status === 422) {
+            _this.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      }
     },
     onFileChange: function onFileChange(e) {
       var files = e.target.files || e.dataTransfer.files;
@@ -2362,22 +2436,30 @@ __webpack_require__.r(__webpack_exports__);
     getAreaConhecimento: function getAreaConhecimento() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-areaconhecimento').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-areaconhecimento').then(function (response) {
         return _this2.areaconhecimento = response.data;
       });
     },
     getNivelEnsino: function getNivelEnsino() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-nivelensino').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-nivelensino').then(function (response) {
         return _this3.nivelensino = response.data;
       });
     },
     getAnoEscolar: function getAnoEscolar() {
       var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-anoescolar').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-anoescolar').then(function (response) {
         return _this4.anoescolar = response.data;
+      });
+    },
+    editProduto: function editProduto() {
+      var _this5 = this;
+
+      this.errors = {};
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-produto/' + this.$route.params.id).then(function (response) {
+        return _this5.form = response.data;
       });
     }
   },
@@ -2385,6 +2467,10 @@ __webpack_require__.r(__webpack_exports__);
     this.getAreaConhecimento();
     this.getNivelEnsino();
     this.getAnoEscolar();
+
+    if (this.$route.params.id) {
+      this.editProduto();
+    }
   }
 });
 
@@ -2451,7 +2537,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       perPage: 20,
       items: [{
         idProduto: '',
-        observaca: '',
+        observacao: '',
         created_at: ''
       }],
       fields: [{
@@ -2482,7 +2568,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     }
   },
   mounted: function mounted() {
-    this.getObservacoes(1);
+    this.getObservacoes(this.$route.params.id);
   }
 });
 
@@ -2971,7 +3057,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     }
   },
   mounted: function mounted() {
-    this.getEspecificacoes(1);
+    this.getEspecificacoes(this.$route.params.id);
   }
 });
 
@@ -3118,7 +3204,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.errors = {};
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-especificacao', {
-        idProduto: this.form.idProduto,
+        idProduto: this.$route.params.id,
         idTipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
         formato_aberto: this.form.formato_aberto,
@@ -3236,7 +3322,7 @@ __webpack_require__.r(__webpack_exports__);
       this.errors = {};
       console.log('ole');
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/cadastrar-observacao', {
-        idProduto: this.form.idProduto,
+        idProduto: this.$route.params.id,
         idUsuario: this.form.idUsuario,
         observacao: this.form.observacao
       }).then(function (response) {
@@ -3373,9 +3459,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       perPage: 20,
       selectedItems: [],
       items: [{}],
-      produto: {
-        id: 1
-      },
+      produto: {},
       fields: [{
         key: "select",
         label: ""
@@ -3424,7 +3508,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_5___default.a.post('/cadastrar-estrutura', {
-        idProduto: this.produto.id,
+        idProduto: this.$route.params.id,
         selectedItems: this.selectedItems
       }).then(function (response) {
         var responseLog = document.getElementById('responseProdutos');
@@ -3440,7 +3524,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     }
   },
   mounted: function mounted() {
-    this.getProdutosEstrutura(1);
+    this.getProdutosEstrutura(this.$route.params.id);
   }
 });
 
@@ -4000,7 +4084,7 @@ __webpack_require__.r(__webpack_exports__);
       busy: false,
       items: {},
       form: {
-        nome_modelo: '',
+        nomeModelo: '',
         compartilhamento: '',
         checkbox: []
       }
@@ -4018,22 +4102,41 @@ __webpack_require__.r(__webpack_exports__);
     submitModelo: function submitModelo() {
       var _this2 = this;
 
-      this.errors = {};
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-modelo', {
-        nome_modelo: this.form.nome_modelo,
-        compartilhamento: this.form.compartilhamento,
-        checkbox: this.form.checkbox
-      }).then(function (response) {
-        var responseLog = document.getElementById('response');
-        responseLog.innerHTML = response.data.msg;
-      })["catch"](function (error) {
-        if (error.response.status === 422) {
-          _this2.errors = error.response.data.errors || {};
+      if (this.$route.params.id) {
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/editar-modelo', {
+          idModelo: this.$route.params.id,
+          nome_modelo: this.form.nomeModelo,
+          compartilhamento: this.form.compartilhamento,
+          checkbox: this.form.checkbox
+        }).then(function (response) {
           var responseLog = document.getElementById('response');
-          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
-          responseLog.innerHTML = errorHandling[0];
-        }
-      });
+          responseLog.innerHTML = response.data.msg;
+        })["catch"](function (error) {
+          if (error.response.status === 422) {
+            _this2.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      } else {
+        this.errors = {};
+        axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-modelo', {
+          nome_modelo: this.form.nomeModelo,
+          compartilhamento: this.form.compartilhamento,
+          checkbox: this.form.checkbox
+        }).then(function (response) {
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = response.data.msg;
+        })["catch"](function (error) {
+          if (error.response.status === 422) {
+            _this2.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -4439,6 +4542,15 @@ __webpack_require__.r(__webpack_exports__);
     ProdutoFormEspecificacoes: _js_components_ProdutoFormEspecificacoes__WEBPACK_IMPORTED_MODULE_1__["default"],
     ProdutoFormEstrutura: _js_components_ProdutoFormEstrutura__WEBPACK_IMPORTED_MODULE_2__["default"],
     ProdutoFormObservacoes: _js_components_ProdutoFormObservacoes__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  mounted: function mounted() {
+    if (!this.$route.params.id) {
+      var navLink = document.getElementsByClassName('nav-link');
+
+      for (var i = 0; i < navLink.length; i++) {
+        navLink[i].classList.add("disabled");
+      }
+    }
   }
 });
 
@@ -54695,6 +54807,43 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Datepicker.vue?vue&type=template&id=0bed6c67&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Datepicker.vue?vue&type=template&id=0bed6c67& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "form-group col col-xs-12" }, [
+    _vm.hasDefaultSlot ? _c("label", [_vm._t("default")], 2) : _vm._e(),
+    _vm._v(" "),
+    _c("input", {
+      staticClass: "form-control form-control-sm",
+      attrs: { type: "date", placeholder: _vm.placeholder },
+      domProps: { value: _vm.value },
+      on: {
+        input: function($event) {
+          return _vm.$emit("input", $event.target.value)
+        }
+      }
+    })
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Filepicker.vue?vue&type=template&id=063408b5&":
 /*!*************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Filepicker.vue?vue&type=template&id=063408b5& ***!
@@ -54995,7 +55144,9 @@ var render = function() {
             {
               key: "cell(peg)",
               fn: function(data) {
-                return [_vm._v("\n      " + _vm._s(data.item.pegLA) + "\n    ")]
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.peg_la) + "\n    ")
+                ]
               }
             },
             {
@@ -55326,8 +55477,8 @@ var render = function() {
                 {
                   attrs: {
                     options: [
-                      { value: "Brasil", name: "Brasil" },
-                      { value: "Japão", name: "Japão" }
+                      { value: "1", name: "Brasil" },
+                      { value: "2", name: "Japão" }
                     ]
                   },
                   model: {
@@ -55504,7 +55655,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-input",
+                "v-datepicker",
                 {
                   model: {
                     value: _vm.form.data_assinatura,
@@ -55518,7 +55669,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c(
-                "v-input",
+                "v-datepicker",
                 {
                   model: {
                     value: _vm.form.validade_contrato,
@@ -56879,7 +57030,7 @@ var render = function() {
                         return [
                           _vm._v(
                             "\n          " +
-                              _vm._s(data.item.pegLA) +
+                              _vm._s(data.item.peg_la) +
                               "\n        "
                           )
                         ]
@@ -56903,7 +57054,7 @@ var render = function() {
                         return [
                           _vm._v(
                             "\n          " +
-                              _vm._s(data.item.ISBN_LA) +
+                              _vm._s(data.item.isbn_la) +
                               "\n        "
                           )
                         ]
@@ -57728,11 +57879,11 @@ var render = function() {
             "v-input",
             {
               model: {
-                value: _vm.form.nome_modelo,
+                value: _vm.form.nomeModelo,
                 callback: function($$v) {
-                  _vm.$set(_vm.form, "nome_modelo", $$v)
+                  _vm.$set(_vm.form, "nomeModelo", $$v)
                 },
-                expression: "form.nome_modelo"
+                expression: "form.nomeModelo"
               }
             },
             [_vm._v("Nome do Modelo")]
@@ -58889,7 +59040,9 @@ var render = function() {
             {
               key: "cell(peg)",
               fn: function(data) {
-                return [_vm._v("\n      " + _vm._s(data.item.pegLA) + "\n    ")]
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.peg_la) + "\n    ")
+                ]
               }
             },
             {
@@ -58904,7 +59057,7 @@ var render = function() {
               key: "cell(isbn)",
               fn: function(data) {
                 return [
-                  _vm._v("\n      " + _vm._s(data.item.ISBN_LA) + "\n    ")
+                  _vm._v("\n      " + _vm._s(data.item.isbn_la) + "\n    ")
                 ]
               }
             },
@@ -58943,7 +59096,7 @@ var render = function() {
                           attrs: {
                             to: {
                               name: "editarProduto",
-                              params: { id: data.item.id }
+                              params: { id: data.item.idProduto }
                             },
                             title: "Editar"
                           }
@@ -74278,6 +74431,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_template_id_90aed0a4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Checkbox_vue_vue_type_template_id_90aed0a4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Datepicker.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/Datepicker.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Datepicker_vue_vue_type_template_id_0bed6c67___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Datepicker.vue?vue&type=template&id=0bed6c67& */ "./resources/js/components/Datepicker.vue?vue&type=template&id=0bed6c67&");
+/* harmony import */ var _Datepicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Datepicker.vue?vue&type=script&lang=js& */ "./resources/js/components/Datepicker.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Datepicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Datepicker_vue_vue_type_template_id_0bed6c67___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Datepicker_vue_vue_type_template_id_0bed6c67___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Datepicker.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Datepicker.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/Datepicker.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Datepicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Datepicker.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Datepicker.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Datepicker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Datepicker.vue?vue&type=template&id=0bed6c67&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/Datepicker.vue?vue&type=template&id=0bed6c67& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Datepicker_vue_vue_type_template_id_0bed6c67___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Datepicker.vue?vue&type=template&id=0bed6c67& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Datepicker.vue?vue&type=template&id=0bed6c67&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Datepicker_vue_vue_type_template_id_0bed6c67___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Datepicker_vue_vue_type_template_id_0bed6c67___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

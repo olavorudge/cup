@@ -37,7 +37,7 @@
       <div class="form-row">
         <v-select :options="[{value:1, name:1}, {value:2, name:2}, {value:3, name:3}, {value:4, name:4}]" v-model="form.volume">Volume</v-select>
         <v-input v-model="form.num_edicao">Número da edição</v-input>
-        <v-select :options="[{value:'Brasil', name:'Brasil'}, {value:'Japão', name:'Japão'}]" v-model="form.origem">Origem</v-select>
+        <v-select :options="[{value:'1', name:'Brasil'}, {value:'2', name:'Japão'}]" v-model="form.origem">Origem</v-select>
         <v-select :options="[ {value:'pt-br', name:'Português-BR'}, {value:'en-usa', name:'Inglês-EUA'} ]" v-model="form.idioma">Idioma</v-select>
       </div>
       <div class="form-row">
@@ -58,8 +58,8 @@
       </div>
       <div class="form-row">
         <v-input v-model="form.num_contrato">Número do contrato</v-input>
-        <v-input v-model="form.data_assinatura">Data de assinatura</v-input>
-        <v-input v-model="form.validade_contrato">Validade do contrato</v-input>
+        <v-datepicker v-model="form.data_assinatura">Data de assinatura</v-datepicker>
+        <v-datepicker v-model="form.validade_contrato">Validade do contrato</v-datepicker>
       </div>
       <div>
         <label>Imagens</label>
@@ -91,10 +91,11 @@
 import Filepicker from "@/js/components/Filepicker";
 import VInput from "@/js/components/Input";
 import VSelect from "@/js/components/Select";
+import VDatepicker from "@/js/components/Datepicker";
 import axios from "axios";
 
 export default {
-  components: { Filepicker, VInput, VSelect },
+  components: { Filepicker, VInput, VSelect, VDatepicker},
   data() {
     return {
       errors: {},
@@ -131,43 +132,83 @@ export default {
   methods: {
     submit() {
       this.errors = {};
-
-      axios.post('/cadastrar-produto', {
-        titulo: this.form.titulo,
-        titulo_obra: this.form.titulo_obra,
-        ano_uso: this.form.ano_uso,
-        ano_lancamento: this.form.ano_lancamento,
-        ano_ciclo: this.form.ano_ciclo,
-        area_conhec: this.form.area_conhec,
-        nivel_ensino: this.form.nivel_ensino,
-        serie: this.form.serie,
-        volume: this.form.volume,
-        num_edicao: this.form.num_edicao,
-        origem: this.form.origem,
-        idioma: this.form.idioma,
-        peg_la: this.form.peg_la,
-        peg_lp: this.form.peg_lp,
-        isbn_la: this.form.isbn_la,
-        isbn_lp: this.form.isbn_lp,
-        nome_contrato: this.form.nome_contrato,
-        nome_capa: this.form.nome_capa,
-        pseudonomio: this.form.pseudonomio,
-        num_contrato: this.form.num_contrato,
-        data_assinatura: this.form.data_assinatura,
-        validade_contrato: this.form.validade_contrato,
-        image: this.image,
-      }).then(response => {
-        var responseLog = document.getElementById('response');
-        responseLog.innerHTML = response.data.msg;
-      }).catch(error => {
-        if (error.response.status === 422) {
-          this.errors = error.response.data.errors || {};
+      if(this.$route.params.id){
+        axios.post('/editar-produto', {
+          idProduto: this.$route.params.id,
+          titulo: this.form.titulo,
+          titulo_obra: this.form.titulo_obra,
+          ano_uso: this.form.ano_uso,
+          ano_lancamento: this.form.ano_lancamento,
+          ano_ciclo: this.form.ano_ciclo,
+          area_conhec: this.form.area_conhec,
+          nivel_ensino: this.form.nivel_ensino,
+          serie: this.form.serie,
+          volume: this.form.volume,
+          num_edicao: this.form.num_edicao,
+          origem: this.form.origem,
+          idioma: this.form.idioma,
+          peg_la: this.form.peg_la,
+          peg_lp: this.form.peg_lp,
+          isbn_la: this.form.isbn_la,
+          isbn_lp: this.form.isbn_lp,
+          nome_contrato: this.form.nome_contrato,
+          nome_capa: this.form.nome_capa,
+          pseudonomio: this.form.pseudonomio,
+          num_contrato: this.form.num_contrato,
+          data_assinatura: this.form.data_assinatura,
+          validade_contrato: this.form.validade_contrato,
+          image: this.image,
+        }).then(response => {
           var responseLog = document.getElementById('response');
-          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+          responseLog.innerHTML = response.data.msg;
+        }).catch(error => {
+          if (error.response.status === 422) {
+            this.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
 
-          responseLog.innerHTML = errorHandling[0];
-        }
-      });
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      } else{
+        axios.post('/cadastrar-produto', {
+          titulo: this.form.titulo,
+          titulo_obra: this.form.titulo_obra,
+          ano_uso: this.form.ano_uso,
+          ano_lancamento: this.form.ano_lancamento,
+          ano_ciclo: this.form.ano_ciclo,
+          area_conhec: this.form.area_conhec,
+          nivel_ensino: this.form.nivel_ensino,
+          serie: this.form.serie,
+          volume: this.form.volume,
+          num_edicao: this.form.num_edicao,
+          origem: this.form.origem,
+          idioma: this.form.idioma,
+          peg_la: this.form.peg_la,
+          peg_lp: this.form.peg_lp,
+          isbn_la: this.form.isbn_la,
+          isbn_lp: this.form.isbn_lp,
+          nome_contrato: this.form.nome_contrato,
+          nome_capa: this.form.nome_capa,
+          pseudonomio: this.form.pseudonomio,
+          num_contrato: this.form.num_contrato,
+          data_assinatura: this.form.data_assinatura,
+          validade_contrato: this.form.validade_contrato,
+          image: this.image,
+        }).then(response => {
+          this.$router.push('/produto/1');
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = response.data.msg;
+        }).catch(error => {
+          if (error.response.status === 422) {
+            this.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      }
     },
     onFileChange(e) {
       let files = e.target.files || e.dataTransfer.files;
@@ -197,12 +238,21 @@ export default {
       axios
       .get('/listar-anoescolar')
       .then(response => (this.anoescolar = response.data))
+    },
+    editProduto(){
+      this.errors = {};
+      axios
+      .get('/listar-produto/'+ this.$route.params.id)
+      .then(response => (this.form = response.data))
     }
   },
   mounted() {
     this.getAreaConhecimento();
     this.getNivelEnsino();
     this.getAnoEscolar();
+    if(this.$route.params.id){
+      this.editProduto();
+    }
   }
 }
 </script>

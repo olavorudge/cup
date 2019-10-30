@@ -52,13 +52,13 @@
       {{data.item.idProduto}}
     </template>
     <template v-slot:cell(peg)="data">
-      {{data.item.pegLA}}
+      {{data.item.peg_la}}
     </template>
     <template v-slot:cell(nome)="data">
       {{data.item.titulo}}
     </template>
     <template v-slot:cell(isbn)="data">
-      {{data.item.ISBN_LA}}
+      {{data.item.isbn_la}}
     </template>
     <template v-slot:cell(dataModificacao)="data">
       {{data.item.updated_at}}
@@ -72,7 +72,7 @@
         @click="openModal('#modal-visualizar-produto')"
         >remove_red_eye</span>
       </a>
-      <router-link v-if="!data.item.arquivado" :to="{ name: 'editarProduto', params: { id: data.item.id } }" title="Editar">
+      <router-link v-if="!data.item.arquivado" :to="{ name: 'editarProduto', params: { id: data.item.idProduto } }" title="Editar">
         <span class="material-icons">edit</span>
       </router-link>
       <button type="" class="button-invisible" v-if="!data.item.arquivado" title="Deletar" data-toggle="tooltip" @click="deleteProduto(data.item.idProduto)">

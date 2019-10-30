@@ -60,7 +60,7 @@ export default {
       this.errors = {};
       console.log('ole');
       axios.post('/cadastrar-observacao', {
-        idProduto: this.form.idProduto,
+        idProduto: this.$route.params.id,
         idUsuario: this.form.idUsuario,
         observacao: this.form.observacao
       }).then(response => {

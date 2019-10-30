@@ -42,7 +42,7 @@ export default {
       perPage: 20,
       items: [{
         idProduto: '',
-        observaca: '',
+        observacao: '',
         created_at: '',
       }],
       fields: [
@@ -75,7 +75,7 @@ export default {
     },
   },
   mounted(){
-    this.getObservacoes(1);
+    this.getObservacoes(this.$route.params.id);
   }
 };
 </script>

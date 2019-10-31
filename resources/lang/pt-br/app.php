@@ -14,15 +14,16 @@ return [
     */
 
     'produto_cadastrado' => 'Produto cadastrado com sucesso.',
-    'modelo_cadastrado' => 'Modelo cadastrado com sucesso.',
-    'modelo_deletado' => 'Modelo deletado.',
-    'modelo_atualizado' => 'Modelo atualizado com sucesso.',
     'produto_deletado' => 'Produto deletado com sucesso.',
     'produto_duplicado' => 'Produto duplicado com sucesso.',
     'produto_alterado' => 'Produto alterado com sucesso.',
+    'produto_vazio' => 'Nenhum produto selecionado.',
+    'modelo_cadastrado' => 'Modelo cadastrado com sucesso.',
+    'modelo_deletado' => 'Modelo deletado.',
+    'modelo_atualizado' => 'Modelo atualizado com sucesso.',
     'componente_cadastrado' => 'Componente cadastrado com sucesso.',
     'observacao_cadastrada' => 'Observação cadastrada com sucesso.',
     'erro_cadastrar' => 'Erro ao cadastrar, tente novamente mais tarde.',
-    'produto_vazio' => 'Nenhum produto selecionado.',
+    'especificacao_deletada' => 'Especificacão deletada.',
 
 ];

@@ -98,7 +98,7 @@ export default {
           responseLog.innerHTML = responseMsg;
         })
       }
-      this.getModelos();
+      setTimeout(() => this.getModelos(), 100);
     }
   },
   mounted(){

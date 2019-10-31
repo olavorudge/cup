@@ -2881,7 +2881,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -3054,6 +3053,21 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-especificacoes/' + id).then(function (response) {
         return _this2.items = response.data;
       });
+    },
+    DeleteEspecificacao: function DeleteEspecificacao(id) {
+      var _this3 = this;
+
+      if (confirm('Deletar?')) {
+        axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/deletar-especificacao/' + id).then(function (response) {
+          var responseLog = document.getElementById('response');
+          var responseMsg = response.data.msg;
+          responseLog.innerHTML = responseMsg;
+        });
+      }
+
+      setTimeout(function () {
+        return _this3.getEspecificacoes(_this3.$route.params.id);
+      }, 100);
     }
   },
   mounted: function mounted() {
@@ -4253,6 +4267,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       });
     },
     deleteModelo: function deleteModelo(id) {
+      var _this2 = this;
+
       if (confirm('Deletar?')) {
         axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/deletar-modelo/' + id).then(function (response) {
           var responseLog = document.getElementById('response');
@@ -4261,7 +4277,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         });
       }
 
-      this.getModelos();
+      setTimeout(function () {
+        return _this2.getModelos();
+      }, 100);
     }
   },
   mounted: function mounted() {
@@ -56176,141 +56194,224 @@ var render = function() {
             hover: true,
             "tbody-tr-class": "row-class"
           },
-          scopedSlots: _vm._u(
-            [
-              {
-                key: "cell(tipo)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.componente) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(formatoAberto)",
-                fn: function(data) {
-                  return [
-                    _vm._v(
-                      "\n      " + _vm._s(data.item.formatoAberto) + "\n    "
+          scopedSlots: _vm._u([
+            {
+              key: "cell(tipo)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.componente) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(formatoAberto)",
+              fn: function(data) {
+                return [
+                  _vm._v(
+                    "\n      " + _vm._s(data.item.formatoAberto) + "\n    "
+                  )
+                ]
+              }
+            },
+            {
+              key: "cell(formatoFechado)",
+              fn: function(data) {
+                return [
+                  _vm._v(
+                    "\n      " + _vm._s(data.item.formatoFechado) + "\n    "
+                  )
+                ]
+              }
+            },
+            {
+              key: "cell(numeroPaginas)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.numPagina) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(papelGramatura)",
+              fn: function(data) {
+                return [_vm._v("\n      " + _vm._s(data.item.papel) + "\n    ")]
+              }
+            },
+            {
+              key: "cell(cores)",
+              fn: function(data) {
+                return [_vm._v("\n      " + _vm._s(data.item.cores) + "\n    ")]
+              }
+            },
+            {
+              key: "cell(acabamento)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.acabamento) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(observacao)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.observacao) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(espessura)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.espessura) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(peso)",
+              fn: function(data) {
+                return [_vm._v("\n      " + _vm._s(data.item.peso) + "\n    ")]
+              }
+            },
+            {
+              key: "cell(orientacao)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.orientacao) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(alvura)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.alvura) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(opacidade)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.opacidade) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(lombada)",
+              fn: function(data) {
+                return [
+                  _vm._v("\n      " + _vm._s(data.item.lombada) + "\n    ")
+                ]
+              }
+            },
+            {
+              key: "cell(medidasLombada)",
+              fn: function(data) {
+                return [
+                  _vm._v(
+                    "\n      " + _vm._s(data.item.medidasLombada) + "\n    "
+                  )
+                ]
+              }
+            },
+            {
+              key: "cell(actions)",
+              fn: function(data) {
+                return [
+                  _c("a", { attrs: { href: "", "data-toggle": "modal" } }, [
+                    _c(
+                      "span",
+                      {
+                        staticClass: "material-icons",
+                        attrs: { title: "Visualizar" },
+                        on: {
+                          click: function($event) {
+                            return _vm.openModal("#modal-visualizar-produto")
+                          }
+                        }
+                      },
+                      [_vm._v("remove_red_eye")]
                     )
-                  ]
-                }
-              },
-              {
-                key: "cell(formatoFechado)",
-                fn: function(data) {
-                  return [
-                    _vm._v(
-                      "\n      " + _vm._s(data.item.formatoFechado) + "\n    "
-                    )
-                  ]
-                }
-              },
-              {
-                key: "cell(numeroPaginas)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.numPagina) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(papelGramatura)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.papel) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(cores)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.cores) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(acabamento)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.acabamento) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(observacao)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.observacao) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(espessura)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.espessura) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(peso)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.peso) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(orientacao)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.orientacao) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(alvura)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.alvura) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(opacidade)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.opacidade) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(lombada)",
-                fn: function(data) {
-                  return [
-                    _vm._v("\n      " + _vm._s(data.item.lombada) + "\n    ")
-                  ]
-                }
-              },
-              {
-                key: "cell(medidasLombada)",
-                fn: function(data) {
-                  return [
-                    _vm._v(
-                      "\n      " + _vm._s(data.item.medidasLombada) + "\n    "
-                    )
-                  ]
-                }
-              },
-              false
-                ? undefined
-                : null
-            ],
-            null,
-            true
-          )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "router-link",
+                    {
+                      attrs: {
+                        to: {
+                          name: "editarProduto",
+                          params: { id: data.item.idEspecificacao }
+                        }
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("edit")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "button-invisible",
+                      attrs: {
+                        type: "button",
+                        title: "Deletar",
+                        "data-toggle": "tooltip"
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.DeleteEspecificacao(
+                            data.item.idEspecificacao
+                          )
+                        }
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("delete")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "",
+                        title: "Exportar",
+                        "data-toggle": "tooltip"
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("picture_as_pdf")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      attrs: {
+                        href: "#",
+                        title: "Histórico",
+                        "data-toggle": "modal",
+                        "data-target": "#modal-listar-alteracoes"
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("history")
+                      ])
+                    ]
+                  )
+                ]
+              }
+            }
+          ])
         },
         [
           _c(

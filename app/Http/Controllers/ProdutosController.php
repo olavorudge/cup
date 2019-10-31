@@ -384,6 +384,20 @@ class ProdutosController extends Controller
 
     }
     /*
+    DELETAR ESPECIFICACAO
+    */
+    public function DeletarEspecificacao($id){
+      if ($id){
+        $produto = EspecificacaoTecnica::find($id);
+        if ($produto){
+          $produto->bolAnulado = 1;
+          $produto->save();
+
+          return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_deletada')]);
+        }
+      }
+    }
+    /*
     FUNÇÃO PARA DUPLICAR PRODUTOS
     */
     public function DuplicarProduto($id){

@@ -34,6 +34,7 @@ Route::get('listar-modelo/{id}', ['as' => 'listar-modelo', 'uses' => 'ModelosCon
 
 Route::get('deletar-modelo/{id}', ['as' => 'deletar-modelo', 'uses' => 'ModelosController@DeletarModelo']);
 Route::get('deletar-produto/{id}', ['as' => 'deletar-produto', 'uses' => 'ProdutosController@DeletarProduto']);
+Route::get('deletar-especificacao/{id}', ['as' => 'deletar-especificacao', 'uses' => 'ProdutosController@DeletarEspecificacao']);
 
 /* POST */
 Route::post('cadastrar-produto', ['as' => 'cadastrar-produto', 'uses' => 'ProdutosController@CadastrarProdutos']);

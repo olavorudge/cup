@@ -76,7 +76,7 @@
       <template v-slot:cell(medidasLombada)="data">
         {{data.item.medidasLombada}}
       </template>
-      <template v-slot:cell(actions)="data" v-if="false">
+      <template v-slot:cell(actions)="data" v-if="">
         <a href data-toggle="modal">
           <span
             title="Visualizar"
@@ -84,13 +84,12 @@
             @click="openModal('#modal-visualizar-produto')"
           >remove_red_eye</span>
         </a>
-
         <router-link :to="{ name: 'editarProduto', params: { id: data.item.idEspecificacao } }">
           <span class="material-icons">edit</span>
         </router-link>
-        <a href title="Deletar" data-toggle="tooltip">
+        <button type="button" title="Deletar" class="button-invisible" data-toggle="tooltip" @click="DeleteEspecificacao(data.item.idEspecificacao)">
           <span class="material-icons">delete</span>
-        </a>
+        </button>
         <a href title="Exportar" data-toggle="tooltip">
           <span class="material-icons">picture_as_pdf</span>
         </a>
@@ -290,6 +289,18 @@ export default {
       .get('/listar-especificacoes/' + id)
       .then(response => (this.items = response.data))
     },
+    DeleteEspecificacao(id) {
+      if(confirm('Deletar?')){
+        axios
+        .get('/deletar-especificacao/' + id)
+        .then(response => {
+          var responseLog = document.getElementById('response');
+          var responseMsg = response.data.msg;
+          responseLog.innerHTML = responseMsg;
+        })
+      }
+      setTimeout(() => this.getEspecificacoes(this.$route.params.id), 100);
+    }
   },
   mounted(){
     this.getEspecificacoes(this.$route.params.id);

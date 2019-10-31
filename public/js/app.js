@@ -4067,7 +4067,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -4206,8 +4205,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 
 
@@ -4256,11 +4253,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       });
     },
     deleteModelo: function deleteModelo(id) {
-      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/deletar-modelo/' + id).then(function (response) {
-        var responseLog = document.getElementById('response');
-        var responseMsg = response.data.msg;
-        responseLog.innerHTML = responseMsg;
-      });
+      if (confirm('Deletar?')) {
+        axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/deletar-modelo/' + id).then(function (response) {
+          var responseLog = document.getElementById('response');
+          var responseMsg = response.data.msg;
+          responseLog.innerHTML = responseMsg;
+        });
+      }
+
       this.getModelos();
     }
   },
@@ -4779,11 +4779,14 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     deleteProduto: function deleteProduto(id) {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/deletar-produto/' + id).then(function (response) {
-        var responseMsg = response.data.msg;
-        var responseLog = document.getElementById('response');
-        responseLog.innerHTML = responseMsg;
-      });
+      if (confirm('Deletar Produto?')) {
+        axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/deletar-produto/' + id).then(function (response) {
+          var responseMsg = response.data.msg;
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = responseMsg;
+        });
+      }
+
       setTimeout(function () {
         return _this3.getProdutos();
       }, 100);
@@ -58294,7 +58297,7 @@ var render = function() {
         ],
         1
       ),
-      _vm._v("\n  " + _vm._s(_vm.form.checkbox) + "\n  "),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "mt-3 text-right" },
@@ -58405,57 +58408,43 @@ var render = function() {
               fn: function(data) {
                 return [
                   _c(
-                    "form",
+                    "router-link",
                     {
+                      attrs: {
+                        to: {
+                          name: "editarModelo",
+                          params: { id: data.item.idModelo }
+                        },
+                        title: "Editar"
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("edit")
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "button-invisible",
+                      attrs: {
+                        type: "",
+                        title: "Deletar",
+                        "data-toggle": "tooltip"
+                      },
                       on: {
-                        submit: function($event) {
-                          $event.preventDefault()
-                          return _vm.deleteModelo($event)
+                        click: function($event) {
+                          return _vm.deleteModelo(data.item.idModelo)
                         }
                       }
                     },
                     [
-                      _c(
-                        "router-link",
-                        {
-                          attrs: {
-                            to: {
-                              name: "editarModelo",
-                              params: { id: data.item.idModelo }
-                            },
-                            title: "Editar"
-                          }
-                        },
-                        [
-                          _c("span", { staticClass: "material-icons" }, [
-                            _vm._v("edit")
-                          ])
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "button",
-                        {
-                          staticClass: "button-invisible",
-                          attrs: {
-                            type: "",
-                            title: "Deletar",
-                            "data-toggle": "tooltip"
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.deleteModelo(data.item.idModelo)
-                            }
-                          }
-                        },
-                        [
-                          _c("span", { staticClass: "material-icons" }, [
-                            _vm._v("delete")
-                          ])
-                        ]
-                      )
-                    ],
-                    1
+                      _c("span", { staticClass: "material-icons" }, [
+                        _vm._v("delete")
+                      ])
+                    ]
                   )
                 ]
               }

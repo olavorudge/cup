@@ -48,7 +48,6 @@
       <checkbox v-model="form.checkbox" class="col-3" id="dataAssinatura" :value="21">Data de assinatura</checkbox>
       <checkbox v-model="form.checkbox" class="col-3" id="validadeContrato" :value="22">Validade do contrato</checkbox>
     </div>
-    {{form.checkbox}}
     <div class="mt-3 text-right">
       <button type="submit" class="btn btn-primary">Salvar</button>
       <router-link to="/modelos" class="btn btn-secondary">Cancelar</router-link>

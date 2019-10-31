@@ -203,6 +203,7 @@ export default {
       .then(response => (this.items = response.data))
     },
     deleteProduto(id){
+      if(confirm('Deletar Produto?')){
       axios
       .get('/deletar-produto/' + id)
       .then(response => {
@@ -210,6 +211,7 @@ export default {
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
       })
+    }
       setTimeout(() => this.getProdutos(), 100);
     },
     duplicateProduto(id){

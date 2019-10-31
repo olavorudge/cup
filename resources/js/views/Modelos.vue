@@ -29,14 +29,12 @@
       {{data.item.autor}}
     </template>
     <template v-slot:cell(actions)="data">
-      <form @submit.prevent="deleteModelo">
         <router-link :to="{ name: 'editarModelo', params: { id: data.item.idModelo } }" title="Editar">
           <span class="material-icons">edit</span>
         </router-link>
         <button type="" class="button-invisible" title="Deletar" data-toggle="tooltip" @click="deleteModelo(data.item.idModelo)">
           <span class="material-icons">delete</span>
         </button>
-      </form>
     </template>
   </b-table>
 </div>
@@ -91,19 +89,21 @@ export default {
       .then(response => (this.items = response.data))
     },
     deleteModelo(id) {
-      axios
-      .get('/deletar-modelo/' + id)
-      .then(response => {
-        var responseLog = document.getElementById('response');
-        var responseMsg = response.data.msg;
-        responseLog.innerHTML = responseMsg;
-      })
-        this.getModelos();
+      if(confirm('Deletar?')){
+        axios
+        .get('/deletar-modelo/' + id)
+        .then(response => {
+          var responseLog = document.getElementById('response');
+          var responseMsg = response.data.msg;
+          responseLog.innerHTML = responseMsg;
+        })
+      }
+      this.getModelos();
+    }
+  },
+  mounted(){
+    this.getModelos();
   }
-},
-mounted(){
-  this.getModelos();
-}
 };
 </script>
 

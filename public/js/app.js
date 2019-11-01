@@ -4091,6 +4091,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -4109,12 +4112,23 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         nomeModelo: '',
         compartilhamento: '',
-        checkbox: []
+        checkbox: [],
+        checkboxValue: 20,
+        selectAll: 0
       }
     };
   },
   computed: {},
   methods: {
+    checkAll: function checkAll() {
+      if (this.form.selectAll == 0) {
+        this.form.checkbox = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+        this.form.selectAll = 1;
+      } else {
+        this.form.checkbox = [];
+        this.form.selectAll = 0;
+      }
+    },
     editModelo: function editModelo() {
       var _this = this;
 
@@ -58582,6 +58596,50 @@ var render = function() {
         ],
         1
       ),
+      _vm._v(" "),
+      _c("div", { staticClass: "mt-3" }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.form.selectAll,
+              expression: "form.selectAll"
+            }
+          ],
+          attrs: { type: "checkbox" },
+          domProps: {
+            checked: Array.isArray(_vm.form.selectAll)
+              ? _vm._i(_vm.form.selectAll, null) > -1
+              : _vm.form.selectAll
+          },
+          on: {
+            click: _vm.checkAll,
+            change: function($event) {
+              var $$a = _vm.form.selectAll,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false
+              if (Array.isArray($$a)) {
+                var $$v = null,
+                  $$i = _vm._i($$a, $$v)
+                if ($$el.checked) {
+                  $$i < 0 && _vm.$set(_vm.form, "selectAll", $$a.concat([$$v]))
+                } else {
+                  $$i > -1 &&
+                    _vm.$set(
+                      _vm.form,
+                      "selectAll",
+                      $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                    )
+                }
+              } else {
+                _vm.$set(_vm.form, "selectAll", $$c)
+              }
+            }
+          }
+        }),
+        _vm._v(" Selecionar tudo\n  ")
+      ]),
       _vm._v(" "),
       _c(
         "div",

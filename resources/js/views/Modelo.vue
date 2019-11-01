@@ -48,6 +48,9 @@
       <checkbox v-model="form.checkbox" class="col-3" id="dataAssinatura" :value="21">Data de assinatura</checkbox>
       <checkbox v-model="form.checkbox" class="col-3" id="validadeContrato" :value="22">Validade do contrato</checkbox>
     </div>
+    <div class="mt-3">
+      <input type="checkbox" v-model="form.selectAll" @click="checkAll"> Selecionar tudo
+    </div>
     <div class="mt-3 text-right">
       <button type="submit" class="btn btn-primary">Salvar</button>
       <router-link to="/modelos" class="btn btn-secondary">Cancelar</router-link>
@@ -65,74 +68,85 @@ import Router from "vue-router";
 
 export default {
   components: { Checkbox, VInput, VSelect },
-    data() {
-      return {
-        busy: false,
-        items:
-          {
-          },
-        form: {
-          nomeModelo: '',
-          compartilhamento: '',
-          checkbox: [],
-        }
-      };
-    },
-    computed: {
-
+  data() {
+    return {
+      busy: false,
+      items:
+      {
       },
-      methods: {
-        editModelo(){
-          axios
-          .get('/listar-modelo/'+ this.$route.params.id)
-          .then(response => (this.form = response.data))
-        },
-        submitModelo(){
-          if(this.$route.params.id){
-            axios.post('/editar-modelo', {
-              idModelo: this.$route.params.id,
-              nome_modelo: this.form.nomeModelo,
-              compartilhamento: this.form.compartilhamento,
-              checkbox: this.form.checkbox
-            }).then(response => {
-              var responseLog = document.getElementById('response');
-              responseLog.innerHTML = response.data.msg;
-            }).catch(error => {
-              if (error.response.status === 422) {
-                this.errors = error.response.data.errors || {};
-                var responseLog = document.getElementById('response');
-                var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-                responseLog.innerHTML = errorHandling[0];
-              }
-            });
-          } else {
-            this.errors = {};
-
-            axios.post('/cadastrar-modelo', {
-              nome_modelo: this.form.nomeModelo,
-              compartilhamento: this.form.compartilhamento,
-              checkbox: this.form.checkbox
-            }).then(response => {
-              var responseLog = document.getElementById('response');
-              responseLog.innerHTML = response.data.msg;
-            }).catch(error => {
-              if (error.response.status === 422) {
-                this.errors = error.response.data.errors || {};
-                var responseLog = document.getElementById('response');
-                var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-                responseLog.innerHTML = errorHandling[0];
-              }
-            });
-          }
-        }
-      },
-      mounted(){
-        if(this.$route.params.id){
-          this.editModelo();
-        }
+      form: {
+        nomeModelo: '',
+        compartilhamento: '',
+        checkbox: [],
+        checkboxValue: 20,
+        selectAll: 0,
       }
-  };
+    };
+  },
+  computed: {
+
+  },
+  methods: {
+    checkAll (){
+      if(this.form.selectAll == 0){
+        this.form.checkbox = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22];
+        this.form.selectAll = 1;
+      } else {
+        this.form.checkbox = [];
+        this.form.selectAll = 0;
+      }
+    },
+    editModelo(){
+      axios
+      .get('/listar-modelo/'+ this.$route.params.id)
+      .then(response => (this.form = response.data))
+    },
+    submitModelo(){
+      if(this.$route.params.id){
+        axios.post('/editar-modelo', {
+          idModelo: this.$route.params.id,
+          nome_modelo: this.form.nomeModelo,
+          compartilhamento: this.form.compartilhamento,
+          checkbox: this.form.checkbox
+        }).then(response => {
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = response.data.msg;
+        }).catch(error => {
+          if (error.response.status === 422) {
+            this.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      } else {
+        this.errors = {};
+
+        axios.post('/cadastrar-modelo', {
+          nome_modelo: this.form.nomeModelo,
+          compartilhamento: this.form.compartilhamento,
+          checkbox: this.form.checkbox
+        }).then(response => {
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = response.data.msg;
+        }).catch(error => {
+          if (error.response.status === 422) {
+            this.errors = error.response.data.errors || {};
+            var responseLog = document.getElementById('response');
+            var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+
+            responseLog.innerHTML = errorHandling[0];
+          }
+        });
+      }
+    }
+  },
+  mounted(){
+    if(this.$route.params.id){
+      this.editModelo();
+    }
+  }
+};
 
 </script>
 

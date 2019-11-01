@@ -9,6 +9,7 @@ use App\AnoEscolar;
 use App\NivelEnsino;
 use App\Observacao;
 use App\EstruturaProduto;
+use App\Origem;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -62,11 +63,60 @@ class ProdutosController extends Controller
       'isbn_lp' => $produto->isbn_lp,
       'nome_contrato' => $produto->nomeContrato,
       'nome_capa' => $produto->nomeCapa,
-      'pseudonomio' => $produto->pseudonomio,
+      'pseudonimo' => $produto->pseudonimo,
       'num_contrato' => $produto->numContrato,
       'data_assinatura' => $produto->dataAssinatura,
       'validade_contrato' => $produto->validadeContrato
     ];
+
+    $produtos = json_encode($data);
+    return $produtos;
+  }
+  /*
+  Função para exibir todos os produtos cadastrados
+  */
+  public function ListarProdutoGeral($id)
+  {
+    $produto = array();
+    $produto = Produto::where('idProduto', $id)->first();
+    $especificacoes = EspecificacaoTecnica::where('idProduto', $id)->where('bolAnulado', 0)->orderBy('idTipoEspecificacao', 'ASC')->get();
+
+    $anoEscolar = AnoEscolar::where('idAnoEscolar', $produto->idAnoEscolar)->first();
+    $nivel = NivelEnsino::where('idNivel', $anoEscolar->idNivel)->first();
+    $areaConhecimento = AreaConhecimento::where('idAreaConhecimento', $produto->idAreaConhecimento)->first();
+    $origem = Origem::where('idOrigem', $produto->idOrigem)->first();
+
+    $dadosGerais = [
+      'titulo' => $produto->titulo,
+      'titulo_obra' => $produto->tituloObra,
+      'ano_uso' => $produto->anoUso,
+      'ano_lancamento' => $produto->anoLancamento,
+      'ano_ciclo' => $produto->anoCicloVida,
+      'area_conhec' => $areaConhecimento->nomeAreaConhecimento,
+      'nivel_ensino' => $nivel->nomeNivel,
+      'serie' => $anoEscolar->nomeAnoEscolar,
+      'volume' => $produto->volume,
+      'num_edicao' => $produto->numEdicao,
+      'origem' => $origem->nomeOrigem,
+      'idioma' => $produto->idioma,
+      'peg_la' => $produto->peg_la,
+      'peg_lp' => $produto->peg_lp,
+      'isbn_la' => $produto->isbn_la,
+      'isbn_lp' => $produto->isbn_lp,
+      'nome_contrato' => $produto->nomeContrato,
+      'nome_capa' => $produto->nomeCapa,
+      'pseudonimo' => $produto->pseudonimo,
+      'num_contrato' => $produto->numContrato,
+      'data_assinatura' => $produto->dataAssinatura,
+      'validade_contrato' => $produto->validadeContrato
+    ];
+
+    $data = [
+      'dadosGerais' => $dadosGerais,
+      'especificacoes' => $especificacoes
+    ];
+
+
 
     $produtos = json_encode($data);
     return $produtos;
@@ -85,7 +135,7 @@ class ProdutosController extends Controller
       ['ISBN_LP', '=', ''],
       ['nomeContrato', '=', ''],
       ['nomeCapa', '=', ''],
-      ['pseudonomio', '=', ''],
+      ['pseudonimo', '=', ''],
       ['numContrato', '=', ''],
       ['dataAssinatura', '=', ''],
       ['validadeContrato', '=', '']
@@ -108,7 +158,7 @@ class ProdutosController extends Controller
       return $produtos;
     }
     /*
-    Listar as estrtuturas do produto X
+    Listar as estruturas do produto X
     */
     public function ListarEstruturas($id)
     {
@@ -125,7 +175,7 @@ class ProdutosController extends Controller
       return $produtos;
     }
     /*
-    Listar as especificações do produto X
+    Listar as observacoes do produto X
     */
 
     public function ListarObservacoes($id)
@@ -204,7 +254,7 @@ class ProdutosController extends Controller
           'isbn_lp'               => $request->isbn_lp,
           'nomeContrato'          => $request->nome_contrato,
           'nomeCapa'              => $request->nome_capa,
-          'pseudonomio'           => $request->pseudonomio,
+          'pseudonimo'           => $request->pseudonimo,
           'numContrato'           => $request->num_contrato,
           'dataAssinatura'        => $request->data_assinatura,
           'validadeContrato'      => $request->validade_contrato,
@@ -346,7 +396,7 @@ class ProdutosController extends Controller
               'isbn_lp'               => $request->isbn_lp,
               'nomeContrato'          => $request->nome_contrato,
               'nomeCapa'              => $request->nome_capa,
-              'pseudonomio'           => $request->pseudonomio,
+              'pseudonimo'           => $request->pseudonimo,
               'numContrato'           => $request->num_contrato,
               'dataAssinatura'        => $request->data_assinatura,
               'validadeContrato'      => $request->validade_contrato

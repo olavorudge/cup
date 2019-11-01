@@ -2324,7 +2324,7 @@ __webpack_require__.r(__webpack_exports__);
         isbn_lp: '',
         nome_contrato: '',
         nome_capa: '',
-        pseudonomio: '',
+        pseudonimo: '',
         num_contrato: '',
         data_assinatura: '',
         validade_contrato: ''
@@ -2362,7 +2362,7 @@ __webpack_require__.r(__webpack_exports__);
           isbn_lp: this.form.isbn_lp,
           nome_contrato: this.form.nome_contrato,
           nome_capa: this.form.nome_capa,
-          pseudonomio: this.form.pseudonomio,
+          pseudonimo: this.form.pseudonimo,
           num_contrato: this.form.num_contrato,
           data_assinatura: this.form.data_assinatura,
           validade_contrato: this.form.validade_contrato,
@@ -2398,7 +2398,7 @@ __webpack_require__.r(__webpack_exports__);
           isbn_lp: this.form.isbn_lp,
           nome_contrato: this.form.nome_contrato,
           nome_capa: this.form.nome_capa,
-          pseudonomio: this.form.pseudonomio,
+          pseudonimo: this.form.pseudonimo,
           num_contrato: this.form.num_contrato,
           data_assinatura: this.form.data_assinatura,
           validade_contrato: this.form.validade_contrato,
@@ -2454,11 +2454,11 @@ __webpack_require__.r(__webpack_exports__);
         return _this4.anoescolar = response.data;
       });
     },
-    editProduto: function editProduto() {
+    editProduto: function editProduto(id) {
       var _this5 = this;
 
       this.errors = {};
-      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-produto/' + this.$route.params.id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_4___default.a.get('/listar-produto/' + id).then(function (response) {
         return _this5.form = response.data;
       });
     }
@@ -2469,7 +2469,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getAnoEscolar();
 
     if (this.$route.params.id) {
-      this.editProduto();
+      this.editProduto(this.$route.params.id);
     }
   }
 });
@@ -3733,6 +3733,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -3854,43 +3856,51 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      id: "modal-visualizar-produto"
+      id: "modal-visualizar-produto",
+      form: {
+        dadosGerais: {
+          titulo: '',
+          titulo_obra: '',
+          ano_uso: '',
+          ano_lancamento: '',
+          area_conhec: '',
+          data_assinatura: '',
+          idioma: '',
+          isbn_la: '',
+          isbn_lp: '',
+          nivel_ensino: '',
+          nome_capa: '',
+          nome_contrato: '',
+          num_contrato: '',
+          num_edicao: '',
+          origem: '',
+          peg_la: '',
+          peg_lp: '',
+          pseudonimo: '',
+          serie: '',
+          volume: '',
+          validade_contrato: ''
+        },
+        especificacoes: {}
+      }
     };
+  },
+  methods: {
+    getProduto: function getProduto(id) {
+      var _this = this;
+
+      this.errors = {};
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/listar-produto-geral/' + id).then(function (response) {
+        return _this.form = response.data;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getProduto(1);
   }
 });
 
@@ -4781,8 +4791,8 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     }
   },
   methods: {
-    openModal: function openModal(modalId) {
-      jquery__WEBPACK_IMPORTED_MODULE_8___default()(modalId).modal();
+    openModal: function openModal(modalId, id) {
+      jquery__WEBPACK_IMPORTED_MODULE_8___default()(modalId).modal(id);
     },
     rowClass: function rowClass(item, type) {
       if (item.arquivado) return 'table-danger';
@@ -55644,11 +55654,11 @@ var render = function() {
                 "v-input",
                 {
                   model: {
-                    value: _vm.form.pseudonomio,
+                    value: _vm.form.pseudonimo,
                     callback: function($$v) {
-                      _vm.$set(_vm.form, "pseudonomio", $$v)
+                      _vm.$set(_vm.form, "pseudonimo", $$v)
                     },
-                    expression: "form.pseudonomio"
+                    expression: "form.pseudonimo"
                   }
                 },
                 [_vm._v("Pseudônimo")]
@@ -57562,7 +57572,392 @@ var render = function() {
         "aria-hidden": "true"
       }
     },
-    [_vm._m(0)]
+    [
+      _c(
+        "div",
+        {
+          staticClass: "modal-dialog modal-dialog-slideout modal-lg",
+          attrs: { role: "document" }
+        },
+        [
+          _c("div", { staticClass: "modal-content" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "modal-body" }, [
+              _c("div", { staticClass: "modal-section" }, [
+                _c("div", { staticClass: "card product-line-card" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card-header visualizar-produto-card",
+                      attrs: {
+                        "data-toggle": "collapse",
+                        "data-target": "#card-items-0"
+                      }
+                    },
+                    [
+                      _c("p", [_vm._v("Dados Gerais")]),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "material-icons",
+                          attrs: { "data-toggle": "tooltip" }
+                        },
+                        [_vm._v("chevron_right")]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "collapse card-inside",
+                    attrs: { id: "card-items-0" }
+                  },
+                  [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("p", [
+                          _vm._v("Título: "),
+                          _c("b", [_vm._v(_vm._s(_vm.form.dadosGerais.titulo))])
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Geração de uso(ano): " +
+                              _vm._s(_vm.form.dadosGerais.ano_uso)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Ano de lançamento: " +
+                              _vm._s(_vm.form.dadosGerais.ano_lancamento)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Área de conhecimento: " +
+                              _vm._s(_vm.form.dadosGerais.area_conhec)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Volume: " + _vm._s(_vm.form.dadosGerais.volume)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Número da edição: " +
+                              _vm._s(_vm.form.dadosGerais.num_edicao)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "PEG (LA): " + _vm._s(_vm.form.dadosGerais.peg_la)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "ISBN (LA): " + _vm._s(_vm.form.dadosGerais.isbn_la)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("p", [
+                          _vm._v(
+                            "Título da obra: " +
+                              _vm._s(_vm.form.dadosGerais.titulo_obra)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Ciclo e vida (até): " +
+                              _vm._s(_vm.form.dadosGerais.ano_ciclo)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Nível de Ensino: " +
+                              _vm._s(_vm.form.dadosGerais.nivel_ensino)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Ano Escolar/Série: " +
+                              _vm._s(_vm.form.dadosGerais.ano_ciclo)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Origem: " + _vm._s(_vm.form.dadosGerais.origem)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Idioma: " + _vm._s(_vm.form.dadosGerais.idioma)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "PEG (LP): " + _vm._s(_vm.form.dadosGerais.peg_lp)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "ISBN (LP): " + _vm._s(_vm.form.dadosGerais.isbn_lp)
+                          )
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-section" }, [
+                _c("div", { staticClass: "card product-line-card" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card-header visualizar-produto-card",
+                      attrs: {
+                        "data-toggle": "collapse",
+                        "data-target": "#card-items-1"
+                      }
+                    },
+                    [
+                      _c("p", [_vm._v("Autoria")]),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "material-icons",
+                          attrs: { "data-toggle": "tooltip" }
+                        },
+                        [_vm._v("chevron_right")]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "collapse card-inside",
+                    attrs: { id: "card-items-1" }
+                  },
+                  [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("p", [
+                          _vm._v(
+                            "Nome para Contrato: " +
+                              _vm._s(_vm.form.dadosGerais.nome_contrato)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Nome para Capa: " +
+                              _vm._s(_vm.form.dadosGerais.nome_capa)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Data de assinatura: " +
+                              _vm._s(_vm.form.dadosGerais.data_assinatura)
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col-md-6" }, [
+                        _c("p", [
+                          _vm._v(
+                            "Número do contrato: " +
+                              _vm._s(_vm.form.dadosGerais.titulo_obra)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Pseudônimo: " +
+                              _vm._s(_vm.form.dadosGerais.pseudonimo)
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("p", [
+                          _vm._v(
+                            "Validade do Contrato: " +
+                              _vm._s(_vm.form.dadosGerais.validade_contrato)
+                          )
+                        ])
+                      ])
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-section" }, [
+                _c("div", { staticClass: "card product-line-card" }, [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "card-header visualizar-produto-card",
+                      attrs: {
+                        "data-toggle": "collapse",
+                        "data-target": "#card-items-2"
+                      }
+                    },
+                    [
+                      _c("p", [_vm._v("Especificações Técnicas")]),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticClass: "material-icons",
+                          attrs: { "data-toggle": "tooltip" }
+                        },
+                        [_vm._v("chevron_right")]
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "collapse card-inside",
+                    attrs: { id: "card-items-2" }
+                  },
+                  _vm._l(_vm.form.especificacoes, function(especificacao) {
+                    return _c("div", {}, [
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-12" }, [
+                          especificacao.idTipoEspecificacao == 1
+                            ? _c("h5", [_vm._v("Livros e Suplementos")])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          especificacao.idTipoEspecificacao == 2
+                            ? _c("h5", [_vm._v("Livro do Aluno")])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          especificacao.idTipoEspecificacao == 3
+                            ? _c("h5", [_vm._v("Livro do Professor")])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          especificacao.idTipoEspecificacao == 4
+                            ? _c("h5", [_vm._v("Suplementos")])
+                            : _vm._e()
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "row" }, [
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c("p", [
+                            _vm._v(
+                              "Componente: " + _vm._s(especificacao.componente)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Formato aberto: " +
+                                _vm._s(especificacao.formatoAberto)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Formato fechado: " +
+                                _vm._s(especificacao.formatoFechado)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("Papel: " + _vm._s(especificacao.papel))
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Orientação: " + _vm._s(especificacao.orientacao)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("Alvura: " + _vm._s(especificacao.alvura))
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("Lombada: " + _vm._s(especificacao.lombada))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "col-md-6" }, [
+                          _c("p", [
+                            _vm._v(
+                              "Número de Páginas: " +
+                                _vm._s(especificacao.numPagina)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Acabamento: " + _vm._s(especificacao.acabamento)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Espessura: " + _vm._s(especificacao.espessura)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v("Peso: " + _vm._s(especificacao.peso) + "g")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Opacidade: " + _vm._s(especificacao.opacidade)
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _c("p", [
+                            _vm._v(
+                              "Medida Lombada: " +
+                                _vm._s(especificacao.medLombada)
+                            )
+                          ])
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("hr")
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ])
+          ])
+        ]
+      )
+    ]
   )
 }
 var staticRenderFns = [
@@ -57570,233 +57965,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "modal-dialog modal-dialog-slideout modal-lg",
-        attrs: { role: "document" }
-      },
-      [
-        _c("div", { staticClass: "modal-content" }, [
-          _c("div", { staticClass: "modal-header" }, [
-            _c("h5", { staticClass: "modal-title" }, [
-              _vm._v("Visualizar Produto")
-            ]),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
-                staticClass: "close",
-                attrs: {
-                  type: "button",
-                  "data-dismiss": "modal",
-                  "aria-label": "Close"
-                }
-              },
-              [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "modal-body" }, [
-            _c("div", { staticClass: "modal-section" }, [
-              _c("h5", [_vm._v("Dados gerais")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("Título: Just For Kids")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("Geração de uso (ano): 2019")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("Ciclo de vida (até): 2022")])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [
-                    _vm._v(
-                      "Título da obra: Just For Kids - EF1 - Inglês 1º Ano"
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("Ano de lançamento: 2019")])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-section" }, [
-              _c("h5", [_vm._v("Autoria")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("Nome para contrato: sdfah sdfashfkjfs af")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("Nome do contrato: sdfah sdfashfkjfs af")])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("Nome para capa: sdfah sdfashfkjfs af")])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "modal-section" }, [
-              _c("h5", [_vm._v("Especificações técnicas")]),
-              _vm._v(" "),
-              _c("h6", [_c("b", [_vm._v("Livro do aluno")])]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row row-separator" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("01) Componente: Capa")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("03) Formato Aberto (mm): 550 x 205")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("05) Orientação: Horizontal")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("07) Peso (g):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("09) Opacidade:")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("11) Lombada: Espiral")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("13) Papel/Gramatura : Cartão Sólido 350g")]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                15) Obervação : Troca de chapa 4 cores na frente (AL e PF) e no verso troca o preto. Com CD Peg PF: 2000.51885 e\n                Peg AL: 2000.51880, colado na 3ª capa.\n              "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("02) Número de Paginas: 4")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("04) Formato Fechado (mm): 275 x 205")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("06) Espessura (mm):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("08) Alvura (%):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("10) Cores: 4x1 (preto)")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("12) Medidas da lombada (mm):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("14) Acabamento : Plastificação Brilho")])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row row-separator" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("01) Componente: Capa")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("03) Formato Aberto (mm): 550 x 205")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("05) Orientação: Horizontal")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("07) Peso (g):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("09) Opacidade:")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("11) Lombada: Espiral")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("13) Papel/Gramatura : Cartão Sólido 350g")]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                15) Obervação : Troca de chapa 4 cores na frente (AL e PF) e no verso troca o preto. Com CD Peg PF: 2000.51885 e\n                Peg AL: 2000.51880, colado na 3ª capa.\n              "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("02) Número de Paginas: 4")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("04) Formato Fechado (mm): 275 x 205")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("06) Espessura (mm):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("08) Alvura (%):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("10) Cores: 4x1 (preto)")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("12) Medidas da lombada (mm):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("14) Acabamento : Plastificação Brilho")])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("01) Componente: Capa")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("03) Formato Aberto (mm): 550 x 205")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("05) Orientação: Horizontal")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("07) Peso (g):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("09) Opacidade:")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("11) Lombada: Espiral")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("13) Papel/Gramatura : Cartão Sólido 350g")]),
-                  _vm._v(" "),
-                  _c("p", [
-                    _vm._v(
-                      "\n                15) Obervação : Troca de chapa 4 cores na frente (AL e PF) e no verso troca o preto. Com CD Peg PF: 2000.51885 e\n                Peg AL: 2000.51880, colado na 3ª capa.\n              "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col" }, [
-                  _c("p", [_vm._v("02) Número de Paginas: 4")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("04) Formato Fechado (mm): 275 x 205")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("06) Espessura (mm):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("08) Alvura (%):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("10) Cores: 4x1 (preto)")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("12) Medidas da lombada (mm):")]),
-                  _vm._v(" "),
-                  _c("p", [_vm._v("14) Acabamento : Plastificação Brilho")])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-row" }, [
-                _c("h6", [_c("b", [_vm._v("Livro do professor")])]),
-                _vm._v(" "),
-                _c("div", { staticClass: "row" }, [
-                  _c("div", { staticClass: "col" }, [
-                    _c("p", [_vm._v("01) Componente: Capa")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("03) Formato Aberto (mm): 550 x 205")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("05) Orientação: Horizontal")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("07) Peso (g):")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("09) Opacidade:")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("11) Lombada: Espiral")]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v("13) Papel/Gramatura : Cartão Sólido 350g")
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _vm._v(
-                        "\n                  15) Obervação : Troca de chapa 4 cores na frente (AL e PF) e no verso troca o preto. Com CD Peg PF: 2000.51885 e\n                  Peg AL: 2000.51880, colado na 3ª capa.\n                "
-                      )
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ])
-        ])
-      ]
-    )
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("h5", { staticClass: "modal-title" }, [_vm._v("Visualizar Produto")]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -59171,7 +59355,10 @@ var render = function() {
                         attrs: { title: "Visualizar" },
                         on: {
                           click: function($event) {
-                            return _vm.openModal("#modal-visualizar-produto")
+                            return _vm.openModal(
+                              "#modal-visualizar-produto",
+                              data.item.idProduto
+                            )
                           }
                         }
                       },

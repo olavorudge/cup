@@ -22,6 +22,7 @@ Route::get('duplicar-produto/{id}', ['as' => 'duplicar-produto', 'uses' => 'Prod
 
 Route::get('listar-produtos', ['as' => 'listar-produtos', 'uses' => 'ProdutosController@ListarProdutos']);
 Route::get('listar-produto/{id}', ['as' => 'listar-produto', 'uses' => 'ProdutosController@ListarProduto']);
+Route::get('listar-produto-geral/{id}', ['as' => 'listar-produto-geral', 'uses' => 'ProdutosController@ListarProdutoGeral']);
 Route::get('listar-areaconhecimento', ['as' => 'listar-areaconhecimento', 'uses' => 'ProdutosController@getAreaConhecimento']);
 Route::get('listar-nivelensino', ['as' => 'listar-nivelensino', 'uses' => 'ProdutosController@getNivelEnsino']);
 Route::get('listar-anoescolar', ['as' => 'listar-anoescolar', 'uses' => 'ProdutosController@getAnoEscolar']);

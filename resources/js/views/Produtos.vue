@@ -69,7 +69,7 @@
         <span
         title="Visualizar"
         class="material-icons"
-        @click="openModal('#modal-visualizar-produto')"
+        @click="openModal('#modal-visualizar-produto', data.item.idProduto)"
         >remove_red_eye</span>
       </a>
       <router-link v-if="!data.item.arquivado" :to="{ name: 'editarProduto', params: { id: data.item.idProduto } }" title="Editar">
@@ -191,8 +191,8 @@ export default {
     }
   },
   methods: {
-    openModal(modalId) {
-      $(modalId).modal();
+    openModal(modalId, id) {
+      $(modalId).modal(id);
     },
     rowClass(item, type) {
       if (item.arquivado) return 'table-danger'

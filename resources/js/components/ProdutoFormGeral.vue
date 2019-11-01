@@ -54,7 +54,7 @@
       </div>
       <div class="form-row">
         <v-input v-model="form.nome_capa">Nome para capa</v-input>
-        <v-input v-model="form.pseudonomio">Pseudônimo</v-input>
+        <v-input v-model="form.pseudonimo">Pseudônimo</v-input>
       </div>
       <div class="form-row">
         <v-input v-model="form.num_contrato">Número do contrato</v-input>
@@ -118,7 +118,7 @@ export default {
         isbn_lp: '',
         nome_contrato: '',
         nome_capa: '',
-        pseudonomio: '',
+        pseudonimo: '',
         num_contrato: '',
         data_assinatura: '',
         validade_contrato: '',
@@ -153,7 +153,7 @@ export default {
           isbn_lp: this.form.isbn_lp,
           nome_contrato: this.form.nome_contrato,
           nome_capa: this.form.nome_capa,
-          pseudonomio: this.form.pseudonomio,
+          pseudonimo: this.form.pseudonimo,
           num_contrato: this.form.num_contrato,
           data_assinatura: this.form.data_assinatura,
           validade_contrato: this.form.validade_contrato,
@@ -190,7 +190,7 @@ export default {
           isbn_lp: this.form.isbn_lp,
           nome_contrato: this.form.nome_contrato,
           nome_capa: this.form.nome_capa,
-          pseudonomio: this.form.pseudonomio,
+          pseudonimo: this.form.pseudonimo,
           num_contrato: this.form.num_contrato,
           data_assinatura: this.form.data_assinatura,
           validade_contrato: this.form.validade_contrato,
@@ -239,10 +239,10 @@ export default {
       .get('/listar-anoescolar')
       .then(response => (this.anoescolar = response.data))
     },
-    editProduto(){
+    editProduto(id){
       this.errors = {};
       axios
-      .get('/listar-produto/'+ this.$route.params.id)
+      .get('/listar-produto/'+ id)
       .then(response => (this.form = response.data))
     }
   },
@@ -251,7 +251,7 @@ export default {
     this.getNivelEnsino();
     this.getAnoEscolar();
     if(this.$route.params.id){
-      this.editProduto();
+      this.editProduto(this.$route.params.id);
     }
   }
 }

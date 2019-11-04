@@ -37,6 +37,23 @@ class ProdutosController extends Controller
   /*
   Função para exibir todos os produtos cadastrados
   */
+  public function ListarTodasEstruturas()
+  {
+    $estruturas = array();
+    $estruturas = EstruturaProduto::distinct('idEstrutura')->get();
+    $ids = [];
+    foreach ($estruturas as $estrutura) {
+      $ids[] = $estrutura->idEstrutura;
+    }
+    $produtos = Produto::find($ids);
+
+
+    $produtos = json_encode($produtos);
+    return $produtos;
+  }
+  /*
+  Função para exibir todos os produtos cadastrados
+  */
   public function ListarProduto($id)
   {
     $produto = array();
@@ -124,22 +141,33 @@ class ProdutosController extends Controller
   /*
   Listar produtos com pendências
   */
-  public function ListarPendências(){
-    $produtos = array();
-    $produtos = Produto::where([
-      ['volume', '=', ''],
-      ['num_edicao', '=', ''],
-      ['pegLA', '=', ''],
-      ['pegLP', '=', ''],
-      ['ISBN_LA', '=', ''],
-      ['ISBN_LP', '=', ''],
-      ['nomeContrato', '=', ''],
-      ['nomeCapa', '=', ''],
-      ['pseudonimo', '=', ''],
-      ['numContrato', '=', ''],
-      ['dataAssinatura', '=', ''],
-      ['validadeContrato', '=', '']
-      ])->get();
+    public function ListarPendencias(){
+      $produtos = array();
+      $produtos = Produto::select("SELECT * FROM produto
+        WHERE
+          peg_la is null
+          OR peg_lp is null
+          OR isbn_la is null
+          OR isbn_lp is null
+          OR nomeContrato is null
+          OR nomeCapa is null
+          OR pseudonimo is null
+          OR numContrato is null
+          OR dataAssinatura is null
+          OR validadeContrato is null
+        ");
+
+        $produtos = json_encode($produtos);
+        return $produtos;
+    }
+
+    /*
+    Listar especificacao ID
+    */
+    public function ListarEspecificacao($id)
+    {
+      $produtos = array();
+      $produtos = EspecificacaoTecnica::where('idEspecificacao', $id)->first();
 
       $produtos = json_encode($produtos);
       return $produtos;
@@ -148,7 +176,6 @@ class ProdutosController extends Controller
     /*
     Listar as especificações do produto X
     */
-
     public function ListarEspecificacoes($id)
     {
       $produtos = array();
@@ -157,6 +184,7 @@ class ProdutosController extends Controller
       $produtos = json_encode($produtos);
       return $produtos;
     }
+
     /*
     Listar as estruturas do produto X
     */
@@ -405,6 +433,50 @@ class ProdutosController extends Controller
 
             return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado')]);
           }
+        }
+      }
+    }
+    /*
+    * EDITAR ESPECIFICAÇÃO
+    */
+    public function EditarEspecificacao(Request $request)
+    {
+
+
+      $especificacao = EspecificacaoTecnica::find($request->idEspecificacao);
+      $rules = [
+        'componente'   => 'required',
+        'numPagina'   => 'numeric',
+        'peso'   => 'numeric'
+      ];
+
+      if ($this->validate($request, $rules)) {
+
+        $data = [
+          'idProduto'             => $request->idProduto,
+          'idTipoEspecificacao'   => $request->idTipoEspecificacao,
+          'componente'            => $request->componente,
+          'formatoAberto'         => $request->formatoAberto,
+          'formatoFechado'        => $request->formatoFechado,
+          'numPagina'             => $request->numPagina,
+          'papel'                 => $request->papel,
+          'cores'                 => $request->cores,
+          'acabamento'            => $request->acabamento,
+          'observacoes'           => $request->observacoes,
+          'espessura'             => $request->espessura,
+          'peso'                  => $request->peso,
+          'orientacao'            => $request->orientacao,
+          'alvura'                => $request->alvura,
+          'opacidade'             => $request->opacidade,
+          'lombada'              => $request->lombada,
+          'medLombada'           => $request->medLombada,
+          'bolAnulado'            => 0
+        ];
+
+
+        $update = $especificacao->update($data);
+        if($update) {
+          return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_editada')]);
         }
       }
     }

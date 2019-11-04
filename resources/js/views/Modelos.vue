@@ -96,6 +96,7 @@ export default {
           var responseLog = document.getElementById('response');
           var responseMsg = response.data.msg;
           responseLog.innerHTML = responseMsg;
+          responseLog.style.display = "block";
         })
       }
       setTimeout(() => this.getModelos(), 100);

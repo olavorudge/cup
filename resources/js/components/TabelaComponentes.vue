@@ -14,7 +14,7 @@
           @click="openModal('#modal-selecionar-componentes')"
           class="btn p-1"
           title="Selecionar campos"
-        >
+          >
           <span class="material-icons">filter_list</span>
         </button>
       </div>
@@ -81,12 +81,16 @@
           <span
             title="Visualizar"
             class="material-icons"
-            @click="openModal('#modal-visualizar-produto')"
+            @click="openModal('#modal-visualizar-especificacao', data.item.idEspecificacao)"
           >remove_red_eye</span>
         </a>
-        <router-link :to="{ name: 'editarProduto', params: { id: data.item.idEspecificacao } }">
-          <span class="material-icons">edit</span>
-        </router-link>
+        <a href data-toggle="modal">
+          <span
+            title="Editar"
+            class="material-icons"
+            @click="openModal('#modal-editar-componente', data.item.idEspecificacao)"
+          >edit</span>
+        </a>
         <button type="button" title="Deletar" class="button-invisible" data-toggle="tooltip" @click="DeleteEspecificacao(data.item.idEspecificacao)">
           <span class="material-icons">delete</span>
         </button>
@@ -100,6 +104,8 @@
     </b-table>
     <modal-selecionar-componentes :fields="hideableFields" @updateFields="updateFields"></modal-selecionar-componentes>
     <modal-adicionar-componente></modal-adicionar-componente>
+    <modal-editar-componente v-model="especificacao_modal"></modal-editar-componente>
+    <modal-visualizar-especificacao v-model="especificacao_modal"></modal-visualizar-especificacao>
   </div>
 </template>
 
@@ -107,6 +113,8 @@
 import Vue from "vue";
 import ModalSelecionarComponentes from "@/js/modals/SelecionarComponentes";
 import ModalAdicionarComponente from "@/js/modals/AdicionarComponente";
+import ModalEditarComponente from "@/js/modals/EditarComponente";
+import ModalVisualizarEspecificacao from "@/js/modals/VisualizarEspecificacao";
 import BootstrapVue, { BPagination, BTable } from "bootstrap-vue";
 import axios from "axios";
 import $ from "jquery";
@@ -118,7 +126,9 @@ export default {
     BPagination,
     BTable,
     ModalSelecionarComponentes,
-    ModalAdicionarComponente
+    ModalAdicionarComponente,
+    ModalEditarComponente,
+    ModalVisualizarEspecificacao
   },
   props: ["filterBy"],
   data() {
@@ -259,8 +269,8 @@ export default {
         {
           idProduto: '',
         },
-
-      ]
+      ],
+      especificacao_modal: '',
     };
   },
   computed: {
@@ -276,7 +286,8 @@ export default {
     }
   },
   methods: {
-    openModal(modalId) {
+    openModal(modalId, id) {
+      this.especificacao_modal = id;
       $(modalId).modal();
     },
     updateFields(selectedFields) {

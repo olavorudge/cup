@@ -44,7 +44,7 @@ export default {
                 pendencias: [
                     { id: 1, nome: 'Todas', link: '/pendencias' },
                     { id: 2, nome: 'Cadastro geral', link: '/pendencias/gerais' },
-                    { id: 3, nome: 'Espeficicações técnicas', link: '/pendencias/especificacoes' }
+                    { id: 3, nome: 'Especificações técnicas', link: '/pendencias/especificacoes' }
                 ]
             }
         }

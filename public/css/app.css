@@ -13538,3 +13538,10 @@ a.sidebar-link svg {
   width: 100%;
 }
 
+#response {
+  background: #c1daef !important;
+  padding: 5px;
+  color: #2466a0 !important;
+  display: none;
+}
+

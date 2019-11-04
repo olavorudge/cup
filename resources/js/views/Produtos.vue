@@ -100,7 +100,7 @@
   </div>
 
   <modal-visualizar-historico></modal-visualizar-historico>
-  <modal-visualizar-produto></modal-visualizar-produto>
+  <modal-visualizar-produto v-model="produto_modal"></modal-visualizar-produto>
 </div>
 </template>
 
@@ -176,8 +176,9 @@ export default {
       items: [
         {
           idProduto: ''
-        },
-      ]
+        }
+      ],
+      produto_modal: '',
     };
   },
   computed: {
@@ -192,15 +193,22 @@ export default {
   },
   methods: {
     openModal(modalId, id) {
-      $(modalId).modal(id);
+      this.produto_modal = id;
+      $(modalId).modal();
     },
     rowClass(item, type) {
       if (item.arquivado) return 'table-danger'
     },
     getProdutos(){
-      axios
-      .get('/listar-produtos')
-      .then(response => (this.items = response.data))
+      if(this.$router.currentRoute.name == 'estruturas'){
+        axios
+        .get('/listar-todas-estruturas')
+        .then(response => (this.items = response.data))
+      } else {
+        axios
+        .get('/listar-produtos')
+        .then(response => (this.items = response.data))
+      }
     },
     deleteProduto(id){
       if(confirm('Deletar Produto?')){
@@ -210,6 +218,7 @@ export default {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
+        responseLog.style.display = "block";
       })
     }
       setTimeout(() => this.getProdutos(), 100);
@@ -221,9 +230,13 @@ export default {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
+        responseLog.style.display = "block";
       })
       setTimeout(() => this.getProdutos(), 100);
     },
+    updated(){
+      this.getProdutos();
+    }
   },
   mounted(){
     this.getProdutos();

@@ -25,5 +25,6 @@ return [
     'observacao_cadastrada' => 'Observação cadastrada com sucesso.',
     'erro_cadastrar' => 'Erro ao cadastrar, tente novamente mais tarde.',
     'especificacao_deletada' => 'Especificacão deletada.',
+    'especificacao_editada' => 'Especificacão salva com sucesso.',
 
 ];

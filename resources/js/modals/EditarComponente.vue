@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-slideout modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Adicionar Componente</h5>
+          <h5 class="modal-title">Editar Componente</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -27,9 +27,9 @@
             <v-select :options="[ {value: 'capa', name: 'Capa'}, {value: 'miolo', name:'Miolo'} ]"  v-model="form.componente">Componente</v-select>
           </div>
           <div class="form-row">
-            <v-input v-model="form.formato_aberto">Formato aberto (mm)</v-input>
-            <v-input v-model="form.formato_fechado">Formato fechado (mm)</v-input>
-            <v-input v-model="form.num_paginas">Número de páginas</v-input>
+            <v-input v-model="form.formatoAberto">Formato aberto (mm)</v-input>
+            <v-input v-model="form.formatoFechado">Formato fechado (mm)</v-input>
+            <v-input v-model="form.numPagina">Número de páginas</v-input>
           </div>
           <div class="form-row">
             <v-input v-model="form.papel">Papel/Gramatura</v-input>
@@ -48,7 +48,7 @@
           <div class="form-row">
             <v-input v-model="form.opacidade">Opacidade</v-input>
             <v-select :options="[{value: 'A', name: 'A'}, {value: 'B', name:'B'} ]"  v-model="form.lombada">Lombada</v-select>
-            <v-input v-model="form.medida_lombada">Medidas da lombada</v-input>
+            <v-input v-model="form.medLombada">Medidas da lombada</v-input>
           </div>
         </div>
         <div class="modal-footer">
@@ -69,42 +69,50 @@ import axios from "axios";
 
 export default {
   components: { Checkbox, VInput, VSelect },
-  props: [""],
+  props: ["value"],
   data() {
     return {
-      id: "modal-adicionar-componente",
+      id: "modal-editar-componente",
       form: {
-        idProduto: 1,
-        idTipoEspecificacao: 1,
+        idEspecificacao: '',
+        idProduto: '',
+        idTipoEspecificacao: '',
         componente: '',
-        formato_aberto: '',
-        formato_fechado: '',
-        num_paginas: 0,
+        formatoAberto: '',
+        formatoFechado: '',
+        numPagina: '',
         papel: '',
         cores: '',
         acabamento: '',
         observacoes: '',
         espessura: '',
-        peso: 0,
+        peso: '',
         orientacao: '',
         alvura: '',
         opacidade: '',
         lombada: '',
-        medida_lombada: ''
+        medLombada: ''
       }
     };
+  },
+  watch: {
+    value: function(newVal, oldVal) { // watch it
+      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      this.getEspecificacao(newVal);
+    }
   },
   methods: {
     submit() {
       this.errors = {};
 
-      axios.post('/cadastrar-especificacao', {
-        idProduto: this.$route.params.id,
+      axios.post('/editar-especificacao', {
+        idProduto: this.form.idProduto,
+        idEspecificacao: this.form.idEspecificacao,
         idTipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
-        formato_aberto: this.form.formato_aberto,
-        formato_aberto: this.form.formato_fechado,
-        num_paginas: this.form.num_paginas,
+        formatoAberto: this.form.formatoAberto,
+        formatoFechado: this.form.formatoFechado,
+        numPagina: this.form.numPagina,
         papel: this.form.papel,
         cores: this.form.cores,
         acabamento: this.form.acabamento,
@@ -115,7 +123,7 @@ export default {
         alvura: this.form.alvura,
         opacidade: this.form.opacidade,
         lombada: this.form.lombada,
-        medida_lombada: this.form.medida_lombada
+        medLombada: this.form.medLombada
       }).then(response => {
         var responseLog = document.getElementById('responseComponente');
         responseLog.innerHTML = response.data.msg;
@@ -130,10 +138,10 @@ export default {
         }
       });
     },
-    getEspecificacoes(id){
+    getEspecificacao(id){
       axios
-      .get('/listar-especificacoes/' + id)
-      .then(response => (this.items = response.data))
+      .get('/listar-especificacao-geral/' + id)
+      .then(response => (this.form = response.data))
     }
   }
 };

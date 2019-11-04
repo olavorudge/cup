@@ -7,6 +7,7 @@
   :aria-labelledby="id"
   aria-hidden="true"
   >
+
   <div class="modal-dialog modal-dialog-slideout modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -78,7 +79,7 @@
             </div>
           </div>
           <div class="collapse card-inside" :id="'card-items-2'" >
-          <div v-for="especificacao in form.especificacoes" class="">
+            <div v-for="especificacao in form.especificacoes" class="">
               <div class="row">
                 <div class="col-md-12">
                   <h5 v-if="especificacao.idTipoEspecificacao == 1">Livros e Suplementos</h5>
@@ -107,13 +108,10 @@
                 </div>
               </div>
               <hr>
-          </div >
+            </div >
           </div>
         </div>
       </div>
-      <!-- <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-    </div>-->
   </div>
 </div>
 </div>
@@ -123,38 +121,21 @@
 import axios from "axios";
 
 export default {
+  props: ["value"],
   data() {
     return {
       id: "modal-visualizar-produto",
       form: {
-        dadosGerais: {
-          titulo: '',
-          titulo_obra: '',
-          ano_uso: '',
-          ano_lancamento: '',
-          area_conhec: '',
-          data_assinatura: '',
-          idioma: '',
-          isbn_la: '',
-          isbn_lp: '',
-          nivel_ensino: '',
-          nome_capa: '',
-          nome_contrato: '',
-          num_contrato: '',
-          num_edicao: '',
-          origem: '',
-          peg_la: '',
-          peg_lp: '',
-          pseudonimo: '',
-          serie: '',
-          volume: '',
-          validade_contrato: '',
-
-        },
-        especificacoes:{
-        }
+        dadosGerais: {},
+        especificacoes: {}
       }
     };
+  },
+  watch: {
+    value: function(newVal, oldVal) { // watch it
+      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      this.getProduto(newVal);
+    }
   },
   methods: {
     getProduto(id){
@@ -165,7 +146,6 @@ export default {
     }
   },
   mounted() {
-    this.getProduto(1);
   }
 };
 </script>

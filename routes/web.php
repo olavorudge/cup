@@ -27,11 +27,14 @@ Route::get('listar-areaconhecimento', ['as' => 'listar-areaconhecimento', 'uses'
 Route::get('listar-nivelensino', ['as' => 'listar-nivelensino', 'uses' => 'ProdutosController@getNivelEnsino']);
 Route::get('listar-anoescolar', ['as' => 'listar-anoescolar', 'uses' => 'ProdutosController@getAnoEscolar']);
 Route::get('listar-especificacoes/{id}', ['as' => 'listar-especificacoes', 'uses' => 'ProdutosController@ListarEspecificacoes']);
+Route::get('listar-especificacao-geral/{id}', ['as' => 'listar-especificacao', 'uses' => 'ProdutosController@ListarEspecificacao']);
 Route::get('listar-estruturas/{id}', ['as' => 'listar-estruturas', 'uses' => 'ProdutosController@ListarEstruturas']);
 Route::get('listar-produtos-estruturas/{id}', ['as' => 'listar-produtos-estruturas', 'uses' => 'ProdutosController@ListarProdutosEstruturas']);
 Route::get('listar-observacoes/{id}', ['as' => 'listar-observacoes', 'uses' => 'ProdutosController@ListarObservacoes']);
 Route::get('listar-modelos', ['as' => 'listar-modelos', 'uses' => 'ModelosController@ListarModelos']);
 Route::get('listar-modelo/{id}', ['as' => 'listar-modelo', 'uses' => 'ModelosController@SelecionarModelo']);
+Route::get('listar-todas-estruturas', ['as' => 'listar-todas-estruturas', 'uses' => 'ProdutosController@ListarTodasEstruturas']);
+Route::get('listar-pendencias', ['as' => 'listar-pendencias', 'uses' => 'ProdutosController@ListarPendencias']);
 
 Route::get('deletar-modelo/{id}', ['as' => 'deletar-modelo', 'uses' => 'ModelosController@DeletarModelo']);
 Route::get('deletar-produto/{id}', ['as' => 'deletar-produto', 'uses' => 'ProdutosController@DeletarProduto']);
@@ -48,3 +51,4 @@ Route::post('deletar-estrutura', ['as' => 'deletar-estrutura', 'uses' => 'Produt
 
 Route::post('editar-modelo', ['as' => 'editar-modelo', 'uses' => 'ModelosController@EditarModelo']);
 Route::post('editar-produto', ['as' => 'editar-produto', 'uses' => 'ProdutosController@EditarProduto']);
+Route::post('editar-especificacao', ['as' => 'editar-especificacao', 'uses' => 'ProdutosController@EditarEspecificacao']);

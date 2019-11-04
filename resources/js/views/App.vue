@@ -7,7 +7,7 @@
 
       <main class="content container-fluid">
         <h4 class="content-title">{{ title }}</h4>
-        <router-view></router-view>
+        <router-view :key="$route.path"></router-view>
       </main>
 
       <!-- @include('partials.footer') -->

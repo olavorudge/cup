@@ -161,6 +161,7 @@ export default {
         }).then(response => {
           var responseLog = document.getElementById('response');
           responseLog.innerHTML = response.data.msg;
+          responseLog.style.display = "block";
         }).catch(error => {
           if (error.response.status === 422) {
             this.errors = error.response.data.errors || {};
@@ -168,6 +169,7 @@ export default {
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
 
             responseLog.innerHTML = errorHandling[0];
+            responseLog.style.display = "block";
           }
         });
       } else{
@@ -199,6 +201,7 @@ export default {
           this.$router.push('/produto/1');
           var responseLog = document.getElementById('response');
           responseLog.innerHTML = response.data.msg;
+          responseLog.style.display = "block";
         }).catch(error => {
           if (error.response.status === 422) {
             this.errors = error.response.data.errors || {};
@@ -206,6 +209,7 @@ export default {
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
 
             responseLog.innerHTML = errorHandling[0];
+            responseLog.style.display = "block";
           }
         });
       }

@@ -233,9 +233,6 @@ export default {
         responseLog.style.display = "block";
       })
       setTimeout(() => this.getProdutos(), 100);
-    },
-    updated(){
-      this.getProdutos();
     }
   },
   mounted(){

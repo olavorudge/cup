@@ -10,6 +10,7 @@ use App\NivelEnsino;
 use App\Observacao;
 use App\EstruturaProduto;
 use App\Origem;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -141,10 +142,41 @@ class ProdutosController extends Controller
   /*
   Listar produtos com pendências
   */
-    public function ListarPendencias(){
-      $produtos = array();
-      $produtos = Produto::select("SELECT * FROM produto
-        WHERE
+  public function ListarPendencias(){
+    $produtos = array();
+    $produtos = DB::select("SELECT
+      prod.idProduto,
+      prod.titulo,
+      prod.isbn_la,
+      prod.peg_la,
+      SUM(Speg_la + Speg_lp + Sisbn_la + Sisbn_lp + SnomeContrato + SnomeCapa + Spseudonimo + SnumContrato + SdataAssinatura + SvalidadeContrato) AS totalPendentes,
+      CamposPendentes
+      FROM (
+        SELECT idProduto, titulo, isbn_la, peg_la,
+        CASE WHEN peg_la IS NULL THEN 1 ELSE 0 END as Speg_la,
+        CASE WHEN peg_lp IS NULL THEN 1 ELSE 0 END AS Speg_lp,
+        CASE WHEN isbn_la IS NULL THEN 1 ELSE 0 END AS Sisbn_la,
+        CASE WHEN isbn_lp IS NULL THEN 1 ELSE 0 END AS Sisbn_lp,
+        CASE WHEN nomeContrato IS NULL THEN 1 ELSE 0 END AS SnomeContrato,
+        CASE WHEN nomeCapa IS NULL THEN 1 ELSE 0 END AS SnomeCapa,
+        CASE WHEN pseudonimo IS NULL THEN 1 ELSE 0 END AS Spseudonimo,
+        CASE WHEN numContrato IS NULL THEN 1 ELSE 0 END AS SnumContrato,
+        CASE WHEN dataAssinatura IS NULL THEN 1 ELSE 0 END AS SdataAssinatura,
+        CASE WHEN validadeContrato IS NULL THEN 1 ELSE 0 END AS SvalidadeContrato,
+        CONCAT(
+          CASE WHEN peg_la IS NULL THEN 'PEG LA; ' ELSE '' END,
+          CASE WHEN peg_lp IS NULL THEN 'PEG LP; ' ELSE '' END,
+          CASE WHEN isbn_la IS NULL THEN 'ISBN LA; ' ELSE '' END,
+          CASE WHEN isbn_lp IS NULL THEN 'ISBN LP; ' ELSE '' END,
+          CASE WHEN nomeContrato IS NULL THEN 'Nome do Contrato; ' ELSE'' END,
+          CASE WHEN nomeCapa IS NULL THEN 'Nome da Capa; ' ELSE '' END,
+          CASE WHEN pseudonimo IS NULL THEN 'Pseudônimo; ' ELSE '' END,
+          CASE WHEN numContrato IS NULL THEN 'Número do Contrato; ' ELSE '' END,
+          CASE WHEN dataAssinatura IS NULL THEN 'Data de Assinatura; ' ELSE '' END,
+          CASE WHEN validadeContrato IS NULL THEN 'Validade de Contrato; ' ELSE '' END
+        ) as CamposPendentes
+        FROM produto
+        WHERE (
           peg_la is null
           OR peg_lp is null
           OR isbn_la is null
@@ -154,437 +186,441 @@ class ProdutosController extends Controller
           OR pseudonimo is null
           OR numContrato is null
           OR dataAssinatura is null
-          OR validadeContrato is null
+          OR validadeContrato is NULL)
+          AND bolAnulado = 0
+          AND arquivado = 0
+        ) AS prod
+        GROUP BY prod.idProduto
         ");
 
         $produtos = json_encode($produtos);
         return $produtos;
-    }
-
-    /*
-    Listar especificacao ID
-    */
-    public function ListarEspecificacao($id)
-    {
-      $produtos = array();
-      $produtos = EspecificacaoTecnica::where('idEspecificacao', $id)->first();
-
-      $produtos = json_encode($produtos);
-      return $produtos;
-    }
-
-    /*
-    Listar as especificações do produto X
-    */
-    public function ListarEspecificacoes($id)
-    {
-      $produtos = array();
-      $produtos = EspecificacaoTecnica::where('idProduto', $id)->where('bolAnulado', 0)->get();
-
-      $produtos = json_encode($produtos);
-      return $produtos;
-    }
-
-    /*
-    Listar as estruturas do produto X
-    */
-    public function ListarEstruturas($id)
-    {
-      $produtos = array();
-      $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
-      $ids = [];
-      foreach ($produtos as $produto) {
-        $ids[] = $produto->idProduto;
       }
-      $produtos = Produto::find($ids);
 
+      /*
+      Listar especificacao ID
+      */
+      public function ListarEspecificacao($id)
+      {
+        $produtos = array();
+        $produtos = EspecificacaoTecnica::where('idEspecificacao', $id)->first();
 
-      $produtos = json_encode($produtos);
-      return $produtos;
-    }
-    /*
-    Listar as observacoes do produto X
-    */
-
-    public function ListarObservacoes($id)
-    {
-      $produtos = array();
-      $produtos = Observacao::where('idProduto', $id)->get();
-      $data = [];
-      foreach ($produtos as $prod) {
-        $data[] = [
-          'created_at' => $prod->created_at->format('d/m/Y'),
-          'observacao' => $prod->observacao,
-          'idUsuario' => $prod->idUsuario
-        ];
+        $produtos = json_encode($produtos);
+        return $produtos;
       }
-      $data = json_encode($data);
-      return $data;
-    }
-    /*
-    Listar as especificações do produto X
-    */
 
-    public function ListarProdutosEstruturas($id)
-    {
-      $produtos = array();
-      $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
-      $ids = [];
-      foreach ($produtos as $produto) {
-        $ids[] = $produto->idProduto;
+      /*
+      Listar as especificações do produto X
+      */
+      public function ListarEspecificacoes($id)
+      {
+        $produtos = array();
+        $produtos = EspecificacaoTecnica::where('idProduto', $id)->where('bolAnulado', 0)->get();
+
+        $produtos = json_encode($produtos);
+        return $produtos;
       }
-      $prodEstr = Produto::whereNotIn('idProduto', $ids)->where('bolAnulado', 0)->where('arquivado', 0)->get();
 
-
-      $prodEstr = json_encode($prodEstr);
-      return $prodEstr;
-    }
-    /*
-    Função para cadastrar produtos
-    */
-    public function CadastrarProdutos(Request $request)
-    {
-
-      $rules = [
-        'titulo'   => 'required',
-        'titulo_obra'    => 'required',
-        'ano_uso'      => 'required',
-        'ano_lancamento'      => 'required',
-        'ano_ciclo'      => 'required',
-        'area_conhec'      => 'required',
-        'nivel_ensino'      => 'required',
-        'serie' => 'required',
-        'volume' => 'required',
-        'num_edicao' => 'required',
-        'origem' => 'required',
-        'idioma' => 'required'
-      ];
-
-      if ($this->validate($request, $rules)) {
-
-        $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
-
-        $data = [
-          'idAreaConhecimento'    => $anoEscolar->idNivel,
-          'idAnoEscolar'          => $request->serie,
-          'idOrigem'              => $request->origem,
-          'titulo'                => $request->titulo,
-          'tituloObra'            => $request->titulo_obra,
-          'anoUso'                => $request->ano_uso,
-          'anoLancamento'         => $request->ano_lancamento,
-          'anoCicloVida'          => $request->ano_ciclo,
-          'volume'                => $request->volume,
-          'numEdicao'             => $request->num_edicao,
-          'idioma'                => $request->idioma,
-          'peg_la'                 => $request->peg_la,
-          'peg_lp'                 => $request->peg_lp,
-          'isbn_la'               => $request->isbn_la,
-          'isbn_lp'               => $request->isbn_lp,
-          'nomeContrato'          => $request->nome_contrato,
-          'nomeCapa'              => $request->nome_capa,
-          'pseudonimo'           => $request->pseudonimo,
-          'numContrato'           => $request->num_contrato,
-          'dataAssinatura'        => $request->data_assinatura,
-          'validadeContrato'      => $request->validade_contrato,
-          'arquivado'             => 0,
-          'bolAnulado'            => 0
-        ];
-
-        $create = Produto::create($data);
-        if($create) {
-          return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
+      /*
+      Listar as estruturas do produto X
+      */
+      public function ListarEstruturas($id)
+      {
+        $produtos = array();
+        $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
+        $ids = [];
+        foreach ($produtos as $produto) {
+          $ids[] = $produto->idProduto;
         }
+        $produtos = Produto::find($ids);
+
+
+        $produtos = json_encode($produtos);
+        return $produtos;
       }
-    }
-    /*
-    Função para cadastrar especificacoes
-    */
-    public function CadastrarEspecificacao(Request $request)
-    {
+      /*
+      Listar as observacoes do produto X
+      */
 
-      $rules = [
-        'componente'   => 'required',
-        'num_paginas'   => 'numeric',
-        'peso'   => 'numeric'
-      ];
-
-      if ($this->validate($request, $rules)) {
-
-        $data = [
-          'idProduto'             => $request->idProduto,
-          'idTipoEspecificacao'   => 1,
-          'componente'            => $request->componente,
-          'formatoAberto'         => $request->formato_aberto,
-          'formatoFechado'        => $request->formato_fechado,
-          'numPagina'             => $request->num_paginas,
-          'papel'                 => $request->papel,
-          'cores'                 => $request->cores,
-          'acabamento'            => $request->acabamento,
-          'observacoes'           => $request->observacoes,
-          'espessura'             => $request->espessura,
-          'peso'                  => $request->peso,
-          'orientacao'            => $request->orientacao,
-          'alvura'                => $request->alvura,
-          'opacidade'             => $request->opacidade,
-          'lombada'              => $request->lombada,
-          'medLombada'           => $request->medida_lombada,
-          'bolAnulado'            => 0
-        ];
-
-        $create = EspecificacaoTecnica::create($data);
-        if($create) {
-          return response()->json(['success'=>1, 'msg'=>trans('app.componente_cadastrado')]);
+      public function ListarObservacoes($id)
+      {
+        $produtos = array();
+        $produtos = Observacao::where('idProduto', $id)->get();
+        $data = [];
+        foreach ($produtos as $prod) {
+          $data[] = [
+            'created_at' => $prod->created_at->format('d/m/Y'),
+            'observacao' => $prod->observacao,
+            'idUsuario' => $prod->idUsuario
+          ];
         }
+        $data = json_encode($data);
+        return $data;
       }
-    }
-    /*
-    Função para cadastrar observacoes de produtos
-    */
-    public function CadastrarObservacao(Request $request)
-    {
+      /*
+      Listar as especificações do produto X
+      */
 
-      $rules = [
-        'observacao'   => 'required',
-      ];
-
-      if ($this->validate($request, $rules)) {
-
-        $data = [
-          'idProduto'       => $request->idProduto,
-          'idUsuario'       => 1,
-          'observacao'      => $request->observacao
-        ];
-
-        $create = Observacao::create($data);
-        if($create) {
-          return response()->json(['success'=>1, 'msg'=>trans('app.observacao_cadastrada')]);
+      public function ListarProdutosEstruturas($id)
+      {
+        $produtos = array();
+        $produtos = EstruturaProduto::where('idEstrutura', $id)->get();
+        $ids = [];
+        foreach ($produtos as $produto) {
+          $ids[] = $produto->idProduto;
         }
+        $prodEstr = Produto::whereNotIn('idProduto', $ids)->where('bolAnulado', 0)->where('arquivado', 0)->get();
+
+
+        $prodEstr = json_encode($prodEstr);
+        return $prodEstr;
       }
-    }
-    /*
-    Função para cadastrar estruturas de produtos
-    */
-    public function CadastrarEstrutura(Request $request)
-    {
-      if($request->selectedItems == null){
-        return response()->json(['error'=>1, 'msg'=>trans('app.produto_vazio')]);
-      }
-      foreach ($request->selectedItems as $item) {
-        $data = [
-          'idEstrutura'     => $request->idProduto,
-          'idProduto'       => $item
+      /*
+      Função para cadastrar produtos
+      */
+      public function CadastrarProdutos(Request $request)
+      {
+
+        $rules = [
+          'titulo'   => 'required',
+          'titulo_obra'    => 'required',
+          'ano_uso'      => 'required',
+          'ano_lancamento'      => 'required',
+          'ano_ciclo'      => 'required',
+          'area_conhec'      => 'required',
+          'nivel_ensino'      => 'required',
+          'serie' => 'required',
+          'volume' => 'required',
+          'num_edicao' => 'required',
+          'origem' => 'required',
+          'idioma' => 'required'
         ];
 
-        $create = EstruturaProduto::create($data);
-      }
-      return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
-    }
-    /*
-    FUNÇÃO PARA EDITAR PRODUTOS
-    */
-    public function EditarProduto(Request $request){
+        if ($this->validate($request, $rules)) {
 
-      if ($request->idProduto){
-        $produto = Produto::find($request->idProduto);
-        if ($produto){
+          $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
 
-          $rules = [
-            'titulo'   => 'required',
-            'titulo_obra'    => 'required',
-            'ano_uso'      => 'required',
-            'ano_lancamento'      => 'required',
-            'ano_ciclo'      => 'required',
-            'area_conhec'      => 'required',
-            'nivel_ensino'      => 'required',
-            'serie' => 'required',
-            'volume' => 'required',
-            'num_edicao' => 'required',
-            'origem' => 'required',
-            'idioma' => 'required'
+          $data = [
+            'idAreaConhecimento'    => $anoEscolar->idNivel,
+            'idAnoEscolar'          => $request->serie,
+            'idOrigem'              => $request->origem,
+            'titulo'                => $request->titulo,
+            'tituloObra'            => $request->titulo_obra,
+            'anoUso'                => $request->ano_uso,
+            'anoLancamento'         => $request->ano_lancamento,
+            'anoCicloVida'          => $request->ano_ciclo,
+            'volume'                => $request->volume,
+            'numEdicao'             => $request->num_edicao,
+            'idioma'                => $request->idioma,
+            'peg_la'                 => $request->peg_la,
+            'peg_lp'                 => $request->peg_lp,
+            'isbn_la'               => $request->isbn_la,
+            'isbn_lp'               => $request->isbn_lp,
+            'nomeContrato'          => $request->nome_contrato,
+            'nomeCapa'              => $request->nome_capa,
+            'pseudonimo'           => $request->pseudonimo,
+            'numContrato'           => $request->num_contrato,
+            'dataAssinatura'        => $request->data_assinatura,
+            'validadeContrato'      => $request->validade_contrato,
+            'arquivado'             => 0,
+            'bolAnulado'            => 0
           ];
 
-          if ($this->validate($request, $rules)) {
-            $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
-
-            $data = [
-              'idAreaConhecimento'    => $anoEscolar->idNivel,
-              'idAnoEscolar'          => $request->serie,
-              'idOrigem'              => $request->origem,
-              'titulo'                => $request->titulo,
-              'tituloObra'            => $request->titulo_obra,
-              'anoUso'                => $request->ano_uso,
-              'anoLancamento'         => $request->ano_lancamento,
-              'anoCicloVida'          => $request->ano_ciclo,
-              'volume'                => $request->volume,
-              'numEdicao'             => $request->num_edicao,
-              'idioma'                => $request->idioma,
-              'peg_la'                 => $request->peg_la,
-              'peg_lp'                 => $request->peg_lp,
-              'isbn_la'               => $request->isbn_la,
-              'isbn_lp'               => $request->isbn_lp,
-              'nomeContrato'          => $request->nome_contrato,
-              'nomeCapa'              => $request->nome_capa,
-              'pseudonimo'           => $request->pseudonimo,
-              'numContrato'           => $request->num_contrato,
-              'dataAssinatura'        => $request->data_assinatura,
-              'validadeContrato'      => $request->validade_contrato
-            ];
-            $produto->update($data);
-
-            return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado')]);
+          $create = Produto::create($data);
+          if($create) {
+            return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
           }
         }
       }
-    }
-    /*
-    * EDITAR ESPECIFICAÇÃO
-    */
-    public function EditarEspecificacao(Request $request)
-    {
+      /*
+      Função para cadastrar especificacoes
+      */
+      public function CadastrarEspecificacao(Request $request)
+      {
 
-
-      $especificacao = EspecificacaoTecnica::find($request->idEspecificacao);
-      $rules = [
-        'componente'   => 'required',
-        'numPagina'   => 'numeric',
-        'peso'   => 'numeric'
-      ];
-
-      if ($this->validate($request, $rules)) {
-
-        $data = [
-          'idProduto'             => $request->idProduto,
-          'idTipoEspecificacao'   => $request->idTipoEspecificacao,
-          'componente'            => $request->componente,
-          'formatoAberto'         => $request->formatoAberto,
-          'formatoFechado'        => $request->formatoFechado,
-          'numPagina'             => $request->numPagina,
-          'papel'                 => $request->papel,
-          'cores'                 => $request->cores,
-          'acabamento'            => $request->acabamento,
-          'observacoes'           => $request->observacoes,
-          'espessura'             => $request->espessura,
-          'peso'                  => $request->peso,
-          'orientacao'            => $request->orientacao,
-          'alvura'                => $request->alvura,
-          'opacidade'             => $request->opacidade,
-          'lombada'              => $request->lombada,
-          'medLombada'           => $request->medLombada,
-          'bolAnulado'            => 0
+        $rules = [
+          'componente'   => 'required',
+          'num_paginas'   => 'numeric',
+          'peso'   => 'numeric'
         ];
 
+        if ($this->validate($request, $rules)) {
 
-        $update = $especificacao->update($data);
-        if($update) {
-          return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_editada')]);
+          $data = [
+            'idProduto'             => $request->idProduto,
+            'idTipoEspecificacao'   => 1,
+            'componente'            => $request->componente,
+            'formatoAberto'         => $request->formato_aberto,
+            'formatoFechado'        => $request->formato_fechado,
+            'numPagina'             => $request->num_paginas,
+            'papel'                 => $request->papel,
+            'cores'                 => $request->cores,
+            'acabamento'            => $request->acabamento,
+            'observacoes'           => $request->observacoes,
+            'espessura'             => $request->espessura,
+            'peso'                  => $request->peso,
+            'orientacao'            => $request->orientacao,
+            'alvura'                => $request->alvura,
+            'opacidade'             => $request->opacidade,
+            'lombada'              => $request->lombada,
+            'medLombada'           => $request->medida_lombada,
+            'bolAnulado'            => 0
+          ];
+
+          $create = EspecificacaoTecnica::create($data);
+          if($create) {
+            return response()->json(['success'=>1, 'msg'=>trans('app.componente_cadastrado')]);
+          }
         }
       }
-    }
-    /*
-    FUNÇÃO PARA DELETAR PRODUTOS
-    */
-    public function DeletarProduto($id){
-      if ($id){
-        $produto = Produto::find($id);
-        if ($produto){
-          $produto->bolAnulado = 1;
-          $produto->save();
+      /*
+      Função para cadastrar observacoes de produtos
+      */
+      public function CadastrarObservacao(Request $request)
+      {
 
-          return response()->json(['success'=>1, 'msg'=>trans('app.produto_deletado')]);
-        }
-      }
-    }
-    /*
-    FUNÇÃO PARA DELETAR PRODUTOS
-    */
-    public function DeletarEstrutura(Request $request){
-      $idProduto = $request->idProduto;
-      $idEstrutura = $request->idEstrutura;
-      $estrutura = EstruturaProduto::where('idProduto', $idProduto)->where('idEstrutura', $idEstrutura)->delete();
-
-      return response()->json(['success'=>1, 'msg'=>trans('app.produto_deletado')]);
-
-    }
-    /*
-    DELETAR ESPECIFICACAO
-    */
-    public function DeletarEspecificacao($id){
-      if ($id){
-        $produto = EspecificacaoTecnica::find($id);
-        if ($produto){
-          $produto->bolAnulado = 1;
-          $produto->save();
-
-          return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_deletada')]);
-        }
-      }
-    }
-    /*
-    FUNÇÃO PARA DUPLICAR PRODUTOS
-    */
-    public function DuplicarProduto($id){
-      if ($id){
-        $produto = Produto::find($id);
-        if ($produto){
-          $produto->replicate()->save();
-          return response()->json(['success'=>1, 'msg'=>trans('app.produto_duplicado')]);
-        }
-      }
-    }
-
-
-    /*
-    FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
-    */
-    public function getAreaConhecimento()
-    {
-      $areaConhec = array();
-      $areaConhec = AreaConhecimento::all();
-      $data = [];
-      foreach ($areaConhec as $area) {
-        $data[] = [
-          'value' => $area->idAreaConhecimento,
-          'name' => $area->nomeAreaConhecimento
+        $rules = [
+          'observacao'   => 'required',
         ];
-      }
 
-      $areaConhec = json_encode($data);
-      return $areaConhec;
-    }
-    /*
-    FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
-    */
-    public function getNivelEnsino()
-    {
-      $areaConhec = array();
-      $nivelEnsino = NivelEnsino::all();
-      $data = [];
-      foreach ($nivelEnsino as $nivel) {
-        $data[] = [
-          'value' => $nivel->idNivel,
-          'name' => $nivel->nomeNivel
+        if ($this->validate($request, $rules)) {
+
+          $data = [
+            'idProduto'       => $request->idProduto,
+            'idUsuario'       => 1,
+            'observacao'      => $request->observacao
+          ];
+
+          $create = Observacao::create($data);
+          if($create) {
+            return response()->json(['success'=>1, 'msg'=>trans('app.observacao_cadastrada')]);
+          }
+        }
+      }
+      /*
+      Função para cadastrar estruturas de produtos
+      */
+      public function CadastrarEstrutura(Request $request)
+      {
+        if($request->selectedItems == null){
+          return response()->json(['error'=>1, 'msg'=>trans('app.produto_vazio')]);
+        }
+        foreach ($request->selectedItems as $item) {
+          $data = [
+            'idEstrutura'     => $request->idProduto,
+            'idProduto'       => $item
+          ];
+
+          $create = EstruturaProduto::create($data);
+        }
+        return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
+      }
+      /*
+      FUNÇÃO PARA EDITAR PRODUTOS
+      */
+      public function EditarProduto(Request $request){
+
+        if ($request->idProduto){
+          $produto = Produto::find($request->idProduto);
+          if ($produto){
+
+            $rules = [
+              'titulo'   => 'required',
+              'titulo_obra'    => 'required',
+              'ano_uso'      => 'required',
+              'ano_lancamento'      => 'required',
+              'ano_ciclo'      => 'required',
+              'area_conhec'      => 'required',
+              'nivel_ensino'      => 'required',
+              'serie' => 'required',
+              'volume' => 'required',
+              'num_edicao' => 'required',
+              'origem' => 'required',
+              'idioma' => 'required'
+            ];
+
+            if ($this->validate($request, $rules)) {
+              $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
+
+              $data = [
+                'idAreaConhecimento'    => $anoEscolar->idNivel,
+                'idAnoEscolar'          => $request->serie,
+                'idOrigem'              => $request->origem,
+                'titulo'                => $request->titulo,
+                'tituloObra'            => $request->titulo_obra,
+                'anoUso'                => $request->ano_uso,
+                'anoLancamento'         => $request->ano_lancamento,
+                'anoCicloVida'          => $request->ano_ciclo,
+                'volume'                => $request->volume,
+                'numEdicao'             => $request->num_edicao,
+                'idioma'                => $request->idioma,
+                'peg_la'                 => $request->peg_la,
+                'peg_lp'                 => $request->peg_lp,
+                'isbn_la'               => $request->isbn_la,
+                'isbn_lp'               => $request->isbn_lp,
+                'nomeContrato'          => $request->nome_contrato,
+                'nomeCapa'              => $request->nome_capa,
+                'pseudonimo'           => $request->pseudonimo,
+                'numContrato'           => $request->num_contrato,
+                'dataAssinatura'        => $request->data_assinatura,
+                'validadeContrato'      => $request->validade_contrato
+              ];
+              $produto->update($data);
+
+              return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado')]);
+            }
+          }
+        }
+      }
+      /*
+      * EDITAR ESPECIFICAÇÃO
+      */
+      public function EditarEspecificacao(Request $request)
+      {
+
+
+        $especificacao = EspecificacaoTecnica::find($request->idEspecificacao);
+        $rules = [
+          'componente'   => 'required',
+          'numPagina'   => 'numeric',
+          'peso'   => 'numeric'
         ];
+
+        if ($this->validate($request, $rules)) {
+
+          $data = [
+            'idProduto'             => $request->idProduto,
+            'idTipoEspecificacao'   => $request->idTipoEspecificacao,
+            'componente'            => $request->componente,
+            'formatoAberto'         => $request->formatoAberto,
+            'formatoFechado'        => $request->formatoFechado,
+            'numPagina'             => $request->numPagina,
+            'papel'                 => $request->papel,
+            'cores'                 => $request->cores,
+            'acabamento'            => $request->acabamento,
+            'observacoes'           => $request->observacoes,
+            'espessura'             => $request->espessura,
+            'peso'                  => $request->peso,
+            'orientacao'            => $request->orientacao,
+            'alvura'                => $request->alvura,
+            'opacidade'             => $request->opacidade,
+            'lombada'              => $request->lombada,
+            'medLombada'           => $request->medLombada,
+            'bolAnulado'            => 0
+          ];
+
+
+          $update = $especificacao->update($data);
+          if($update) {
+            return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_editada')]);
+          }
+        }
+      }
+      /*
+      FUNÇÃO PARA DELETAR PRODUTOS
+      */
+      public function DeletarProduto($id){
+        if ($id){
+          $produto = Produto::find($id);
+          if ($produto){
+            $produto->bolAnulado = 1;
+            $produto->save();
+
+            return response()->json(['success'=>1, 'msg'=>trans('app.produto_deletado')]);
+          }
+        }
+      }
+      /*
+      FUNÇÃO PARA DELETAR PRODUTOS
+      */
+      public function DeletarEstrutura(Request $request){
+        $idProduto = $request->idProduto;
+        $idEstrutura = $request->idEstrutura;
+        $estrutura = EstruturaProduto::where('idProduto', $idProduto)->where('idEstrutura', $idEstrutura)->delete();
+
+        return response()->json(['success'=>1, 'msg'=>trans('app.produto_deletado')]);
+
+      }
+      /*
+      DELETAR ESPECIFICACAO
+      */
+      public function DeletarEspecificacao($id){
+        if ($id){
+          $produto = EspecificacaoTecnica::find($id);
+          if ($produto){
+            $produto->bolAnulado = 1;
+            $produto->save();
+
+            return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_deletada')]);
+          }
+        }
+      }
+      /*
+      FUNÇÃO PARA DUPLICAR PRODUTOS
+      */
+      public function DuplicarProduto($id){
+        if ($id){
+          $produto = Produto::find($id);
+          if ($produto){
+            $produto->replicate()->save();
+            return response()->json(['success'=>1, 'msg'=>trans('app.produto_duplicado')]);
+          }
+        }
       }
 
-      $nivelEnsino = json_encode($data);
-      return $nivelEnsino;
-    }
-    /*
-    FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
-    */
-    public function getAnoEscolar()
-    {
-      $anoEsc = array();
-      $anoEsc = AnoEscolar::all();
-      $data = [];
-      foreach ($anoEsc as $ano) {
-        $data[] = [
-          'value' => $ano->idAnoEscolar,
-          'name' => $ano->nomeAnoEscolar
-        ];
-      }
 
-      $anoEsc = json_encode($data);
-      return $anoEsc;
+      /*
+      FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
+      */
+      public function getAreaConhecimento()
+      {
+        $areaConhec = array();
+        $areaConhec = AreaConhecimento::all();
+        $data = [];
+        foreach ($areaConhec as $area) {
+          $data[] = [
+            'value' => $area->idAreaConhecimento,
+            'name' => $area->nomeAreaConhecimento
+          ];
+        }
+
+        $areaConhec = json_encode($data);
+        return $areaConhec;
+      }
+      /*
+      FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
+      */
+      public function getNivelEnsino()
+      {
+        $areaConhec = array();
+        $nivelEnsino = NivelEnsino::all();
+        $data = [];
+        foreach ($nivelEnsino as $nivel) {
+          $data[] = [
+            'value' => $nivel->idNivel,
+            'name' => $nivel->nomeNivel
+          ];
+        }
+
+        $nivelEnsino = json_encode($data);
+        return $nivelEnsino;
+      }
+      /*
+      FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
+      */
+      public function getAnoEscolar()
+      {
+        $anoEsc = array();
+        $anoEsc = AnoEscolar::all();
+        $data = [];
+        foreach ($anoEsc as $ano) {
+          $data[] = [
+            'value' => $ano->idAnoEscolar,
+            'name' => $ano->nomeAnoEscolar
+          ];
+        }
+
+        $anoEsc = json_encode($data);
+        return $anoEsc;
+      }
     }
-  }

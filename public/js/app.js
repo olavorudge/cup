@@ -4655,6 +4655,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4730,7 +4739,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       jquery__WEBPACK_IMPORTED_MODULE_5___default()(modalId).modal();
     },
     rowClass: function rowClass(item, type) {
-      if (item.archived) return "table-danger";
+      if (item.arquivado) return "table-danger";
     },
     getPendencias: function getPendencias() {
       var _this2 = this;
@@ -5115,9 +5124,6 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
       setTimeout(function () {
         return _this4.getProdutos();
       }, 100);
-    },
-    updated: function updated() {
-      this.getProdutos();
     }
   },
   mounted: function mounted() {
@@ -59842,15 +59848,33 @@ var render = function() {
           },
           scopedSlots: _vm._u([
             {
-              key: "cell(peg)",
-              fn: function(data) {
-                return [_vm._v("\n      " + _vm._s(data.item.nome) + "\n    ")]
+              key: "cell(nome)",
+              fn: function(row) {
+                return [_c("p", [_vm._v(_vm._s(row.item.titulo))])]
               }
             },
             {
               key: "cell(numeroPendencias)",
               fn: function(row) {
-                return [_c("b", [_vm._v(_vm._s(row.item.numeroPendencias))])]
+                return [_c("p", [_vm._v(_vm._s(row.item.totalPendentes))])]
+              }
+            },
+            {
+              key: "cell(isbn)",
+              fn: function(row) {
+                return [_c("p", [_vm._v(_vm._s(row.item.isbn_la))])]
+              }
+            },
+            {
+              key: "cell(peg)",
+              fn: function(row) {
+                return [_c("p", [_vm._v(_vm._s(row.item.peg_la))])]
+              }
+            },
+            {
+              key: "cell(dataModificacao)",
+              fn: function(row) {
+                return [_c("p", [_vm._v("05/11/2019")])]
               }
             },
             {
@@ -59900,7 +59924,12 @@ var render = function() {
             {
               key: "row-details",
               fn: function(row) {
-                return [_c("p", [_vm._v("Lista de campos pendentes...")])]
+                return [
+                  _c("p", [_c("b", [_vm._v("Campos pendentes:")])]),
+                  _vm._v(
+                    "\n      " + _vm._s(row.item.CamposPendentes) + "\n    "
+                  )
+                ]
               }
             }
           ])

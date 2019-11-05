@@ -27,11 +27,20 @@
         <b-spinner class="align-middle"></b-spinner>
         <strong>Carregando...</strong>
       </div>
-      <template v-slot:cell(peg)="data">
-        {{data.item.nome}}
+      <template v-slot:cell(nome)="row">
+        <p>{{ row.item.titulo }}</p>
       </template>
       <template v-slot:cell(numeroPendencias)="row">
-        <b>{{ row.item.numeroPendencias }}</b>
+        <p>{{ row.item.totalPendentes }}</p>
+      </template>
+      <template v-slot:cell(isbn)="row">
+        <p>{{ row.item.isbn_la }}</p>
+      </template>
+      <template v-slot:cell(peg)="row">
+        <p>{{ row.item.peg_la }}</p>
+      </template>
+      <template v-slot:cell(dataModificacao)="row">
+        <p>05/11/2019</p>
       </template>
 
       <template v-slot:cell(actions)="row">
@@ -55,7 +64,8 @@
       </template>
 
       <template v-slot:row-details="row">
-        <p>Lista de campos pendentes...</p>
+        <p><b>Campos pendentes:</b></p>
+        {{row.item.CamposPendentes}}
       </template>
     </b-table>
 
@@ -65,7 +75,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import Vue from "vue";
 import BootstrapVue, { BPagination, BTable } from "bootstrap-vue";
@@ -73,6 +82,7 @@ import Checkbox from "@/js/components/Checkbox";
 import VInput from "@/js/components/Input";
 import VSelect from "@/js/components/Select";
 import $ from "jquery";
+import axios from "axios";
 
 Vue.use(BootstrapVue);
 
@@ -140,19 +150,22 @@ export default {
         item => !item.arquivado || item.arquivado == this.showArchivedItems
       );
     },
-    getPendencias(){
-      axios
-      .get('/listar-pendencias')
-      .then(response => (this.items = response.data))
-    },
   },
   methods: {
     openModal(modalId) {
       $(modalId).modal();
     },
     rowClass(item, type) {
-      if (item.archived) return "table-danger";
+      if (item.arquivado) return "table-danger";
+    },
+    getPendencias(){
+      axios
+      .get('/listar-pendencias')
+      .then(response => (this.items = response.data))
     }
+  },
+  mounted(){
+    this.getPendencias();
   }
 };
 </script>

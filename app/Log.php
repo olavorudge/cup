@@ -8,5 +8,7 @@ class Log extends Model
 {
   protected $table = 'logs';
   protected $primaryKey = 'idLog';
-  protected $fillable = [];
+  protected $fillable = ['idTipoLog', 'idUsuario', 'descricaoLog', 'observacao', 'created_at'];
+  public $timestamps = false;
+
 }

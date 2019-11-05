@@ -31,7 +31,7 @@
         <p>{{ row.item.titulo }}</p>
       </template>
       <template v-slot:cell(numeroPendencias)="row">
-        <p>{{ row.item.totalPendentes }}</p>
+        <p>{{ row.item.sumPendentesProduto }}</p>
       </template>
       <template v-slot:cell(isbn)="row">
         <p>{{ row.item.isbn_la }}</p>
@@ -54,18 +54,15 @@
           <span class="material-icons">error_outline</span>
         </a>
 
-        <router-link
-          v-if="!row.item.archived"
-          :to="{ name: 'editarProduto', params: { id: row.item.id } }"
-          title="Editar"
-        >
+        <router-link v-if="!row.item.arquivado" :to="{ name: 'editarProduto', params: { id: row.item.idProduto } }" title="Editar">
           <span class="material-icons">edit</span>
         </router-link>
       </template>
 
       <template v-slot:row-details="row">
         <p><b>Campos pendentes:</b></p>
-        {{row.item.CamposPendentes}}
+        {{row.item.CamposPendentes}}<br>
+        {{row.item.CamposEspecificacao}}
       </template>
     </b-table>
 
@@ -137,7 +134,9 @@ export default {
         { key: "actions", label: "Ações", class: "text-center" }
       ],
       items: [
-        {}
+        {
+          numPendencias: ''
+        }
       ]
     };
   },

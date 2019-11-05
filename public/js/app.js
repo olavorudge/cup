@@ -4661,9 +4661,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
 
 
 
@@ -4719,7 +4716,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         label: "Ações",
         "class": "text-center"
       }],
-      items: [{}]
+      items: [{
+        numPendencias: ''
+      }]
     };
   },
   computed: {
@@ -59856,7 +59855,7 @@ var render = function() {
             {
               key: "cell(numeroPendencias)",
               fn: function(row) {
-                return [_c("p", [_vm._v(_vm._s(row.item.totalPendentes))])]
+                return [_c("p", [_vm._v(_vm._s(row.item.sumPendentesProduto))])]
               }
             },
             {
@@ -59899,14 +59898,14 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  !row.item.archived
+                  !row.item.arquivado
                     ? _c(
                         "router-link",
                         {
                           attrs: {
                             to: {
                               name: "editarProduto",
-                              params: { id: row.item.id }
+                              params: { id: row.item.idProduto }
                             },
                             title: "Editar"
                           }
@@ -59926,8 +59925,10 @@ var render = function() {
               fn: function(row) {
                 return [
                   _c("p", [_c("b", [_vm._v("Campos pendentes:")])]),
+                  _vm._v("\n      " + _vm._s(row.item.CamposPendentes)),
+                  _c("br"),
                   _vm._v(
-                    "\n      " + _vm._s(row.item.CamposPendentes) + "\n    "
+                    "\n      " + _vm._s(row.item.CamposEspecificacao) + "\n    "
                   )
                 ]
               }

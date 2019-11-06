@@ -15,7 +15,6 @@ Route::get('/', function(){
     return view('index');
 });
 
-/* PRODUTOS */
 
 /* GET*/
 Route::get('duplicar-produto/{id}', ['as' => 'duplicar-produto', 'uses' => 'ProdutosController@DuplicarProduto']);
@@ -35,6 +34,8 @@ Route::get('listar-modelos', ['as' => 'listar-modelos', 'uses' => 'ModelosContro
 Route::get('listar-modelo/{id}', ['as' => 'listar-modelo', 'uses' => 'ModelosController@SelecionarModelo']);
 Route::get('listar-todas-estruturas', ['as' => 'listar-todas-estruturas', 'uses' => 'ProdutosController@ListarTodasEstruturas']);
 Route::get('listar-pendencias', ['as' => 'listar-pendencias', 'uses' => 'ProdutosController@ListarPendencias']);
+Route::get('listar-pendencias-geral', ['as' => 'listar-pendencias-geral', 'uses' => 'ProdutosController@ListarPendenciasGeral']);
+Route::get('listar-pendencias-especificacao', ['as' => 'listar-pendencias-especificacao', 'uses' => 'ProdutosController@ListarPendenciasEspecificacao']);
 
 Route::get('deletar-modelo/{id}', ['as' => 'deletar-modelo', 'uses' => 'ModelosController@DeletarModelo']);
 Route::get('deletar-produto/{id}', ['as' => 'deletar-produto', 'uses' => 'ProdutosController@DeletarProduto']);

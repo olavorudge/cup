@@ -41,7 +41,6 @@ class ModelosController extends Controller
 
       $create = Modelo::create($data);
       if($create) {
-
         try {
           foreach ($request->checkbox as $check) {
 
@@ -58,8 +57,6 @@ class ModelosController extends Controller
 
           return response()->json(['error'=>1, 'msg'=>trans('app.falha_cadastro')]);
         }
-
-
       }
     }
   }

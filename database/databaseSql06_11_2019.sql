@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `ano_escolar` (
   PRIMARY KEY (`idAnoEscolar`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Copiando dados para a tabela cadastro_unico.ano_escolar: ~11 rows (aproximadamente)
+-- Copiando dados para a tabela cadastro_unico.ano_escolar: ~12 rows (aproximadamente)
 /*!40000 ALTER TABLE `ano_escolar` DISABLE KEYS */;
 INSERT INTO `ano_escolar` (`idAnoEscolar`, `idNivel`, `nomeAnoEscolar`) VALUES
 	(1, 2, '1º Ano'),
@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `campo` (
   PRIMARY KEY (`idCampo`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Copiando dados para a tabela cadastro_unico.campo: ~21 rows (aproximadamente)
+-- Copiando dados para a tabela cadastro_unico.campo: ~22 rows (aproximadamente)
 /*!40000 ALTER TABLE `campo` DISABLE KEYS */;
 INSERT INTO `campo` (`idCampo`, `nomeCampo`) VALUES
 	(1, 'Título'),
@@ -483,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `observacoes` (
   PRIMARY KEY (`idObservacao`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Copiando dados para a tabela cadastro_unico.observacoes: ~7 rows (aproximadamente)
+-- Copiando dados para a tabela cadastro_unico.observacoes: ~8 rows (aproximadamente)
 /*!40000 ALTER TABLE `observacoes` DISABLE KEYS */;
 INSERT INTO `observacoes` (`idObservacao`, `idProduto`, `idUsuario`, `observacao`, `created_at`, `updated_at`) VALUES
 	(1, 1, 1, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sagittis facilisis sem a malesuada. Sed venenatis erat at purus rutrum, vel congue sapien imperdiet. Aliquam consequat eros sed ex varius interdum. ', '2019-10-28 14:30:41', '2019-10-28 14:30:41'),

@@ -142,91 +142,244 @@ class ProdutosController extends Controller
   */
   public function ListarPendencias(){
     $produtos = array();
-            // QUERY TODAS
-            $produtos = DB::select("SELECT
-              prod.idProduto,
-              prod.titulo,
-              prod.isbn_la,
-              prod.peg_la,
-              prod.idEspecificacao,
-              sumPendentesProduto,
-              CamposPendentes,
-              CASE WHEN prod.idEspecificacao IS NULL THEN '' ELSE CamposPendentesEspecificacao END as CamposEspecificacao,
-              CASE WHEN prod.idEspecificacao IS NULL THEN 0 ELSE sumPendentesEspecificacoes END as PendentesEspecificacoes
-              FROM (
-                SELECT p.idProduto, p.titulo, p.isbn_la, p.peg_la, e.idEspecificacao,
-                SUM(CASE WHEN p.peg_la IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.peg_lp IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.isbn_la IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.isbn_lp IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.nomeContrato IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.nomeCapa IS NULL THEN 1 ELSE 0 END   +
-                  CASE WHEN p.pseudonimo IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.numContrato IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.dataAssinatura IS NULL THEN 1 ELSE 0 END  +
-                  CASE WHEN p.validadeContrato IS NULL THEN 1 ELSE 0 END ) as sumPendentesProduto,
-                  SUM(
-                    CASE WHEN e.componente IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.formatoAberto IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.formatoFechado IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.numPagina IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.papel IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.cores IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.acabamento IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.observacoes IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.espessura IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.peso IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.orientacao IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.alvura IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.opacidade IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.lombada IS NULL THEN 1 ELSE 0 END +
-                    CASE WHEN e.medLombada IS NULL THEN 1 ELSE 0 END
-                  ) as sumPendentesEspecificacoes,
-                  CONCAT(
-                    CASE WHEN p.peg_la IS NULL THEN 'PEG LA; ' ELSE '' END,
-                    CASE WHEN p.peg_lp IS NULL THEN 'PEG LP; ' ELSE '' END,
-                    CASE WHEN p.isbn_la IS NULL THEN 'ISBN LA; ' ELSE '' END,
-                    CASE WHEN p.isbn_lp IS NULL THEN 'ISBN LP; ' ELSE '' END,
-                    CASE WHEN p.nomeContrato IS NULL THEN 'Nome do Contrato; ' ELSE'' END,
-                    CASE WHEN p.nomeCapa IS NULL THEN 'Nome da Capa; ' ELSE '' END,
-                    CASE WHEN p.pseudonimo IS NULL THEN 'Pseudônimo; ' ELSE '' END,
-                    CASE WHEN p.numContrato IS NULL THEN 'Número do Contrato; ' ELSE '' END,
-                    CASE WHEN p.dataAssinatura IS NULL THEN 'Data de Assinatura; ' ELSE '' END,
-                    CASE WHEN p.validadeContrato IS NULL THEN 'Validade de Contrato; ' ELSE '' END
-                  ) as CamposPendentes,
-                  CONCAT(
-                    CASE WHEN e.componente IS NULL THEN 'Componente; ' ELSE '' END,
-                    CASE WHEN e.formatoAberto IS NULL THEN 'Formato Aberto; ' ELSE '' END,
-                    CASE WHEN e.formatoFechado IS NULL THEN 'Formato Fechado; ' ELSE '' END,
-                    CASE WHEN e.numPagina IS NULL THEN 'Número de páginas; ' ELSE '' END,
-                    CASE WHEN e.papel IS NULL THEN 'Papel; ' ELSE'' END,
-                    CASE WHEN e.cores IS NULL THEN 'Cores; ' ELSE '' END,
-                    CASE WHEN e.acabamento IS NULL THEN 'Acabamento; ' ELSE '' END,
-                    CASE WHEN e.observacoes IS NULL THEN 'Observações; ' ELSE '' END,
-                    CASE WHEN e.espessura IS NULL THEN 'Espessura; ' ELSE '' END,
-                    CASE WHEN e.peso IS NULL THEN 'Peso; ' ELSE '' END,
-                    CASE WHEN e.orientacao IS NULL THEN 'Orientação; ' ELSE '' END,
-                    CASE WHEN e.alvura IS NULL THEN 'Alvura; ' ELSE '' END,
-                    CASE WHEN e.opacidade IS NULL THEN 'Opacidade; ' ELSE '' END,
-                    CASE WHEN e.lombada IS NULL THEN 'Lombada; ' ELSE '' END,
-                    CASE WHEN e.medLombada IS NULL THEN 'Medida lombada; ' ELSE '' END
-                  ) as CamposPendentesEspecificacao
-                  FROM produto p
-                  LEFT JOIN especificacoes_tecnicas e ON e.idProduto = p.idProduto
-                  WHERE
-                  (
-                    p.peg_la is null
-                    OR p.peg_lp is null
-                    OR p.isbn_la is null
-                    OR p.isbn_lp is null
-                    OR p.nomeContrato is null
-                    OR p.nomeCapa is null
-                    OR p.pseudonimo is null
-                    OR p.numContrato is null
-                    OR p.dataAssinatura is null
-                    OR p.validadeContrato is NULL )
-                    AND p.bolAnulado = 0
-                    AND p.arquivado = 0
+    // QUERY TODAS
+    $produtos = DB::select("SELECT
+      prod.idProduto,
+      prod.titulo,
+      prod.isbn_la,
+      prod.peg_la,
+      prod.idEspecificacao,
+      sumPendentesProduto,
+      CamposPendentes,
+      CASE WHEN prod.idEspecificacao IS NULL THEN '' ELSE CamposPendentesEspecificacao END as CamposEspecificacao,
+      CASE WHEN prod.idEspecificacao IS NULL THEN 0 ELSE sumPendentesEspecificacoes END as PendentesEspecificacoes
+      FROM (
+        SELECT p.idProduto, p.titulo, p.isbn_la, p.peg_la, e.idEspecificacao,
+        SUM(CASE WHEN p.peg_la IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.peg_lp IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.isbn_la IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.isbn_lp IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.nomeContrato IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.nomeCapa IS NULL THEN 1 ELSE 0 END   +
+          CASE WHEN p.pseudonimo IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.numContrato IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.dataAssinatura IS NULL THEN 1 ELSE 0 END  +
+          CASE WHEN p.validadeContrato IS NULL THEN 1 ELSE 0 END ) as sumPendentesProduto,
+          SUM(
+            CASE WHEN e.componente IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.formatoAberto IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.formatoFechado IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.numPagina IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.papel IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.cores IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.acabamento IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.observacoes IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.espessura IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.peso IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.orientacao IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.alvura IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.opacidade IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.lombada IS NULL THEN 1 ELSE 0 END +
+            CASE WHEN e.medLombada IS NULL THEN 1 ELSE 0 END
+          ) as sumPendentesEspecificacoes,
+          CONCAT(
+            CASE WHEN p.peg_la IS NULL THEN 'PEG LA; ' ELSE '' END,
+            CASE WHEN p.peg_lp IS NULL THEN 'PEG LP; ' ELSE '' END,
+            CASE WHEN p.isbn_la IS NULL THEN 'ISBN LA; ' ELSE '' END,
+            CASE WHEN p.isbn_lp IS NULL THEN 'ISBN LP; ' ELSE '' END,
+            CASE WHEN p.nomeContrato IS NULL THEN 'Nome do Contrato; ' ELSE'' END,
+            CASE WHEN p.nomeCapa IS NULL THEN 'Nome da Capa; ' ELSE '' END,
+            CASE WHEN p.pseudonimo IS NULL THEN 'Pseudônimo; ' ELSE '' END,
+            CASE WHEN p.numContrato IS NULL THEN 'Número do Contrato; ' ELSE '' END,
+            CASE WHEN p.dataAssinatura IS NULL THEN 'Data de Assinatura; ' ELSE '' END,
+            CASE WHEN p.validadeContrato IS NULL THEN 'Validade de Contrato; ' ELSE '' END
+          ) as CamposPendentes,
+          CONCAT(
+            CASE WHEN e.componente IS NULL THEN 'Componente; ' ELSE '' END,
+            CASE WHEN e.formatoAberto IS NULL THEN 'Formato Aberto; ' ELSE '' END,
+            CASE WHEN e.formatoFechado IS NULL THEN 'Formato Fechado; ' ELSE '' END,
+            CASE WHEN e.numPagina IS NULL THEN 'Número de páginas; ' ELSE '' END,
+            CASE WHEN e.papel IS NULL THEN 'Papel; ' ELSE'' END,
+            CASE WHEN e.cores IS NULL THEN 'Cores; ' ELSE '' END,
+            CASE WHEN e.acabamento IS NULL THEN 'Acabamento; ' ELSE '' END,
+            CASE WHEN e.observacoes IS NULL THEN 'Observações; ' ELSE '' END,
+            CASE WHEN e.espessura IS NULL THEN 'Espessura; ' ELSE '' END,
+            CASE WHEN e.peso IS NULL THEN 'Peso; ' ELSE '' END,
+            CASE WHEN e.orientacao IS NULL THEN 'Orientação; ' ELSE '' END,
+            CASE WHEN e.alvura IS NULL THEN 'Alvura; ' ELSE '' END,
+            CASE WHEN e.opacidade IS NULL THEN 'Opacidade; ' ELSE '' END,
+            CASE WHEN e.lombada IS NULL THEN 'Lombada; ' ELSE '' END,
+            CASE WHEN e.medLombada IS NULL THEN 'Medida lombada; ' ELSE '' END
+          ) as CamposPendentesEspecificacao
+          FROM produto p
+          LEFT JOIN especificacoes_tecnicas e ON e.idProduto = p.idProduto
+          WHERE
+          (
+            p.peg_la is null
+            OR p.peg_lp is null
+            OR p.isbn_la is null
+            OR p.isbn_lp is null
+            OR p.nomeContrato is null
+            OR p.nomeCapa is null
+            OR p.pseudonimo is null
+            OR p.numContrato is null
+            OR p.dataAssinatura is null
+            OR p.validadeContrato is NULL
+            OR e.componente is null
+            OR e.formatoAberto is null
+            OR e.formatoFechado is null
+            OR e.numPagina is null
+            OR e.papel is null
+            OR e.cores is null
+            OR e.acabamento is null
+            OR e.observacoes is null
+            OR e.espessura is null
+            OR e.peso is NULL
+            OR e.orientacao is NULL
+            OR e.alvura is NULL
+            OR e.opacidade is NULL
+            OR e.lombada is NULL
+            OR e.medLombada is NULL)
+            AND p.bolAnulado = 0
+            AND p.arquivado = 0
+            GROUP BY p.idProduto, e.idEspecificacao
+          ) AS prod
+          GROUP BY prod.idProduto, prod.idEspecificacao
+          ");
+
+          $produtos = json_encode($produtos);
+          return $produtos;
+        }
+
+        /*
+        Listar produtos com pendências do CADASTRO GERAL
+        */
+        public function ListarPendenciasGeral(){
+          $produtos = array();
+          // QUERY TODAS
+          $produtos = DB::select("SELECT
+            prod.idProduto,
+            prod.titulo,
+            prod.isbn_la,
+            prod.peg_la,
+            sumPendentesProduto,
+            CamposPendentes
+            FROM (
+              SELECT p.idProduto, p.titulo, p.isbn_la, p.peg_la,
+              SUM(CASE WHEN p.peg_la IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.peg_lp IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.isbn_la IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.isbn_lp IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.nomeContrato IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.nomeCapa IS NULL THEN 1 ELSE 0 END   +
+                CASE WHEN p.pseudonimo IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.numContrato IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.dataAssinatura IS NULL THEN 1 ELSE 0 END  +
+                CASE WHEN p.validadeContrato IS NULL THEN 1 ELSE 0 END ) as sumPendentesProduto,
+                CONCAT(
+                  CASE WHEN p.peg_la IS NULL THEN 'PEG LA; ' ELSE '' END,
+                  CASE WHEN p.peg_lp IS NULL THEN 'PEG LP; ' ELSE '' END,
+                  CASE WHEN p.isbn_la IS NULL THEN 'ISBN LA; ' ELSE '' END,
+                  CASE WHEN p.isbn_lp IS NULL THEN 'ISBN LP; ' ELSE '' END,
+                  CASE WHEN p.nomeContrato IS NULL THEN 'Nome do Contrato; ' ELSE'' END,
+                  CASE WHEN p.nomeCapa IS NULL THEN 'Nome da Capa; ' ELSE '' END,
+                  CASE WHEN p.pseudonimo IS NULL THEN 'Pseudônimo; ' ELSE '' END,
+                  CASE WHEN p.numContrato IS NULL THEN 'Número do Contrato; ' ELSE '' END,
+                  CASE WHEN p.dataAssinatura IS NULL THEN 'Data de Assinatura; ' ELSE '' END,
+                  CASE WHEN p.validadeContrato IS NULL THEN 'Validade de Contrato; ' ELSE '' END
+                ) as CamposPendentes
+                FROM produto p
+                WHERE (
+                  p.peg_la is null
+                  OR p.peg_lp is null
+                  OR p.isbn_la is null
+                  OR p.isbn_lp is null
+                  OR p.nomeContrato is null
+                  OR p.nomeCapa is null
+                  OR p.pseudonimo is null
+                  OR p.numContrato is null
+                  OR p.dataAssinatura is null
+                  OR p.validadeContrato is NULL )
+                  AND p.bolAnulado = 0
+                  AND p.arquivado = 0
+                  GROUP BY p.idProduto
+                ) AS prod
+                GROUP BY prod.idProduto
+                ");
+
+                $produtos = json_encode($produtos);
+                return $produtos;
+              }
+              /*
+              Listar produtos com pendências das ESPECIFICACOES
+              */
+              public function ListarPendenciasEspecificacao(){
+                $produtos = array();
+                // QUERY TODAS
+                $produtos = DB::select("SELECT
+                  prod.idProduto,
+                  prod.titulo,
+                  prod.isbn_la,
+                  prod.peg_la,
+                  prod.idEspecificacao,
+                  CASE WHEN prod.idEspecificacao IS NULL THEN '' ELSE CamposPendentesEspecificacao END as CamposEspecificacao,
+                  CASE WHEN prod.idEspecificacao IS NULL THEN 0 ELSE sumPendentesEspecificacoes END as PendentesEspecificacoes
+                  FROM (
+                    SELECT p.idProduto, p.titulo, p.isbn_la, p.peg_la, e.idEspecificacao,
+                    SUM(
+                      CASE WHEN e.componente IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.formatoAberto IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.formatoFechado IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.numPagina IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.papel IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.cores IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.acabamento IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.observacoes IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.espessura IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.peso IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.orientacao IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.alvura IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.opacidade IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.lombada IS NULL THEN 1 ELSE 0 END +
+                      CASE WHEN e.medLombada IS NULL THEN 1 ELSE 0 END
+                    ) as sumPendentesEspecificacoes,
+                    CONCAT(
+                      CASE WHEN e.componente IS NULL THEN 'Componente; ' ELSE '' END,
+                      CASE WHEN e.formatoAberto IS NULL THEN 'Formato Aberto; ' ELSE '' END,
+                      CASE WHEN e.formatoFechado IS NULL THEN 'Formato Fechado; ' ELSE '' END,
+                      CASE WHEN e.numPagina IS NULL THEN 'Número de páginas; ' ELSE '' END,
+                      CASE WHEN e.papel IS NULL THEN 'Papel; ' ELSE'' END,
+                      CASE WHEN e.cores IS NULL THEN 'Cores; ' ELSE '' END,
+                      CASE WHEN e.acabamento IS NULL THEN 'Acabamento; ' ELSE '' END,
+                      CASE WHEN e.observacoes IS NULL THEN 'Observações; ' ELSE '' END,
+                      CASE WHEN e.espessura IS NULL THEN 'Espessura; ' ELSE '' END,
+                      CASE WHEN e.peso IS NULL THEN 'Peso; ' ELSE '' END,
+                      CASE WHEN e.orientacao IS NULL THEN 'Orientação; ' ELSE '' END,
+                      CASE WHEN e.alvura IS NULL THEN 'Alvura; ' ELSE '' END,
+                      CASE WHEN e.opacidade IS NULL THEN 'Opacidade; ' ELSE '' END,
+                      CASE WHEN e.lombada IS NULL THEN 'Lombada; ' ELSE '' END,
+                      CASE WHEN e.medLombada IS NULL THEN 'Medida lombada; ' ELSE '' END
+                    ) as CamposPendentesEspecificacao
+                    FROM produto p
+                    LEFT JOIN especificacoes_tecnicas e ON e.idProduto = p.idProduto
+                    WHERE (
+                      e.componente is null
+                      OR e.formatoAberto is null
+                      OR e.formatoFechado is null
+                      OR e.numPagina is null
+                      OR e.papel is null
+                      OR e.cores is null
+                      OR e.acabamento is null
+                      OR e.observacoes is null
+                      OR e.espessura is null
+                      OR e.peso is NULL
+                      OR e.orientacao is NULL
+                      OR e.alvura is NULL
+                      OR e.opacidade is NULL
+                      OR e.lombada is NULL
+                      OR e.medLombada is NULL
+                    )
+                    AND e.bolAnulado = 0
                     GROUP BY p.idProduto, e.idEspecificacao
                   ) AS prod
                   GROUP BY prod.idProduto, prod.idEspecificacao

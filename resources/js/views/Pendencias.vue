@@ -17,60 +17,60 @@
     </div>
 
     <b-table
-      :fields="fields"
-      :items="visibleItems"
-      :busy="busy"
-      :hover="true"
-      :tbody-tr-class="rowClass"
+    :fields="fields"
+    :items="visibleItems"
+    :busy="busy"
+    :hover="true"
+    :tbody-tr-class="rowClass"
     >
-      <div slot="table-busy" class="text-center text-blue my-2">
-        <b-spinner class="align-middle"></b-spinner>
-        <strong>Carregando...</strong>
-      </div>
-      <template v-slot:cell(nome)="row">
-        <p>{{ row.item.titulo }}</p>
-      </template>
-      <template v-slot:cell(numeroPendencias)="row">
-        <p>{{ row.item.sumPendentesProduto }}</p>
-      </template>
-      <template v-slot:cell(isbn)="row">
-        <p>{{ row.item.isbn_la }}</p>
-      </template>
-      <template v-slot:cell(peg)="row">
-        <p>{{ row.item.peg_la }}</p>
-      </template>
-      <template v-slot:cell(dataModificacao)="row">
-        <p>05/11/2019</p>
-      </template>
-
-      <template v-slot:cell(actions)="row">
-        <a
-          href="#"
-          @click="row.toggleDetails"
-          title="Mostrar detalhes"
-          data-toggle="tooltip"
-          :show="row.detailsShowing"
-        >
-          <span class="material-icons">error_outline</span>
-        </a>
-
-        <router-link v-if="!row.item.arquivado" :to="{ name: 'editarProduto', params: { id: row.item.idProduto } }" title="Editar">
-          <span class="material-icons">edit</span>
-        </router-link>
-      </template>
-
-      <template v-slot:row-details="row">
-        <p><b>Campos pendentes:</b></p>
-        {{row.item.CamposPendentes}}<br>
-        {{row.item.CamposEspecificacao}}
-      </template>
-    </b-table>
-
-    <div>Exibindo {{ perPage }} de {{ rows }}</div>
-    <div>
-      <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" align="right"></b-pagination>
+    <div slot="table-busy" class="text-center text-blue my-2">
+      <b-spinner class="align-middle"></b-spinner>
+      <strong>Carregando...</strong>
     </div>
-  </div>
+    <template v-slot:cell(nome)="row">
+      <p>{{ row.item.titulo }}</p>
+    </template>
+    <template v-slot:cell(numeroPendencias)="row">
+      <p>{{ totalPendencias(row.item) }}</p>
+    </template>
+    <template v-slot:cell(isbn)="row">
+      <p>{{ row.item.isbn_la }}</p>
+    </template>
+    <template v-slot:cell(peg)="row">
+      <p>{{ row.item.peg_la }}</p>
+    </template>
+    <template v-slot:cell(dataModificacao)="row">
+      <p>05/11/2019</p>
+    </template>
+
+    <template v-slot:cell(actions)="row">
+      <a
+      href="#"
+      @click="row.toggleDetails"
+      title="Mostrar detalhes"
+      data-toggle="tooltip"
+      :show="row.detailsShowing"
+      >
+      <span class="material-icons">error_outline</span>
+    </a>
+
+    <router-link v-if="!row.item.arquivado" :to="{ name: 'editarProduto', params: { id: row.item.idProduto } }" title="Editar">
+      <span class="material-icons">edit</span>
+    </router-link>
+  </template>
+
+  <template v-slot:row-details="row">
+    <p><b>Campos pendentes:</b></p>
+    {{row.item.CamposPendentes}}<br>
+    {{row.item.CamposEspecificacao}}
+  </template>
+</b-table>
+
+<div>Exibindo {{ perPage }} de {{ rows }}</div>
+<div>
+  <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" align="right"></b-pagination>
+</div>
+</div>
 </template>
 <script>
 import Vue from "vue";
@@ -149,6 +149,7 @@ export default {
         item => !item.arquivado || item.arquivado == this.showArchivedItems
       );
     },
+
   },
   methods: {
     openModal(modalId) {
@@ -157,10 +158,25 @@ export default {
     rowClass(item, type) {
       if (item.arquivado) return "table-danger";
     },
+    totalPendencias(item){
+      return parseInt(item.sumPendentesProduto) || 0 +   parseInt(item.PendentesEspecificacoes) || 0;
+    },
     getPendencias(){
-      axios
-      .get('/listar-pendencias')
-      .then(response => (this.items = response.data))
+      if(this.$router.currentRoute.name == 'pendenciasGeral') {
+        axios
+        .get('/listar-pendencias-geral')
+        .then(response => (this.items = response.data))
+      } else
+      if(this.$router.currentRoute.name == 'pendenciasEspecificacoes') {
+        axios
+        .get('/listar-pendencias-especificacao')
+        .then(response => (this.items = response.data))
+      } else {
+        axios
+        .get('/listar-pendencias')
+        .then(response => (this.items = response.data))
+      }
+
     }
   },
   mounted(){

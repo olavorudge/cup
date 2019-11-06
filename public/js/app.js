@@ -4740,12 +4740,25 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     rowClass: function rowClass(item, type) {
       if (item.arquivado) return "table-danger";
     },
+    totalPendencias: function totalPendencias(item) {
+      return parseInt(item.sumPendentesProduto) || 0 + parseInt(item.PendentesEspecificacoes) || 0;
+    },
     getPendencias: function getPendencias() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_6___default.a.get('/listar-pendencias').then(function (response) {
-        return _this2.items = response.data;
-      });
+      if (this.$router.currentRoute.name == 'pendenciasGeral') {
+        axios__WEBPACK_IMPORTED_MODULE_6___default.a.get('/listar-pendencias-geral').then(function (response) {
+          return _this2.items = response.data;
+        });
+      } else if (this.$router.currentRoute.name == 'pendenciasEspecificacoes') {
+        axios__WEBPACK_IMPORTED_MODULE_6___default.a.get('/listar-pendencias-especificacao').then(function (response) {
+          return _this2.items = response.data;
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_6___default.a.get('/listar-pendencias').then(function (response) {
+          return _this2.items = response.data;
+        });
+      }
     }
   },
   mounted: function mounted() {
@@ -59855,7 +59868,9 @@ var render = function() {
             {
               key: "cell(numeroPendencias)",
               fn: function(row) {
-                return [_c("p", [_vm._v(_vm._s(row.item.sumPendentesProduto))])]
+                return [
+                  _c("p", [_vm._v(_vm._s(_vm.totalPendencias(row.item)))])
+                ]
               }
             },
             {
@@ -59925,10 +59940,10 @@ var render = function() {
               fn: function(row) {
                 return [
                   _c("p", [_c("b", [_vm._v("Campos pendentes:")])]),
-                  _vm._v("\n      " + _vm._s(row.item.CamposPendentes)),
+                  _vm._v("\n    " + _vm._s(row.item.CamposPendentes)),
                   _c("br"),
                   _vm._v(
-                    "\n      " + _vm._s(row.item.CamposEspecificacao) + "\n    "
+                    "\n    " + _vm._s(row.item.CamposEspecificacao) + "\n  "
                   )
                 ]
               }

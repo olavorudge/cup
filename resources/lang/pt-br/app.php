@@ -27,4 +27,5 @@ return [
     'especificacao_deletada' => 'Especificacão deletada.',
     'especificacao_editada' => 'Especificacão salva com sucesso.',
 
+    'falha_cadastro' => 'Falha ao cadastrar',
 ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Modelo;
 use App\ModeloCampo;
+use App\LogService;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
 use App\Models\ViewModels\ProdutoViewModel;
@@ -40,6 +41,10 @@ class ModelosController extends Controller
       ];
 
       $create = Modelo::create($data);
+
+      $LogService = new LogService;
+      $LogService->createLog(1, 2, $request->nome_modelo . 'cadastrado',  'Novo modelo: ' . $request->nome_modelo . 'cadastrado');
+
       if($create) {
         try {
           foreach ($request->checkbox as $check) {
@@ -52,6 +57,7 @@ class ModelosController extends Controller
             $insert = ModeloCampo::create($dataModeloCampo);
 
           }
+
           return response()->json(['success'=>1, 'msg'=>trans('app.modelo_cadastrado')]);
         } catch (\Exception $e) {
 

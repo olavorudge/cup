@@ -10,6 +10,7 @@ use App\NivelEnsino;
 use App\Observacao;
 use App\EstruturaProduto;
 use App\Origem;
+use App\LogService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
@@ -430,10 +431,10 @@ class ProdutosController extends Controller
                   $produtos = json_encode($produtos);
                   return $produtos;
                 }
+
                 /*
                 Listar as observacoes do produto X
                 */
-
                 public function ListarObservacoes($id)
                 {
                   $produtos = array();
@@ -449,6 +450,7 @@ class ProdutosController extends Controller
                   $data = json_encode($data);
                   return $data;
                 }
+
                 /*
                 Listar as especificações do produto X
                 */
@@ -467,6 +469,7 @@ class ProdutosController extends Controller
                   $prodEstr = json_encode($prodEstr);
                   return $prodEstr;
                 }
+
                 /*
                 Função para cadastrar produtos
                 */
@@ -524,6 +527,7 @@ class ProdutosController extends Controller
                     }
                   }
                 }
+
                 /*
                 Função para cadastrar especificacoes
                 */
@@ -607,6 +611,7 @@ class ProdutosController extends Controller
                   }
                   return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
                 }
+
                 /*
                 FUNÇÃO PARA EDITAR PRODUTOS
                 */
@@ -646,20 +651,26 @@ class ProdutosController extends Controller
                           'volume'                => $request->volume,
                           'numEdicao'             => $request->num_edicao,
                           'idioma'                => $request->idioma,
-                          'peg_la'                 => $request->peg_la,
-                          'peg_lp'                 => $request->peg_lp,
+                          'peg_la'                => $request->peg_la,
+                          'peg_lp'                => $request->peg_lp,
                           'isbn_la'               => $request->isbn_la,
                           'isbn_lp'               => $request->isbn_lp,
                           'nomeContrato'          => $request->nome_contrato,
                           'nomeCapa'              => $request->nome_capa,
-                          'pseudonimo'           => $request->pseudonimo,
+                          'pseudonimo'            => $request->pseudonimo,
                           'numContrato'           => $request->num_contrato,
                           'dataAssinatura'        => $request->data_assinatura,
                           'validadeContrato'      => $request->validade_contrato
                         ];
+
                         $produto->update($data);
 
-                        return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado')]);
+                        $changes = json_encode($produto->getChanges());
+
+                        $LogService = new LogService;
+                        $LogService->createLogProduto(1, 6, $request->idProduto, null, $changes, 'Alteração do produto ' . $request->titulo);
+
+                        return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado'), 'teste'=>$changes]);
                       }
                     }
                   }
@@ -669,7 +680,6 @@ class ProdutosController extends Controller
                 */
                 public function EditarEspecificacao(Request $request)
                 {
-
 
                   $especificacao = EspecificacaoTecnica::find($request->idEspecificacao);
                   $rules = [

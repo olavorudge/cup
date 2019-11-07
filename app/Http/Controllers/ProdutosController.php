@@ -639,6 +639,8 @@ class ProdutosController extends Controller
                       if ($this->validate($request, $rules)) {
                         $anoEscolar = AnoEscolar::where('idAnoEscolar', $request->serie)->first();
 
+                        $original = Produto::where('idProduto', $request->idProduto)->first();
+
                         $data = [
                           'idAreaConhecimento'    => $anoEscolar->idNivel,
                           'idAnoEscolar'          => $request->serie,
@@ -665,12 +667,27 @@ class ProdutosController extends Controller
 
                         $produto->update($data);
 
-                        $changes = json_encode($produto->getChanges());
+                        $changes = $produto->getChanges();
 
-                        $LogService = new LogService;
-                        $LogService->createLogProduto(1, 6, $request->idProduto, null, $changes, 'Alteração do produto ' . $request->titulo);
+                        // Salvar log com as alterações
+                        if ($changes != null) {
 
-                        return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado'), 'teste'=>$changes]);
+                          $descricaoLog = [
+                            'changes' => [
+                              $changes
+                            ],
+                            'original' => [
+                              $original
+                            ]
+                          ];
+
+                          $descricaoLog = json_encode($descricaoLog);
+
+                          $LogService = new LogService;
+                          $LogService->createLogProduto(1, 6, $request->idProduto, null, $descricaoLog, 'Alteração do produto ' . $request->titulo);
+
+                        }
+                        return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado'), 'teste'=>$changes, 'original'=>$original]);
                       }
                     }
                   }

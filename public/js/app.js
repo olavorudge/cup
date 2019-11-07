@@ -3891,6 +3891,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! bootstrap-vue */ "./node_modules/bootstrap-vue/esm/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 //
 //
 //
@@ -3949,27 +3951,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     BTable: bootstrap_vue__WEBPACK_IMPORTED_MODULE_1__["BTable"]
   },
+  props: ["value"],
   data: function data() {
     return {
       id: "modal-visualizar-historico",
       busy: false,
       currentPage: 1,
       perPage: 20,
-      items: [{
-        dataModificacao: "16/08/2019 14:50",
-        descricao: "descricao breve das alterações",
-        usuario: "Alexandre g"
-      }, {
-        dataModificacao: "04/08/2019 14:25",
-        descricao: "descricao breve das alterações",
-        usuario: "Olavinho"
-      }],
+      items: [{}],
       fields: [{
         key: "dataModificacao",
         label: "Data de modificação"
@@ -3988,6 +3992,34 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     rows: function rows() {
       return this.items.length;
+    }
+  },
+  watch: {
+    value: function value(newVal, oldVal) {
+      // watch it
+      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      this.getLogs(newVal);
+    }
+  },
+  methods: {
+    getLogs: function getLogs(id) {
+      var _this = this;
+
+      this.errors = {};
+      axios__WEBPACK_IMPORTED_MODULE_2___default.a.get('/listar-logs-produto/' + id).then(function (response) {
+        return _this.items = response.data;
+      });
+    },
+    descricaoLog: function descricaoLog(item) {
+      var item = JSON.parse(item);
+      var columns = Object.keys(item['changes'][0]);
+      var html = '';
+      columns.forEach(function (column, chave) {
+        if (column != 'updated_at') {
+          html += '<span><span style="color: #36999f">' + column + ':</span> </span>' + item['changes'][0][column] + '<span style="color: #bbb"> // Valor antigo: ' + item['original'][0][column] + '</span><br>';
+        }
+      });
+      return html;
     }
   }
 });
@@ -58405,6 +58437,36 @@ var render = function() {
                   },
                   scopedSlots: _vm._u([
                     {
+                      key: "cell(dataModificacao)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.created_at) +
+                              "\n        "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(descricao)",
+                      fn: function(data) {
+                        return [
+                          _vm._v(
+                            "\n          " +
+                              _vm._s(data.item.observacao) +
+                              "\n        "
+                          )
+                        ]
+                      }
+                    },
+                    {
+                      key: "cell(usuario)",
+                      fn: function(data) {
+                        return [_vm._v("\n          isa\n        ")]
+                      }
+                    },
+                    {
                       key: "cell(showDetails)",
                       fn: function(row) {
                         return [
@@ -58430,11 +58492,15 @@ var render = function() {
                     },
                     {
                       key: "row-details",
-                      fn: function(row) {
+                      fn: function(data) {
                         return [
-                          _c("p", [_vm._v("Nome: nome antigo ou nome novo?")]),
-                          _vm._v(" "),
-                          _c("p", [_vm._v("ISBN: novo ou antigo")])
+                          _c("p", {
+                            domProps: {
+                              innerHTML: _vm._s(
+                                _vm.descricaoLog(data.item.descricaoLog)
+                              )
+                            }
+                          })
                         ]
                       }
                     }
@@ -60493,7 +60559,10 @@ var render = function() {
                         attrs: { title: "Histórico" },
                         on: {
                           click: function($event) {
-                            return _vm.openModal("#modal-visualizar-historico")
+                            return _vm.openModal(
+                              "#modal-visualizar-historico",
+                              data.item.idProduto
+                            )
                           }
                         }
                       },
@@ -60548,7 +60617,15 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("modal-visualizar-historico"),
+      _c("modal-visualizar-historico", {
+        model: {
+          value: _vm.produto_modal,
+          callback: function($$v) {
+            _vm.produto_modal = $$v
+          },
+          expression: "produto_modal"
+        }
+      }),
       _vm._v(" "),
       _c("modal-visualizar-produto", {
         model: {

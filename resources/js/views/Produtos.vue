@@ -88,7 +88,7 @@
         <span
         title="Histórico"
         class="material-icons"
-        @click="openModal('#modal-visualizar-historico')"
+        @click="openModal('#modal-visualizar-historico', data.item.idProduto)"
         >history</span>
       </a>
     </template>
@@ -99,7 +99,7 @@
     <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" align="right"></b-pagination>
   </div>
 
-  <modal-visualizar-historico></modal-visualizar-historico>
+  <modal-visualizar-historico v-model="produto_modal"></modal-visualizar-historico>
   <modal-visualizar-produto v-model="produto_modal"></modal-visualizar-produto>
 </div>
 </template>

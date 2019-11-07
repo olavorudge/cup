@@ -36,6 +36,7 @@ Route::get('listar-todas-estruturas', ['as' => 'listar-todas-estruturas', 'uses'
 Route::get('listar-pendencias', ['as' => 'listar-pendencias', 'uses' => 'ProdutosController@ListarPendencias']);
 Route::get('listar-pendencias-geral', ['as' => 'listar-pendencias-geral', 'uses' => 'ProdutosController@ListarPendenciasGeral']);
 Route::get('listar-pendencias-especificacao', ['as' => 'listar-pendencias-especificacao', 'uses' => 'ProdutosController@ListarPendenciasEspecificacao']);
+Route::get('listar-logs-produto/{id}', ['as' => 'listar-logs-produto', 'uses' => 'LogsController@ListarLogsProdutos']);
 
 Route::get('deletar-modelo/{id}', ['as' => 'deletar-modelo', 'uses' => 'ModelosController@DeletarModelo']);
 Route::get('deletar-produto/{id}', ['as' => 'deletar-produto', 'uses' => 'ProdutosController@DeletarProduto']);

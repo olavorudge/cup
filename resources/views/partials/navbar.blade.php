@@ -121,7 +121,7 @@ return Route::current()->getName() == $menuRoute ? "active" : "";
             </li>
             {{-- <li class="sidebar-item">
                 <a href="#usuarios" data-toggle="collapse" class="sidebar-link collapsed" aria-expanded="false">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-chart-line"></i> 
                     <span class="align-middle">Usuários</span>
                 </a>
                 <ul id="usuarios" class="sidebar-dropdown list-unstyled collapse" data-parent="#sidebar">

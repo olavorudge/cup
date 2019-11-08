@@ -10,6 +10,7 @@ use App\NivelEnsino;
 use App\Observacao;
 use App\EstruturaProduto;
 use App\Origem;
+use App\TipoEspecificacao;
 use App\LogService;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -452,7 +453,7 @@ class ProdutosController extends Controller
                 }
 
                 /*
-                Listar as especificações do produto X
+                Listar as estruturas do produto X
                 */
 
                 public function ListarProdutosEstruturas($id)
@@ -540,6 +541,7 @@ class ProdutosController extends Controller
                     'peso'   => 'numeric'
                   ];
 
+
                   if ($this->validate($request, $rules)) {
 
                     $data = [
@@ -564,11 +566,29 @@ class ProdutosController extends Controller
                     ];
 
                     $create = EspecificacaoTecnica::create($data);
+
+                    // Salvar log com as alterações
+                    if ($create) {
+
+                      $especificacao = TipoEspecificacao::where('idTipoEspecificacao', 1)->first();
+
+
+                      $html = '<table class="table table-historico">
+                              <tr class="tr-historico"> <th>Identificador</th> <th>Tipo</th> <th>Componente</th> </tr>
+                              <tr><td>#' . $create->idEspecificacao . '</td><td>' . $especificacao->nomeTipoEspecificacao . '</td><td>' . $request->componente . '</td></tr>
+                              ';
+
+                      $LogService = new LogService;
+                      $LogService->createLogProduto(1, 6, $request->idProduto, $create->id, $html, null,'Nova especificação técnica cadastrada');
+                    }
+
+
                     if($create) {
                       return response()->json(['success'=>1, 'msg'=>trans('app.componente_cadastrado')]);
                     }
                   }
                 }
+
                 /*
                 Função para cadastrar observacoes de produtos
                 */
@@ -588,11 +608,20 @@ class ProdutosController extends Controller
                     ];
 
                     $create = Observacao::create($data);
+
                     if($create) {
+
+                      // Log
+                      $html = $request->observacao;
+
+                      $LogService = new LogService;
+                      $LogService->createLogProduto(1, 6, $request->idProduto, null, $html, null, 'Observação cadastrada');
+
                       return response()->json(['success'=>1, 'msg'=>trans('app.observacao_cadastrada')]);
                     }
                   }
                 }
+
                 /*
                 Função para cadastrar estruturas de produtos
                 */
@@ -608,6 +637,21 @@ class ProdutosController extends Controller
                     ];
 
                     $create = EstruturaProduto::create($data);
+
+
+                    if ($create) {
+                      // Salvar log com as alterações
+
+                      $produto = Produto::find($item)->first();
+
+                      $html = '<table class="table table-historico">
+                                <tr class="tr-historico"> <th>Identificador</th> <th>Título</th> <th>PEG LA</th> </tr>
+                                <tr><td>#' . $produto->idProduto . '</td><td>' . $produto->titulo . '</td><td>' . $produto->peg_la . '</td></tr>
+                              ';
+
+                      $LogService = new LogService;
+                      $LogService->createLogProduto(1, 7, $request->idProduto, null, $html, null, 'Cadastro de estrutura: ' . $produto->titulo);
+                    }
                   }
                   return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
                 }
@@ -642,7 +686,7 @@ class ProdutosController extends Controller
                         $original = Produto::where('idProduto', $request->idProduto)->first();
 
                         $data = [
-                          'idAreaConhecimento'    => $anoEscolar->idNivel,
+                          'idAreaConhecimento'    => $request->area_conhec,
                           'idAnoEscolar'          => $request->serie,
                           'idOrigem'              => $request->origem,
                           'titulo'                => $request->titulo,
@@ -672,7 +716,7 @@ class ProdutosController extends Controller
                         // Salvar log com as alterações
                         if ($changes != null) {
 
-                          $descricaoLog = [
+                          $descricaoJson = [
                             'changes' => [
                               $changes
                             ],
@@ -681,10 +725,19 @@ class ProdutosController extends Controller
                             ]
                           ];
 
-                          $descricaoLog = json_encode($descricaoLog);
+                          $descricaoJson = json_encode($descricaoJson);
 
+                          $html = '<table class="table table-historico"><tr class="tr-historico"> <th>Coluna</th> <th>Valor alterado</th> <th>Valor antigo</th> </tr>';
+                          foreach (array_keys($changes) as $change) {
+                            if($change != 'updated_at'){
+                             $html = $html . '<tr><td>' . $change .
+                             '</td><td>' . $changes[$change] .
+                             '</td><td>' . $original->$change . '</td>';
+                            }
+                          }
+                          $html = $html . '</tr></table>';
                           $LogService = new LogService;
-                          $LogService->createLogProduto(1, 6, $request->idProduto, null, $descricaoLog, 'Alteração do produto ' . $request->titulo);
+                          $LogService->createLogProduto(1, 6, $request->idProduto, null, $html, $descricaoJson, 'Alteração do produto ' . $request->titulo);
 
                         }
                         return response()->json(['success'=>1, 'msg'=>trans('app.produto_alterado'), 'teste'=>$changes, 'original'=>$original]);
@@ -692,6 +745,7 @@ class ProdutosController extends Controller
                     }
                   }
                 }
+
                 /*
                 * EDITAR ESPECIFICAÇÃO
                 */
@@ -706,6 +760,8 @@ class ProdutosController extends Controller
                   ];
 
                   if ($this->validate($request, $rules)) {
+
+                  $original = EspecificacaoTecnica::where('idEspecificacao', $request->idEspecificacao)->first();
 
                     $data = [
                       'idProduto'             => $request->idProduto,
@@ -730,11 +786,44 @@ class ProdutosController extends Controller
 
 
                     $update = $especificacao->update($data);
+
                     if($update) {
+
+                      // Salvar log com as alterações
+                      $changes = $especificacao->getChanges();
+
+                      $descricaoJson = [
+                        'changes' => [
+                          $changes
+                        ],
+                        'original' => [
+                          $original
+                        ]
+                      ];
+                      $descricaoJson = json_encode($descricaoJson);
+
+                      if ($changes != null) {
+
+                        $html = '<table class="table table-historico"><tr class="tr-historico"> <th>Coluna</th> <th>Valor alterado</th> <th>Valor antigo</th> </tr>';
+                        foreach (array_keys($changes) as $change) {
+                          if($change != 'updated_at'){
+                           $html = $html . '<tr><td>' . $change .
+                           '</td><td>' . $changes[$change] .
+                           '</td><td>' . $original->$change . '</td>';
+                          }
+                        }
+                        $html = $html . '</tr></table>';
+
+                        $LogService = new LogService;
+                        $LogService->createLogProduto(1, 6, $request->idProduto, $request->idEspecificacao, $html, $descricaoJson, 'Alteração da especificação (#' . $request->idEspecificacao . ')');
+
+                      }
+
                       return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_editada')]);
                     }
                   }
                 }
+
                 /*
                 FUNÇÃO PARA DELETAR PRODUTOS
                 */
@@ -749,6 +838,7 @@ class ProdutosController extends Controller
                     }
                   }
                 }
+
                 /*
                 FUNÇÃO PARA DELETAR PRODUTOS
                 */
@@ -757,23 +847,53 @@ class ProdutosController extends Controller
                   $idEstrutura = $request->idEstrutura;
                   $estrutura = EstruturaProduto::where('idProduto', $idProduto)->where('idEstrutura', $idEstrutura)->delete();
 
-                  return response()->json(['success'=>1, 'msg'=>trans('app.produto_deletado')]);
+                  // Salvar log com as alterações
+                  if ($estrutura) {
 
+                    $produto = Produto::find($idProduto)->first();
+
+                    $html = '<table class="table table-historico">
+                              <tr class="tr-historico"> <th>Identificador</th> <th>Título</th> <th>PEG LA</th> </tr>
+                              <tr><td>#' . $produto->idProduto . '</td><td>' . $produto->titulo . '</td><td>' . $produto->peg_la . '</td></tr>
+                            ';
+
+                    $LogService = new LogService;
+                    $LogService->createLogProduto(1, 6, $request->idProduto, null, $html, null, 'Produto removido da estrutura');
+
+                    return response()->json(['success'=>1, 'msg'=>trans('app.estrutura_removida')]);
+                  }
                 }
+
                 /*
                 DELETAR ESPECIFICACAO
                 */
                 public function DeletarEspecificacao($id){
                   if ($id){
-                    $produto = EspecificacaoTecnica::find($id);
-                    if ($produto){
-                      $produto->bolAnulado = 1;
-                      $produto->save();
+                    $especificacao = EspecificacaoTecnica::find($id);
+                    if ($especificacao){
+                      $especificacao->bolAnulado = 1;
+                      $update = $especificacao->save();
 
-                      return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_deletada')]);
+                      if ($update) {
+
+                        $tipoespecificacao = TipoEspecificacao::where('idTipoEspecificacao', 2)->first();
+
+                        $html = '<table class="table table-historico">
+                                  <tr class="tr-historico"> <th>Identificador</th> <th>Tipo</th> <th>Componente</th> </tr>
+                                  <tr><td>#' . $especificacao->idEspecificacao . '</td><td>' . $tipoespecificacao->nomeTipoEspecificacao . '</td><td>' . $especificacao->componente . '</td></tr>
+                                ';
+
+                        $LogService = new LogService;
+                        $LogService->createLogProduto(1, 7, $especificacao->idProduto, $especificacao->idEspecificacao, $html, null,'Especificação Deletada');
+
+                      }
+                      if ($update) {
+                        return response()->json(['success'=>1, 'msg'=>trans('app.especificacao_deletada')]);
+                      }
                     }
                   }
                 }
+
                 /*
                 FUNÇÃO PARA DUPLICAR PRODUTOS
                 */
@@ -806,6 +926,7 @@ class ProdutosController extends Controller
                   $areaConhec = json_encode($data);
                   return $areaConhec;
                 }
+
                 /*
                 FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
                 */
@@ -824,6 +945,7 @@ class ProdutosController extends Controller
                   $nivelEnsino = json_encode($data);
                   return $nivelEnsino;
                 }
+
                 /*
                 FUNÇÃO PARA PREENCHER SELECTS DA VIEW CadastrarProdutos
                 */

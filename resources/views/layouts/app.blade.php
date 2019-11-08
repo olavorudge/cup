@@ -23,13 +23,12 @@
 <body>
     <div id="app">
         @include('partials.sidebar', isset($subLinhas) ? $subLinhas : $subLinhas = [])
-        
         <div class="main">
             @include('partials.header')
 
             <main class="content container-fluid">
                 <h4 class="content-title">@yield( 'title' )</h4>
-                
+
                 @yield('content')
             </main>
 

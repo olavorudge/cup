@@ -4011,15 +4011,7 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     descricaoLog: function descricaoLog(item) {
-      var item = JSON.parse(item);
-      var columns = Object.keys(item['changes'][0]);
-      var html = '';
-      columns.forEach(function (column, chave) {
-        if (column != 'updated_at') {
-          html += '<span><span style="color: #36999f">' + column + ':</span> </span>' + item['changes'][0][column] + '<span style="color: #bbb"> // Valor antigo: ' + item['original'][0][column] + '</span><br>';
-        }
-      });
-      return html;
+      return item;
     }
   }
 });
@@ -58433,7 +58425,7 @@ var render = function() {
                     items: _vm.items,
                     busy: _vm.busy,
                     hover: true,
-                    "tbody-tr-class": "row-class"
+                    "tbody-tr-class": "row-class no-hover"
                   },
                   scopedSlots: _vm._u([
                     {

@@ -24,16 +24,16 @@ class LogService
     }
   }
 
-  public function createLogProduto($idUsuario, $idTipoLog, $idProduto, $idEspecificacao, $descricaoLog, $observacao){
+  public function createLogProduto($idUsuario, $idTipoLog, $idProduto, $idEspecificacao, $descricaoLog, $descricaoJson ,$observacao){
     $data = [
       'idTipoLog' => $idTipoLog,
       'idUsuario' => $idUsuario,
       'idProduto' => $idProduto,
       'idEspecificacao' => $idEspecificacao,
       'descricaoLog' => $descricaoLog,
+      'descricaoJson' => $descricaoJson,
       'observacao' => $observacao,
-      'created_at' => Carbon::now(),
-
+      'created_at' => Carbon::now()
     ];
 
     $create = LogProduto::create($data);

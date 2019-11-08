@@ -13415,6 +13415,27 @@ a.sidebar-link svg {
   margin-bottom: 0;
 }
 
+.table-historico {
+  box-shadow: none;
+  border: 1px solid #ccc;
+}
+
+.table-historico .tr-historico {
+  background: #ecd97c;
+}
+
+.table-historico .tr-historico:hover {
+  background: #ecd97c !important;
+}
+
+.no-hover:hover {
+  background: none !important;
+}
+
+.table-historico .bg-add {
+  background: #c9efb6;
+}
+
 .tab .nav-tabs {
   border: 0;
 }

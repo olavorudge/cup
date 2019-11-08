@@ -133,7 +133,8 @@ let router = new Router({
         },
         {
             path: "/login",
-            name: "login"
+            name: "login",
+
         },
         {
             path: "/recover-password",

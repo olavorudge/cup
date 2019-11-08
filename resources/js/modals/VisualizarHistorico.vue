@@ -21,7 +21,7 @@
         :items="items"
         :busy="busy"
         :hover="true"
-        tbody-tr-class="row-class"
+        tbody-tr-class="row-class no-hover"
         >
         <template v-slot:cell(dataModificacao)="data">
           {{data.item.created_at}}
@@ -121,18 +121,7 @@ export default {
     },
 
     descricaoLog(item){
-      var item = JSON.parse(item);
-      var columns = Object.keys(item['changes'][0]);
-      var html = '';
-      columns.forEach(function(column, chave){
-
-        if(column != 'updated_at'){
-          html += '<span><span style="color: #36999f">' + column + ':</span> </span>' + item['changes'][0][column] + '<span style="color: #bbb"> // Valor antigo: ' + item['original'][0][column] + '</span><br>';
-        }
-      });
-
-      return html;
-
+      return item;
     }
   },
 };

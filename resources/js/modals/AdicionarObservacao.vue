@@ -17,7 +17,9 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div id="responseObservacao" class="p-6 mb-2 bg-light text-dark">
+            <div class="response responseObservacao p-6 mb-2 bg-info text-dark">
+              <span class="material-icons">done</span>
+              <span id="observacaoResponse"></span>
             </div>
           </div>
         </div>
@@ -64,16 +66,12 @@ export default {
         idUsuario: this.form.idUsuario,
         observacao: this.form.observacao
       }).then(response => {
-        var responseLog = document.getElementById('responseObservacao');
+        var responseLog = document.getElementById('observacaoResponse');
         responseLog.innerHTML = response.data.msg;
-        this.getEspecificacoes(this.form.idProduto);
+        document.getElementsByClassName('responseObservacao')[0].style.display = "block";
       }).catch(error => {
         if (error.response.status === 422) {
           this.errors = error.response.data.errors || {};
-          var responseLog = document.getElementById('responseObservacao');
-          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-          responseLog.innerHTML = errorHandling[0];
         }
       });
     }

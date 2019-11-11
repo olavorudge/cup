@@ -24,7 +24,9 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div id="responseProdutos" class="p-6 mb-2 bg-light text-dark">
+            <div class="response responseProdutos p-6 mb-2 bg-info text-dark">
+              <span class="material-icons">done</span>
+              <span id="produtosResponse"></span>
             </div>
           </div>
         </div>
@@ -152,15 +154,13 @@ export default {
         selectedItems: this.selectedItems
       })
       .then(response => {
-        var responseLog = document.getElementById('responseProdutos');
-        responseLog.innerHTML = response.data.msg;
+          var responseLog = document.getElementById('produtosResponse');
+          console.log(response.data.msg);
+          responseLog.innerHTML = response.data.msg;
+          document.getElementsByClassName('responseProdutos')[0].style.display = "block";
       }).catch(error => {
         if (error.response.status === 422) {
           this.errors = error.response.data.errors || {};
-          var responseLog = document.getElementById('responseProdutos');
-          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-          responseLog.innerHTML = errorHandling[0];
         }
       });
     }

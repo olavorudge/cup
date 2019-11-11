@@ -34,7 +34,9 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div id="response" class="p-6 mb-2 bg-info text-dark">
+      <div class="response p-6 mb-2 bg-info text-dark">
+        <span class="material-icons">done</span>
+        <span id="response"></span>
       </div>
     </div>
   </div>
@@ -216,9 +218,9 @@ export default {
       .get('/deletar-produto/' + id)
       .then(response => {
         var responseMsg = response.data.msg;
-        var responseLog = document.getElementById('response');
-        responseLog.innerHTML = responseMsg;
-        responseLog.style.display = "block";
+          var responseLog = document.getElementById('response');
+          responseLog.innerHTML = response.data.msg;
+          document.getElementsByClassName('response')[0].style.display = "block";
       })
     }
       setTimeout(() => this.getProdutos(), 100);
@@ -230,7 +232,7 @@ export default {
         var responseMsg = response.data.msg;
         var responseLog = document.getElementById('response');
         responseLog.innerHTML = responseMsg;
-        responseLog.style.display = "block";
+        document.getElementsByClassName('response')[0].style.display = "block";
       })
       setTimeout(() => this.getProdutos(), 100);
     }

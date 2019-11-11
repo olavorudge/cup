@@ -13084,7 +13084,7 @@ a.text-dark:focus {
 
 .content {
   flex: 1;
-  padding: 2.5rem;
+  padding: 5rem 2.5rem;
 }
 
 .content-title {
@@ -13183,6 +13183,7 @@ footer.footer ul {
   min-width: 256px;
   max-width: 256px;
   border-right: 0;
+  z-index: 2;
 }
 
 .sidebar,
@@ -13387,6 +13388,28 @@ a.sidebar-link svg {
   top: 14px;
 }
 
+.navbar-login {
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  height: 55px;
+  z-index: 1;
+  padding: 1rem 3rem;
+  box-shadow: 0px 0px 5px 0px #b3b3b3;
+}
+
+.navbar-login .dropdown {
+  cursor: pointer;
+}
+
+.navbar-login .dropdown-menu li {
+  padding: 5px;
+}
+
+.navbar-login .login-name {
+  color: #555;
+}
+
 .table {
   box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5);
 }
@@ -13559,10 +13582,15 @@ a.sidebar-link svg {
   width: 100%;
 }
 
-#response {
-  background: #c1daef !important;
+.response {
+  background: #bde6bd !important;
   padding: 5px;
-  color: #2466a0 !important;
+  color: #177904 !important;
   display: none;
+  border: 1px solid #a5d6a5;
+}
+
+.response .material-icons {
+  font-size: 14px;
 }
 

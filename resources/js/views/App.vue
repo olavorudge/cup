@@ -1,5 +1,6 @@
 <template>
   <div class id="app">
+    <navbar></navbar>
     <sidebar></sidebar>
 
     <div class="main">
@@ -17,9 +18,10 @@
 
 <script>
 import Sidebar from "@/js/components/Sidebar";
+import Navbar from "@/js/components/Navbar";
 
 export default {
-  components: { Sidebar },
+  components: { Sidebar, Navbar },
   data() {
     return {
       title: this.$route.meta.title

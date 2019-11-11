@@ -8,7 +8,9 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div id="response" class="p-6 mb-2 bg-info text-dark">
+        <div class="response p-6 mb-2 bg-info text-dark">
+          <span class="material-icons">done</span>
+          <span id="response"></span>
         </div>
       </div>
     </div>
@@ -94,9 +96,8 @@ export default {
         .get('/deletar-modelo/' + id)
         .then(response => {
           var responseLog = document.getElementById('response');
-          var responseMsg = response.data.msg;
-          responseLog.innerHTML = responseMsg;
-          responseLog.style.display = "block";
+          responseLog.innerHTML = response.data.msg;
+          document.getElementsByClassName('response')[0].style.display = "block";
         })
       }
       setTimeout(() => this.getModelos(), 100);

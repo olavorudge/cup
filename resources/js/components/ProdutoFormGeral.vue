@@ -5,7 +5,9 @@
     </h6>
     <div class="row">
       <div class="col-md-12">
-        <div id="response" class="p-6 mb-2 bg-light text-dark">
+        <div class="response p-6 mb-2 bg-info text-dark">
+          <span class="material-icons">done</span>
+          <span id="response"></span>
         </div>
       </div>
     </div>
@@ -21,24 +23,24 @@
         </div>
       </div>
       <div class="form-row">
-        <v-input  v-model="form.titulo">Título</v-input>
-        <v-input v-model="form.titulo_obra">Título da obra</v-input>
+        <v-input  v-model="form.titulo">Título*</v-input>
+        <v-input v-model="form.titulo_obra">Título da obra*</v-input>
       </div>
       <div class="form-row">
-        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_uso">Geração de uso (ano)</v-select>
-        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_lancamento">Ano de lançamento</v-select>
-        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_ciclo">Ciclo de vida (até)</v-select>
+        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_uso">Geração de uso (ano)*</v-select>
+        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_lancamento">Ano de lançamento*</v-select>
+        <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_ciclo">Ciclo de vida (até)*</v-select>
       </div>
       <div class="form-row">
-        <v-select :options="areaconhecimento" v-model="form.area_conhec">Área de conhecimento</v-select>
-        <v-select :options="nivelensino" v-model="form.nivel_ensino">Nível de ensino</v-select>
-        <v-select :options="anoescolar" v-model="form.serie">Ano escolar/ Série</v-select>
+        <v-select :options="areaconhecimento" v-model="form.area_conhec">Área de conhecimento*</v-select>
+        <v-select :options="nivelensino" v-model="form.nivel_ensino">Nível de ensino*</v-select>
+        <v-select :options="anoescolar" v-model="form.serie">Ano escolar/Série*</v-select>
       </div>
       <div class="form-row">
-        <v-select :options="[{value:1, name:1}, {value:2, name:2}, {value:3, name:3}, {value:4, name:4}]" v-model="form.volume">Volume</v-select>
-        <v-input v-model="form.num_edicao">Número da edição</v-input>
-        <v-select :options="[{value:'1', name:'Brasil'}, {value:'2', name:'Japão'}]" v-model="form.origem">Origem</v-select>
-        <v-select :options="[ {value:'pt-br', name:'Português-BR'}, {value:'en-usa', name:'Inglês-EUA'} ]" v-model="form.idioma">Idioma</v-select>
+        <v-select :options="[{value:1, name:1}, {value:2, name:2}, {value:3, name:3}, {value:4, name:4}]" v-model="form.volume">Volume*</v-select>
+        <v-input v-model="form.num_edicao">Número da edição*</v-input>
+        <v-select :options="[{value:'1', name:'Brasil'}, {value:'2', name:'Japão'}]" v-model="form.origem">Origem*</v-select>
+        <v-select :options="[ {value:'pt-br', name:'Português-BR'}, {value:'en-usa', name:'Inglês-EUA'} ]" v-model="form.idioma">Idioma*</v-select>
       </div>
       <div class="form-row">
         <v-input v-model="form.peg_la">PEG (LA)</v-input>
@@ -161,15 +163,11 @@ export default {
         }).then(response => {
           var responseLog = document.getElementById('response');
           responseLog.innerHTML = response.data.msg;
-          responseLog.style.display = "block";
+          document.getElementsByClassName('response')[0].style.display = "block";
         }).catch(error => {
           if (error.response.status === 422) {
-            this.errors = error.response.data.errors || {};
-            var responseLog = document.getElementById('response');
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-            responseLog.innerHTML = errorHandling[0];
-            responseLog.style.display = "block";
+            this.errors = errorHandling[0] || {};
           }
         });
       } else{
@@ -199,17 +197,13 @@ export default {
           image: this.image,
         }).then(response => {
           this.$router.push('/produto/1');
-          var responseLog = document.getElementById('response');
-          responseLog.innerHTML = response.data.msg;
-          responseLog.style.display = "block";
+            var responseLog = document.getElementById('response');
+            responseLog.innerHTML = response.data.msg;
+            document.getElementsByClassName('response')[0].style.display = "block";
         }).catch(error => {
           if (error.response.status === 422) {
-            this.errors = error.response.data.errors || {};
-            var responseLog = document.getElementById('response');
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-            responseLog.innerHTML = errorHandling[0];
-            responseLog.style.display = "block";
+            this.errors = errorHandling[0] || {};
           }
         });
       }

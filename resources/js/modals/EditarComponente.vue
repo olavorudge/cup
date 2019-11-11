@@ -17,7 +17,9 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div id="responseComponente" class="p-6 mb-2 bg-light text-dark">
+            <div class="response responseComponente p-6 mb-2 bg-info text-dark">
+              <span class="material-icons">done</span>
+              <span id="componenteResponse"></span>
             </div>
           </div>
         </div>
@@ -125,16 +127,12 @@ export default {
         lombada: this.form.lombada,
         medLombada: this.form.medLombada
       }).then(response => {
-        var responseLog = document.getElementById('responseComponente');
-        responseLog.innerHTML = response.data.msg;
-        this.getEspecificacoes(this.form.idProduto);
+          var responseLog = document.getElementById('componenteResponse');
+          responseLog.innerHTML = response.data.msg;
+          document.getElementsByClassName('responseComponente')[0].style.display = "block";
       }).catch(error => {
         if (error.response.status === 422) {
           this.errors = error.response.data.errors || {};
-          var responseLog = document.getElementById('responseComponente');
-          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-          responseLog.innerHTML = errorHandling[0];
         }
       });
     },

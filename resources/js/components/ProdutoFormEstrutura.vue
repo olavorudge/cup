@@ -82,6 +82,7 @@ export default {
       .then(response => (this.items = response.data))
     },
     deletarEstrutura(idProduto){
+    if(confirm('Deletar?')){
       axios
       .post('/deletar-estrutura', {
         idEstrutura: this.$route.params.id,
@@ -94,6 +95,7 @@ export default {
       })
       setTimeout(() => this.getEstrutura(this.$route.params.id), 100);
     }
+  }
   },
   mounted(){
     this.getEstrutura(this.$route.params.id);

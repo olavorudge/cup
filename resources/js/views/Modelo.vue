@@ -2,8 +2,20 @@
   <form @submit.prevent="submitModelo">
     <div class="row">
       <div class="col-md-12">
-        <div id="response" class="p-6 mb-2 bg-info text-dark">
+        <div class="response p-6 mb-2 bg-info text-dark">
+          <span class="material-icons">done</span>
+          <span id="response"></span>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p v-if="errors.length">
+          <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
+          <ul class="bg-alert">
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+        </p>
       </div>
     </div>
     <div class="form-row">
@@ -70,6 +82,7 @@ export default {
   components: { Checkbox, VInput, VSelect },
   data() {
     return {
+      errors: {},
       busy: false,
       items:
       {
@@ -103,6 +116,7 @@ export default {
     },
     submitModelo(){
       if(this.$route.params.id){
+        this.errors = {};
         axios.post('/editar-modelo', {
           idModelo: this.$route.params.id,
           nome_modelo: this.form.nomeModelo,
@@ -111,17 +125,15 @@ export default {
         }).then(response => {
           var responseLog = document.getElementById('response');
           responseLog.innerHTML = response.data.msg;
+          document.getElementsByClassName('response')[0].style.display = "block";
         }).catch(error => {
           if (error.response.status === 422) {
-            this.errors = error.response.data.errors || {};
-            var responseLog = document.getElementById('response');
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-            responseLog.innerHTML = errorHandling[0];
+            this.errors = errorHandling[0] || {};
           }
         });
       } else {
         this.errors = {};
-
         axios.post('/cadastrar-modelo', {
           nome_modelo: this.form.nomeModelo,
           compartilhamento: this.form.compartilhamento,
@@ -129,15 +141,11 @@ export default {
         }).then(response => {
           var responseLog = document.getElementById('response');
           responseLog.innerHTML = response.data.msg;
-          responseLog.style.display = "block";
+          document.getElementsByClassName('response')[0].style.display = "block";
         }).catch(error => {
           if (error.response.status === 422) {
-            this.errors = error.response.data.errors || {};
-            var responseLog = document.getElementById('response');
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-            responseLog.innerHTML = errorHandling[0];
-            responseLog.style.display = "block";
+            this.errors = errorHandling[0] || {};
           }
         });
       }

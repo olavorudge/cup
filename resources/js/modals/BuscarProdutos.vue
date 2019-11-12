@@ -158,6 +158,8 @@ export default {
           console.log(response.data.msg);
           responseLog.innerHTML = response.data.msg;
           document.getElementsByClassName('responseProdutos')[0].style.display = "block";
+          // reload parent
+          this.$emit('clicked', this.$route.params.id);
       }).catch(error => {
         if (error.response.status === 422) {
           this.errors = error.response.data.errors || {};

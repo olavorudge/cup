@@ -103,8 +103,8 @@
       </template>
     </b-table>
     <modal-selecionar-componentes :fields="hideableFields" @updateFields="updateFields"></modal-selecionar-componentes>
-    <modal-adicionar-componente></modal-adicionar-componente>
-    <modal-editar-componente v-model="especificacao_modal"></modal-editar-componente>
+    <modal-adicionar-componente @clicked="getEspecificacoes" v-model="filterBy"></modal-adicionar-componente>
+    <modal-editar-componente v-model="especificacao_modal" @clicked="getEspecificacoes"></modal-editar-componente>
     <modal-visualizar-especificacao v-model="especificacao_modal"></modal-visualizar-especificacao>
   </div>
 </template>

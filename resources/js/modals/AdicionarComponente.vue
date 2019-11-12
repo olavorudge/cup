@@ -25,8 +25,21 @@
         </div>
         <form name="form" id="form" @submit.prevent="submit">
         <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <p v-if="errors.length">
+                <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
+                <ul class="bg-alert">
+                  <li v-for="error in errors">{{ error }}</li>
+                </ul>
+              </p>
+            </div>
+          </div>
           <div class="form-row">
             <v-select :options="[ {value: 'capa', name: 'Capa'}, {value: 'miolo', name:'Miolo'} ]"  v-model="form.componente">Componente</v-select>
+          </div>
+          <div class="form-row">
+            <v-select :options="[ {value: '1', name: 'Livro do aluno'}, {value: '2', name:'Livro do professor'}, {value: '3', name:'Suplementos'} ]"  v-model="form.idTipoEspecificacao">Tipo de componente</v-select>
           </div>
           <div class="form-row">
             <v-input v-model="form.formato_aberto">Formato aberto (mm)</v-input>
@@ -71,14 +84,15 @@ import axios from "axios";
 
 export default {
   components: { Checkbox, VInput, VSelect },
-  props: [""],
+  props: ["filterBy"],
   data() {
     return {
       id: "modal-adicionar-componente",
+      errors: {},
       form: {
-        idProduto: 1,
-        idTipoEspecificacao: 1,
-        componente: '',
+        idProduto: '',
+        idTipoEspecificacao: '',
+        componente: 1,
         formato_aberto: '',
         formato_fechado: '',
         num_paginas: 0,
@@ -102,7 +116,7 @@ export default {
 
       axios.post('/cadastrar-especificacao', {
         idProduto: this.$route.params.id,
-        idTipoEspecificacao: this.form.idTipoEspecificacao,
+        tipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
         formato_aberto: this.form.formato_aberto,
         formato_aberto: this.form.formato_fechado,
@@ -119,24 +133,22 @@ export default {
         lombada: this.form.lombada,
         medida_lombada: this.form.medida_lombada
       }).then(response => {
+        // show response
         var responseLog = document.getElementById('componenteResponse');
         responseLog.innerHTML = response.data.msg;
         document.getElementsByClassName('responseComponente')[0].style.display = "block";
+        // reload parent
+        this.$emit('clicked', this.$route.params.id);
       }).catch(error => {
         if (error.response.status === 422) {
-          this.errors = error.response.data.errors || {};
-          var responseLog = document.getElementById('responseComponente');
           var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
-
-          responseLog.innerHTML = errorHandling[0];
+          this.errors = errorHandling[0] || {};
         }
       });
-    },
-    getEspecificacoes(id){
-      axios
-      .get('/listar-especificacoes/' + id)
-      .then(response => (this.items = response.data))
     }
+  },
+  mounted() {
+    console.log(this.filterBy);
   }
 };
 </script>

@@ -20,7 +20,7 @@
         {{data.item.observacao}}
       </template>
     </b-table>
-    <modal-adicionar-observacao></modal-adicionar-observacao>
+    <modal-adicionar-observacao @clicked="getObservacoes"></modal-adicionar-observacao>
   </div>
 </template>
 

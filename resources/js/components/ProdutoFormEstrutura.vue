@@ -26,7 +26,7 @@
         </button>
       </template>
     </b-table>
-    <modal-buscar-produtos></modal-buscar-produtos>
+    <modal-buscar-produtos @clicked="getEstrutura"></modal-buscar-produtos>
   </div>
 </template>
 

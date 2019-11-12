@@ -17,16 +17,29 @@
         </div>
         <div class="row">
           <div class="col-md-12">
-            <div class="response responseComponente p-6 mb-2 bg-info text-dark">
+            <div class="response responseEditarComponente p-6 mb-2 bg-info text-dark">
               <span class="material-icons">done</span>
-              <span id="componenteResponse"></span>
+              <span id="componenteEditarResponse"></span>
             </div>
           </div>
         </div>
         <form name="form" id="form" @submit.prevent="submit">
         <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <p v-if="errors.length">
+                <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
+                <ul class="bg-alert">
+                  <li v-for="error in errors">{{ error }}</li>
+                </ul>
+              </p>
+            </div>
+          </div>
           <div class="form-row">
             <v-select :options="[ {value: 'capa', name: 'Capa'}, {value: 'miolo', name:'Miolo'} ]"  v-model="form.componente">Componente</v-select>
+          </div>
+          <div class="form-row">
+            <v-select :options="[ {value: '1', name: 'Livro do aluno'}, {value: '2', name:'Livro do professor'}, {value: '3', name:'Suplementos'} ]"  v-model="form.idTipoEspecificacao">Tipo de componente</v-select>
           </div>
           <div class="form-row">
             <v-input v-model="form.formatoAberto">Formato aberto (mm)</v-input>
@@ -75,6 +88,7 @@ export default {
   data() {
     return {
       id: "modal-editar-componente",
+      errors: {},
       form: {
         idEspecificacao: '',
         idProduto: '',
@@ -98,8 +112,8 @@ export default {
     };
   },
   watch: {
-    value: function(newVal, oldVal) { // watch it
-      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+    value: function(newVal, oldVal) { 
+      document.getElementsByClassName('responseEditarComponente')[0].style.display = "none";
       this.getEspecificacao(newVal);
     }
   },
@@ -110,7 +124,7 @@ export default {
       axios.post('/editar-especificacao', {
         idProduto: this.form.idProduto,
         idEspecificacao: this.form.idEspecificacao,
-        idTipoEspecificacao: this.form.idTipoEspecificacao,
+        tipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
         formatoAberto: this.form.formatoAberto,
         formatoFechado: this.form.formatoFechado,
@@ -127,12 +141,16 @@ export default {
         lombada: this.form.lombada,
         medLombada: this.form.medLombada
       }).then(response => {
-          var responseLog = document.getElementById('componenteResponse');
+          //show response
+          var responseLog = document.getElementById('componenteEditarResponse');
           responseLog.innerHTML = response.data.msg;
-          document.getElementsByClassName('responseComponente')[0].style.display = "block";
+          document.getElementsByClassName('responseEditarComponente')[0].style.display = "block";
+          // reload parent
+          this.$emit('clicked', this.$route.params.id);
       }).catch(error => {
         if (error.response.status === 422) {
-          this.errors = error.response.data.errors || {};
+          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+          this.errors = errorHandling[0] || {};
         }
       });
     },

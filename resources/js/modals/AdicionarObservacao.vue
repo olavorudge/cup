@@ -60,7 +60,6 @@ export default {
   methods: {
     submit() {
       this.errors = {};
-      console.log('ole');
       axios.post('/cadastrar-observacao', {
         idProduto: this.$route.params.id,
         idUsuario: this.form.idUsuario,
@@ -69,6 +68,10 @@ export default {
         var responseLog = document.getElementById('observacaoResponse');
         responseLog.innerHTML = response.data.msg;
         document.getElementsByClassName('responseObservacao')[0].style.display = "block";
+        //
+        this.form.reset();
+        //reload parent
+        this.$emit('clicked', this.$route.params.id);
       }).catch(error => {
         if (error.response.status === 422) {
           this.errors = error.response.data.errors || {};

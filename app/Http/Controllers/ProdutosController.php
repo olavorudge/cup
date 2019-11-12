@@ -537,6 +537,7 @@ class ProdutosController extends Controller
 
                   $rules = [
                     'componente'   => 'required',
+                    'tipoEspecificacao'   => 'required',
                     'num_paginas'   => 'numeric',
                     'peso'   => 'numeric'
                   ];
@@ -546,7 +547,7 @@ class ProdutosController extends Controller
 
                     $data = [
                       'idProduto'             => $request->idProduto,
-                      'idTipoEspecificacao'   => 1,
+                      'idTipoEspecificacao'   => $request->tipoEspecificacao,
                       'componente'            => $request->componente,
                       'formatoAberto'         => $request->formato_aberto,
                       'formatoFechado'        => $request->formato_fechado,
@@ -755,6 +756,7 @@ class ProdutosController extends Controller
                   $especificacao = EspecificacaoTecnica::find($request->idEspecificacao);
                   $rules = [
                     'componente'   => 'required',
+                    'tipoEspecificacao'   => 'required',
                     'numPagina'   => 'numeric',
                     'peso'   => 'numeric'
                   ];
@@ -765,7 +767,7 @@ class ProdutosController extends Controller
 
                     $data = [
                       'idProduto'             => $request->idProduto,
-                      'idTipoEspecificacao'   => $request->idTipoEspecificacao,
+                      'idTipoEspecificacao'   => $request->tipoEspecificacao,
                       'componente'            => $request->componente,
                       'formatoAberto'         => $request->formatoAberto,
                       'formatoFechado'        => $request->formatoFechado,

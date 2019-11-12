@@ -2030,24 +2030,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3198,6 +3180,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3208,14 +3203,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     VInput: _js_components_Input__WEBPACK_IMPORTED_MODULE_1__["default"],
     VSelect: _js_components_Select__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  props: [""],
+  props: ["filterBy"],
   data: function data() {
     return {
       id: "modal-adicionar-componente",
+      errors: {},
       form: {
-        idProduto: 1,
-        idTipoEspecificacao: 1,
-        componente: '',
+        idProduto: '',
+        idTipoEspecificacao: '',
+        componente: 1,
         formato_aberto: '',
         formato_fechado: '',
         num_paginas: 0,
@@ -3241,29 +3237,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.errors = {};
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/cadastrar-especificacao', (_axios$post = {
         idProduto: this.$route.params.id,
-        idTipoEspecificacao: this.form.idTipoEspecificacao,
+        tipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
         formato_aberto: this.form.formato_aberto
       }, _defineProperty(_axios$post, "formato_aberto", this.form.formato_fechado), _defineProperty(_axios$post, "num_paginas", this.form.num_paginas), _defineProperty(_axios$post, "papel", this.form.papel), _defineProperty(_axios$post, "cores", this.form.cores), _defineProperty(_axios$post, "acabamento", this.form.acabamento), _defineProperty(_axios$post, "observacoes", this.form.observacoes), _defineProperty(_axios$post, "espessura", this.form.espessura), _defineProperty(_axios$post, "peso", this.form.peso), _defineProperty(_axios$post, "orientacao", this.form.orientacao), _defineProperty(_axios$post, "alvura", this.form.alvura), _defineProperty(_axios$post, "opacidade", this.form.opacidade), _defineProperty(_axios$post, "lombada", this.form.lombada), _defineProperty(_axios$post, "medida_lombada", this.form.medida_lombada), _axios$post)).then(function (response) {
+        // show response
         var responseLog = document.getElementById('componenteResponse');
         responseLog.innerHTML = response.data.msg;
-        document.getElementsByClassName('responseComponente')[0].style.display = "block";
+        document.getElementsByClassName('responseComponente')[0].style.display = "block"; // reload parent
+
+        _this.$emit('clicked', _this.$route.params.id);
       })["catch"](function (error) {
         if (error.response.status === 422) {
-          _this.errors = error.response.data.errors || {};
-          var responseLog = document.getElementById('responseComponente');
           var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
-          responseLog.innerHTML = errorHandling[0];
+          _this.errors = errorHandling[0] || {};
         }
       });
-    },
-    getEspecificacoes: function getEspecificacoes(id) {
-      var _this2 = this;
-
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-especificacoes/' + id).then(function (response) {
-        return _this2.items = response.data;
-      });
     }
+  },
+  mounted: function mounted() {
+    console.log(this.filterBy);
   }
 });
 
@@ -3345,7 +3338,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.errors = {};
-      console.log('ole');
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/cadastrar-observacao', {
         idProduto: this.$route.params.id,
         idUsuario: this.form.idUsuario,
@@ -3353,7 +3345,12 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         var responseLog = document.getElementById('observacaoResponse');
         responseLog.innerHTML = response.data.msg;
-        document.getElementsByClassName('responseObservacao')[0].style.display = "block";
+        document.getElementsByClassName('responseObservacao')[0].style.display = "block"; //
+
+        _this.form.reset(); //reload parent
+
+
+        _this.$emit('clicked', _this.$route.params.id);
       })["catch"](function (error) {
         if (error.response.status === 422) {
           _this.errors = error.response.data.errors || {};
@@ -3537,7 +3534,9 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
         var responseLog = document.getElementById('produtosResponse');
         console.log(response.data.msg);
         responseLog.innerHTML = response.data.msg;
-        document.getElementsByClassName('responseProdutos')[0].style.display = "block";
+        document.getElementsByClassName('responseProdutos')[0].style.display = "block"; // reload parent
+
+        _this2.$emit('clicked', _this2.$route.params.id);
       })["catch"](function (error) {
         if (error.response.status === 422) {
           _this2.errors = error.response.data.errors || {};
@@ -3631,6 +3630,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3645,6 +3657,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       id: "modal-editar-componente",
+      errors: {},
       form: {
         idEspecificacao: '',
         idProduto: '',
@@ -3669,8 +3682,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   watch: {
     value: function value(newVal, oldVal) {
-      // watch it
-      //console.log('Prop changed: ', newVal, ' | was: ', oldVal);
+      document.getElementsByClassName('responseEditarComponente')[0].style.display = "none";
       this.getEspecificacao(newVal);
     }
   },
@@ -3682,7 +3694,7 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.post('/editar-especificacao', {
         idProduto: this.form.idProduto,
         idEspecificacao: this.form.idEspecificacao,
-        idTipoEspecificacao: this.form.idTipoEspecificacao,
+        tipoEspecificacao: this.form.idTipoEspecificacao,
         componente: this.form.componente,
         formatoAberto: this.form.formatoAberto,
         formatoFechado: this.form.formatoFechado,
@@ -3699,12 +3711,16 @@ __webpack_require__.r(__webpack_exports__);
         lombada: this.form.lombada,
         medLombada: this.form.medLombada
       }).then(function (response) {
-        var responseLog = document.getElementById('componenteResponse');
+        //show response
+        var responseLog = document.getElementById('componenteEditarResponse');
         responseLog.innerHTML = response.data.msg;
-        document.getElementsByClassName('responseComponente')[0].style.display = "block";
+        document.getElementsByClassName('responseEditarComponente')[0].style.display = "block"; // reload parent
+
+        _this.$emit('clicked', _this.$route.params.id);
       })["catch"](function (error) {
         if (error.response.status === 422) {
-          _this.errors = error.response.data.errors || {};
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          _this.errors = errorHandling[0] || {};
         }
       });
     },
@@ -55747,7 +55763,7 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("modal-buscar-produtos")
+      _c("modal-buscar-produtos", { on: { clicked: _vm.getEstrutura } })
     ],
     1
   )
@@ -56428,7 +56444,7 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("modal-adicionar-observacao")
+      _c("modal-adicionar-observacao", { on: { clicked: _vm.getObservacoes } })
     ],
     1
   )
@@ -56963,9 +56979,19 @@ var render = function() {
         on: { updateFields: _vm.updateFields }
       }),
       _vm._v(" "),
-      _c("modal-adicionar-componente"),
+      _c("modal-adicionar-componente", {
+        on: { clicked: _vm.getEspecificacoes },
+        model: {
+          value: _vm.filterBy,
+          callback: function($$v) {
+            _vm.filterBy = $$v
+          },
+          expression: "filterBy"
+        }
+      }),
       _vm._v(" "),
       _c("modal-editar-componente", {
+        on: { clicked: _vm.getEspecificacoes },
         model: {
           value: _vm.especificacao_modal,
           callback: function($$v) {
@@ -57084,6 +57110,29 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _vm.errors.length
+                        ? _c("p", [
+                            _c("b", [
+                              _vm._v(
+                                "Por favor, corrija o(s) seguinte(s) erro(s):"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "ul",
+                              { staticClass: "bg-alert" },
+                              _vm._l(_vm.errors, function(error) {
+                                return _c("li", [_vm._v(_vm._s(error))])
+                              }),
+                              0
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "div",
                     { staticClass: "form-row" },
@@ -57106,6 +57155,34 @@ var render = function() {
                           }
                         },
                         [_vm._v("Componente")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-select",
+                        {
+                          attrs: {
+                            options: [
+                              { value: "1", name: "Livro do aluno" },
+                              { value: "2", name: "Livro do professor" },
+                              { value: "3", name: "Suplementos" }
+                            ]
+                          },
+                          model: {
+                            value: _vm.form.idTipoEspecificacao,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "idTipoEspecificacao", $$v)
+                            },
+                            expression: "form.idTipoEspecificacao"
+                          }
+                        },
+                        [_vm._v("Tipo de componente")]
                       )
                     ],
                     1
@@ -57903,6 +57980,29 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _vm.errors.length
+                        ? _c("p", [
+                            _c("b", [
+                              _vm._v(
+                                "Por favor, corrija o(s) seguinte(s) erro(s):"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "ul",
+                              { staticClass: "bg-alert" },
+                              _vm._l(_vm.errors, function(error) {
+                                return _c("li", [_vm._v(_vm._s(error))])
+                              }),
+                              0
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _c(
                     "div",
                     { staticClass: "form-row" },
@@ -57925,6 +58025,34 @@ var render = function() {
                           }
                         },
                         [_vm._v("Componente")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-row" },
+                    [
+                      _c(
+                        "v-select",
+                        {
+                          attrs: {
+                            options: [
+                              { value: "1", name: "Livro do aluno" },
+                              { value: "2", name: "Livro do professor" },
+                              { value: "3", name: "Suplementos" }
+                            ]
+                          },
+                          model: {
+                            value: _vm.form.idTipoEspecificacao,
+                            callback: function($$v) {
+                              _vm.$set(_vm.form, "idTipoEspecificacao", $$v)
+                            },
+                            expression: "form.idTipoEspecificacao"
+                          }
+                        },
+                        [_vm._v("Tipo de componente")]
                       )
                     ],
                     1
@@ -58215,12 +58343,12 @@ var staticRenderFns = [
           "div",
           {
             staticClass:
-              "response responseComponente p-6 mb-2 bg-info text-dark"
+              "response responseEditarComponente p-6 mb-2 bg-info text-dark"
           },
           [
             _c("span", { staticClass: "material-icons" }, [_vm._v("done")]),
             _vm._v(" "),
-            _c("span", { attrs: { id: "componenteResponse" } })
+            _c("span", { attrs: { id: "componenteEditarResponse" } })
           ]
         )
       ])

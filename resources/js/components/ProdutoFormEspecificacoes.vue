@@ -48,24 +48,6 @@
     </ul>
 
     <div class="tab-content">
-      <!-- <div
-        class="tab-pane fade show active"
-        id="livro-todos"
-        role="tabpanel"
-        aria-labelledby="livro-todos-tab"
-      >
-      </div>
-      <div class="tab-pane fade" id="livro-aluno" role="tabpanel" aria-labelledby="livro-aluno-tab">
-      </div>
-      <div
-        class="tab-pane fade"
-        id="livro-professor"
-        role="tabpanel"
-        aria-labelledby="livro-professor-tab"
-      >
-      </div>
-      <div class="tab-pane fade" id="suplementos" role="tabpanel" aria-labelledby="suplementos-tab">
-      </div> -->
     </div>
 
     <tabela-componentes :filter-by="filterComponentsBy"></tabela-componentes>

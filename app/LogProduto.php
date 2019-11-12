@@ -9,7 +9,11 @@ class LogProduto extends Model
   protected $table = 'logs_produto';
   protected $primaryKey = 'idLog';
   protected $fillable = ['idTipoLog', 'idProduto', 'idEspecificacao', 'idUsuario', 'descricaoLog', 'descricaoJson' ,'observacao', 'created_at'];
-  public $timestamps = false;
+  protected $dates = ['created_at'];
 
 
+  public function produto()
+  {
+      return $this->belongsTo('App\Produto', 'idProduto');
+  }
 }

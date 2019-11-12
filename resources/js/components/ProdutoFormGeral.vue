@@ -1,7 +1,8 @@
 <template>
   <div class="d-flex" style="flex-flow: column">
     <h6>
-      <b>Dados gerais</b>
+      <small><b style="color: #f00;">*</b> Campos obrigatórios.</small><br>
+      <small><b style="color: #f00;">**</b> Só é possível cadastrar especificações após o cadastro dos dados gerais do produto.</small>
     </h6>
     <div class="row">
       <div class="col-md-12">
@@ -11,7 +12,7 @@
         </div>
       </div>
     </div>
-    <form class="mr-3" id="form" style="flex: 1" method="POST" @submit.prevent="submit" enctype="multipart/form-data">
+    <form class="mr-3" id="form" style="flex: 1; margin-top:15px" method="POST" @submit.prevent="submit" enctype="multipart/form-data" >
       <div class="row">
         <div class="col-md-12">
           <p v-if="errors.length">
@@ -32,12 +33,12 @@
         <v-select :options="[{value:2019, name:2019}, {value:2018, name:2018}, {value:2017, name:2017}]" v-model="form.ano_ciclo">Ciclo de vida (até)*</v-select>
       </div>
       <div class="form-row">
-        <v-select :options="areaconhecimento" v-model="form.area_conhec">Área de conhecimento*</v-select>
-        <v-select :options="nivelensino" v-model="form.nivel_ensino">Nível de ensino*</v-select>
-        <v-select :options="anoescolar" v-model="form.serie">Ano escolar/Série*</v-select>
+        <v-select :options="areaconhecimento" v-model="form.area_conhec">Área de conhecimento</v-select>
+        <v-select :options="nivelensino" v-model="form.nivel_ensino">Nível de ensino</v-select>
+        <v-select :options="anoescolar" v-model="form.serie">Ano escolar/Série</v-select>
       </div>
       <div class="form-row">
-        <v-select :options="[{value:1, name:1}, {value:2, name:2}, {value:3, name:3}, {value:4, name:4}]" v-model="form.volume">Volume*</v-select>
+        <v-select :options="[{value:1, name:1}, {value:2, name:2}, {value:3, name:3}, {value:4, name:4}]" v-model="form.volume">Volume</v-select>
         <v-input v-model="form.num_edicao">Número da edição*</v-input>
         <v-select :options="[{value:'1', name:'Brasil'}, {value:'2', name:'Japão'}]" v-model="form.origem">Origem*</v-select>
         <v-select :options="[ {value:'pt-br', name:'Português-BR'}, {value:'en-usa', name:'Inglês-EUA'} ]" v-model="form.idioma">Idioma*</v-select>
@@ -86,6 +87,7 @@
         <button type="" class="btn btn-secondary">Cancelar</button>
       </div>
     </form>
+    <modal-success v-model="produto_id"></modal-success>
   </div>
 </template>
 
@@ -93,11 +95,13 @@
 import Filepicker from "@/js/components/Filepicker";
 import VInput from "@/js/components/Input";
 import VSelect from "@/js/components/Select";
+import ModalSuccess from "@/js/modals/Success";
 import VDatepicker from "@/js/components/Datepicker";
 import axios from "axios";
+import $ from "jquery";
 
 export default {
-  components: { Filepicker, VInput, VSelect, VDatepicker},
+  components: { Filepicker, VInput, VSelect, VDatepicker, ModalSuccess},
   data() {
     return {
       errors: {},
@@ -129,6 +133,7 @@ export default {
       areaconhecimento:  {},
       nivelensino:  {},
       anoescolar:  {},
+      produto_id: '',
     }
   },
   methods: {
@@ -196,10 +201,9 @@ export default {
           validade_contrato: this.form.validade_contrato,
           image: this.image,
         }).then(response => {
-          this.$router.push('/produto/1');
-            var responseLog = document.getElementById('response');
-            responseLog.innerHTML = response.data.msg;
-            document.getElementsByClassName('response')[0].style.display = "block";
+            this.id_produto = response.data.id;
+            $('#modal-success').modal();
+
         }).catch(error => {
           if (error.response.status === 422) {
             var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
@@ -242,6 +246,9 @@ export default {
       axios
       .get('/listar-produto/'+ id)
       .then(response => (this.form = response.data))
+    },
+    doSomethingOnHidden(){
+        this.$router.push('/produto/' + this.produto_id);
     }
   },
   mounted() {
@@ -251,6 +258,7 @@ export default {
     if(this.$route.params.id){
       this.editProduto(this.$route.params.id);
     }
+
   }
 }
 </script>

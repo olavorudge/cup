@@ -12,6 +12,7 @@ use App\EstruturaProduto;
 use App\Origem;
 use App\TipoEspecificacao;
 use App\LogService;
+use App\LogProduto;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\ViewModels\LinhaProdutoViewModel;
@@ -33,8 +34,30 @@ class ProdutosController extends Controller
   {
     $produtos = array();
     $produtos = Produto::where('bolAnulado', 0)->get();
+    $data = [];
+    foreach ($produtos as $produto) {
+      $last_log = LogProduto::where('idProduto', $produto->idProduto)->orderBy('idLogProduto', 'desc')->first();
 
-    $produtos = json_encode($produtos);
+      if(!$last_log) {
+        $updated_at = $produto->updated_at->format('d/m/Y');
+      } else {
+        $updated_at = $last_log->created_at->format('d/m/Y');
+      }
+
+      $data[] = [
+        'idProduto' => $produto->idProduto,
+        'peg_la'  => $produto->peg_la,
+        'titulo' => $produto->titulo,
+        'isbn_la' => $produto->isbn_la,
+        'updated_at' => $updated_at
+      ];
+
+
+
+    }
+
+
+    $produtos = json_encode($data);
     return $produtos;
   }
   /*
@@ -50,8 +73,26 @@ class ProdutosController extends Controller
     }
     $produtos = Produto::find($ids);
 
+    foreach ($produtos as $produto) {
+      $last_log = LogProduto::where('idProduto', $produto->idProduto)->orderBy('idLogProduto', 'desc')->first();
 
-    $produtos = json_encode($produtos);
+      if(!$last_log) {
+        $updated_at = $produto->updated_at->format('d/m/Y');
+      } else {
+        $updated_at = $last_log->created_at->format('d/m/Y');
+      }
+
+      $data[] = [
+        'idProduto' => $produto->idProduto,
+        'peg_la'  => $produto->peg_la,
+        'titulo' => $produto->titulo,
+        'isbn_la' => $produto->isbn_la,
+        'updated_at' => $updated_at
+      ];
+
+    }
+
+    $produtos = json_encode($data);
     return $produtos;
   }
   /*
@@ -483,10 +524,6 @@ class ProdutosController extends Controller
                     'ano_uso'      => 'required',
                     'ano_lancamento'      => 'required',
                     'ano_ciclo'      => 'required',
-                    'area_conhec'      => 'required',
-                    'nivel_ensino'      => 'required',
-                    'serie' => 'required',
-                    'volume' => 'required',
                     'num_edicao' => 'required',
                     'origem' => 'required',
                     'idioma' => 'required'
@@ -524,7 +561,7 @@ class ProdutosController extends Controller
 
                     $create = Produto::create($data);
                     if($create) {
-                      return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado')]);
+                      return response()->json(['success'=>1, 'msg'=>trans('app.produto_cadastrado'), 'id'=>$create->idProduto]);
                     }
                   }
                 }

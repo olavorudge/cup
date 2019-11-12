@@ -13594,3 +13594,7 @@ a.sidebar-link svg {
   font-size: 14px;
 }
 
+.disabled {
+  color: #bfbfbf !important;
+}
+

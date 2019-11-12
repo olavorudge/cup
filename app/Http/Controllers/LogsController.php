@@ -34,11 +34,20 @@ class LogsController extends Controller
     $logs = array();
     $logs = LogProduto::where('idProduto', $id)->orderBy('idLogProduto', 'DESC')->get();
 
+    $arr = [];
     foreach ($logs as $log) {
-      $descricaoLog = json_decode($log->descricaoLog, true);
+      $arr[] = [
+        'idLogProduto' => $log->idProduto,
+        'idusuario' => $log->idUsuario,
+        'idProduto' => $log->idProduto,
+        'observacao' => $log->observacao,
+        'idTipoLog' => $log->idTipoLog,
+        'descricaoLog' => $log->descricaoLog,
+        'created_at' => $log->created_at->format('d/m/Y H:i')
+      ];
     }
 
-    $logs = json_encode($logs);
+    $logs = json_encode($arr);
     return $logs;
   }
 

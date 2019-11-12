@@ -14,7 +14,7 @@
       </li>
       <li class="nav-item">
         <a
-          class="nav-link"
+          class="nav-link nav-disab"
           id="especificacoes-tab"
           data-toggle="tab"
           href="#especificacoes"
@@ -25,7 +25,7 @@
       </li>
       <li class="nav-item">
         <a
-          class="nav-link"
+          class="nav-link nav-disab"
           id="contact-tab"
           data-toggle="tab"
           href="#contact"
@@ -36,7 +36,7 @@
       </li>
       <li class="nav-item">
         <a
-          class="nav-link"
+          class="nav-link nav-disab"
           id="observacoes-tab"
           data-toggle="tab"
           href="#observacoes"
@@ -88,7 +88,7 @@ export default {
   },
   mounted() {
     if(!this.$route.params.id){
-      var navLink = document.getElementsByClassName('nav-link');
+      var navLink = document.getElementsByClassName('nav-disab');
       for(var i=0; i < navLink.length; i++) {
         navLink[i].classList.add("disabled");
       }

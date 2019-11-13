@@ -25,6 +25,16 @@
         </div>
         <form name="form" id="form" @submit.prevent="submit">
         <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <p v-if="errors.length">
+                <b>Por favor, corrija o(s) seguinte(s) erro(s):</b>
+                <ul class="bg-alert">
+                  <li v-for="error in errors">{{ error }}</li>
+                </ul>
+              </p>
+            </div>
+          </div>
           <div>
             <p>Adicione uma breve descrição das alterações realizadas.</p>
           </div>
@@ -50,8 +60,9 @@ export default {
   data() {
     return {
       id: "modal-adicionar-observacao",
+      errors: {},
       form: {
-        idProduto: 1,
+        idProduto: '',
         idUsuario: 1,
         observacao: ''
       }
@@ -68,13 +79,13 @@ export default {
         var responseLog = document.getElementById('observacaoResponse');
         responseLog.innerHTML = response.data.msg;
         document.getElementsByClassName('responseObservacao')[0].style.display = "block";
-        //
-        this.form.reset();
+        
         //reload parent
         this.$emit('clicked', this.$route.params.id);
       }).catch(error => {
         if (error.response.status === 422) {
-          this.errors = error.response.data.errors || {};
+          var errorHandling = Object.values((JSON.parse(JSON.stringify(error.response.data.errors))));
+          this.errors = errorHandling[0] || {};
         }
       });
     }

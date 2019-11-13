@@ -70,7 +70,7 @@ export default {
     },
     getObservacoes(id){
       axios
-      .get('/listar-observacoes/' + id)
+      .get('/listar-observacoes/' + this.$route.params.id)
       .then(response => (this.items = response.data))
     },
   },

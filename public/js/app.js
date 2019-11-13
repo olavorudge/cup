@@ -2398,7 +2398,7 @@ __webpack_require__.r(__webpack_exports__);
           validade_contrato: this.form.validade_contrato,
           image: this.image
         }).then(function (response) {
-          _this.id_produto = response.data.id;
+          _this.produto_id = response.data.id;
           jquery__WEBPACK_IMPORTED_MODULE_6___default()('#modal-success').modal();
         })["catch"](function (error) {
           if (error.response.status === 422) {
@@ -2451,9 +2451,6 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/listar-produto/' + id).then(function (response) {
         return _this5.form = response.data;
       });
-    },
-    doSomethingOnHidden: function doSomethingOnHidden() {
-      this.$router.push('/produto/' + this.produto_id);
     }
   },
   mounted: function mounted() {
@@ -2555,7 +2552,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(bootstrap_vue__WEBPACK_IMPORTED_M
     getObservacoes: function getObservacoes(id) {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-observacoes/' + id).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/listar-observacoes/' + this.$route.params.id).then(function (response) {
         return _this.items = response.data;
       });
     }
@@ -3264,9 +3261,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       });
     }
   },
-  mounted: function mounted() {
-    console.log(this.filterBy);
-  }
+  mounted: function mounted() {}
 });
 
 /***/ }),
@@ -3326,6 +3321,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3335,8 +3340,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       id: "modal-adicionar-observacao",
+      errors: {},
       form: {
-        idProduto: 1,
+        idProduto: '',
         idUsuario: 1,
         observacao: ''
       }
@@ -3354,15 +3360,13 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         var responseLog = document.getElementById('observacaoResponse');
         responseLog.innerHTML = response.data.msg;
-        document.getElementsByClassName('responseObservacao')[0].style.display = "block"; //
-
-        _this.form.reset(); //reload parent
-
+        document.getElementsByClassName('responseObservacao')[0].style.display = "block"; //reload parent
 
         _this.$emit('clicked', _this.$route.params.id);
       })["catch"](function (error) {
         if (error.response.status === 422) {
-          _this.errors = error.response.data.errors || {};
+          var errorHandling = Object.values(JSON.parse(JSON.stringify(error.response.data.errors)));
+          _this.errors = errorHandling[0] || {};
         }
       });
     }
@@ -3856,6 +3860,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3870,7 +3875,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    redirect: function redirect() {}
+    redirect: function redirect() {
+      this.$router.push('/produto/' + this.value);
+    }
   },
   mounted: function mounted() {}
 });
@@ -56411,6 +56418,7 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("modal-success", {
+        on: { close: _vm.doSomethingOnHidden },
         model: {
           value: _vm.produto_id,
           callback: function($$v) {
@@ -57713,6 +57721,29 @@ var render = function() {
               },
               [
                 _c("div", { staticClass: "modal-body" }, [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _vm.errors.length
+                        ? _c("p", [
+                            _c("b", [
+                              _vm._v(
+                                "Por favor, corrija o(s) seguinte(s) erro(s):"
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "ul",
+                              { staticClass: "bg-alert" },
+                              _vm._l(_vm.errors, function(error) {
+                                return _c("li", [_vm._v(_vm._s(error))])
+                              }),
+                              0
+                            )
+                          ])
+                        : _vm._e()
+                    ])
+                  ]),
+                  _vm._v(" "),
                   _vm._m(2),
                   _vm._v(" "),
                   _c(
@@ -58657,7 +58688,8 @@ var render = function() {
         role: "dialog",
         "aria-labelledby": _vm.id,
         "aria-hidden": "true"
-      }
+      },
+      on: { click: _vm.redirect }
     },
     [
       _c(
@@ -58677,7 +58709,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("p", [
                       _vm._v(
-                        "\n            As opções para cadastrar especificações, estruturas e observações estão habilitadas.\n          "
+                        "\n          Agora é possível cadastrar especificações técnicas, estruturas e observações.\n          "
                       )
                     ])
                   ])

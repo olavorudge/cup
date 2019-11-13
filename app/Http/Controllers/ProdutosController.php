@@ -709,10 +709,6 @@ class ProdutosController extends Controller
                         'ano_uso'      => 'required',
                         'ano_lancamento'      => 'required',
                         'ano_ciclo'      => 'required',
-                        'area_conhec'      => 'required',
-                        'nivel_ensino'      => 'required',
-                        'serie' => 'required',
-                        'volume' => 'required',
                         'num_edicao' => 'required',
                         'origem' => 'required',
                         'idioma' => 'required'

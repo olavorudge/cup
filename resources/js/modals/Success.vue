@@ -6,6 +6,7 @@
     role="dialog"
     :aria-labelledby="id"
     aria-hidden="true"
+    @click="redirect"
   >
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
@@ -19,7 +20,7 @@
           <div>
             <h5>Sucesso ao Cadastrar</h5>
             <p>
-              As opções para cadastrar especificações, estruturas e observações estão habilitadas.
+            Agora é possível cadastrar especificações técnicas, estruturas e observações.
             </p>
           </div>
         </center>
@@ -48,6 +49,7 @@ export default {
   },
   methods: {
     redirect(){
+      this.$router.push('/produto/' + this.value);
     }
   },
   mounted() {

@@ -87,7 +87,7 @@
         <button type="" class="btn btn-secondary">Cancelar</button>
       </div>
     </form>
-    <modal-success v-model="produto_id"></modal-success>
+    <modal-success v-model="produto_id" @close="doSomethingOnHidden"></modal-success>
   </div>
 </template>
 
@@ -201,7 +201,7 @@ export default {
           validade_contrato: this.form.validade_contrato,
           image: this.image,
         }).then(response => {
-            this.id_produto = response.data.id;
+            this.produto_id = response.data.id;
             $('#modal-success').modal();
 
         }).catch(error => {
@@ -246,9 +246,6 @@ export default {
       axios
       .get('/listar-produto/'+ id)
       .then(response => (this.form = response.data))
-    },
-    doSomethingOnHidden(){
-        this.$router.push('/produto/' + this.produto_id);
     }
   },
   mounted() {

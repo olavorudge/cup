@@ -23,7 +23,7 @@
         "bootstrap": "^4.3.1",
         "bootstrap-datepicker": "^1.9.0",
         "bootstrap-vue": "^2.0.3",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "material-icons": "^0.3.1",
         "popper.js": "^1.15.0",
         "vue": "^2.6.10",
